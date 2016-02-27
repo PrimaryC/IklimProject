@@ -1,4 +1,4 @@
-package iklim.engine.gameInterface.layer;
+package iklim.engine.test;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.JButton;
 import javax.swing.border.LineBorder;
 
+import iklim.engine.gameInterface.layer.AbstractLayer;
 import iklim.engine.uicontrol.SceneContext;
 import iklim.engine.uidata.ViewModelManager;
 import ViewModel.layermodel.LogoLayerModel;

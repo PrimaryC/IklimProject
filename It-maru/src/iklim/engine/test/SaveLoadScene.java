@@ -1,5 +1,6 @@
-package iklim.engine.gameInterface.scene;
+package iklim.engine.test;
 
+import iklim.engine.gameInterface.scene.Scene;
 import iklim.engine.uicontrol.EventListener;
 import iklim.engine.uidata.AbstractViewModel;
 import iklim.engine.uidata.ViewModelManager;
