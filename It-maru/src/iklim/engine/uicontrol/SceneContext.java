@@ -1,4 +1,4 @@
-package control;
+package iklim.engine.uicontrol;
 
 public class SceneContext {
 	public static final String LogoScene = "LogoScene";

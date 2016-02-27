@@ -1,4 +1,4 @@
-package userinterface.scene;
+package iklim.engine.gameInterface.scene;
 
 
 
@@ -6,12 +6,12 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
-import userinterface.layer.AbstractLayer;
-import userinterface.layer.TitleLayer;
-import control.EventListener;
-import control.SceneContext;
-import ViewModel.AbstractViewModel;
-import ViewModel.ViewModelManager;
+import iklim.engine.gameInterface.layer.AbstractLayer;
+import iklim.engine.gameInterface.layer.TitleLayer;
+import iklim.engine.uicontrol.EventListener;
+import iklim.engine.uicontrol.SceneContext;
+import iklim.engine.uidata.AbstractViewModel;
+import iklim.engine.uidata.ViewModelManager;
 
 
 

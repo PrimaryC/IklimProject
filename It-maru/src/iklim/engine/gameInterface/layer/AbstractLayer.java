@@ -1,12 +1,12 @@
-package userinterface.layer;
+package iklim.engine.gameInterface.layer;
 
 import java.awt.Graphics;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import ViewModel.AbstractViewModel;
-import ViewModel.ViewModelManager;
+import iklim.engine.uidata.AbstractViewModel;
+import iklim.engine.uidata.ViewModelManager;
 
 public abstract class AbstractLayer extends JPanel{
 	

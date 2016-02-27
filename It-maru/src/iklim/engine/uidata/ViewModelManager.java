@@ -1,12 +1,12 @@
-package ViewModel;
+package iklim.engine.uidata;
 
 import java.util.Hashtable;
 
 import javax.swing.JFrame;
 
 import ViewModel.layermodel.LogoLayerModel;
-import control.SceneContext;
-import userinterface.layer.AbstractLayer;
+import iklim.engine.gameInterface.layer.AbstractLayer;
+import iklim.engine.uicontrol.SceneContext;
 
 public class ViewModelManager {
 	

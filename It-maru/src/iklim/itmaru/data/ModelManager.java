@@ -1,4 +1,4 @@
-package model;
+package iklim.itmaru.data;
 
 public class ModelManager {
 

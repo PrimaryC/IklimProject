@@ -1,8 +1,8 @@
-package userinterface.scene;
+package iklim.engine.gameInterface.scene;
 
-import control.EventListener;
-import ViewModel.AbstractViewModel;
-import ViewModel.ViewModelManager;
+import iklim.engine.uicontrol.EventListener;
+import iklim.engine.uidata.AbstractViewModel;
+import iklim.engine.uidata.ViewModelManager;
 
 
 

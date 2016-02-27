@@ -2,7 +2,7 @@ package ViewModel.layermodel;
 
 import java.awt.image.BufferedImage;
 
-import ViewModel.AbstractViewModel;
+import iklim.engine.uidata.AbstractViewModel;
 
 public class LogoLayerModel implements AbstractViewModel{
 	private BufferedImage image;

@@ -1,4 +1,4 @@
-package ViewModel;
+package iklim.engine.uidata;
 
 public interface AbstractViewModel {
 	

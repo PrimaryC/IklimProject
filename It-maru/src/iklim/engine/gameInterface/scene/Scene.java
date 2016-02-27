@@ -1,4 +1,4 @@
-package userinterface.scene;
+package iklim.engine.gameInterface.scene;
 
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -6,10 +6,10 @@ import java.util.LinkedList;
 
 import javax.swing.JPanel;
 
-import userinterface.layer.AbstractLayer;
-import control.EventListener;
-import ViewModel.AbstractViewModel;
-import ViewModel.ViewModelManager;
+import iklim.engine.gameInterface.layer.AbstractLayer;
+import iklim.engine.uicontrol.EventListener;
+import iklim.engine.uidata.AbstractViewModel;
+import iklim.engine.uidata.ViewModelManager;
 
 
 public abstract class Scene extends JPanel {

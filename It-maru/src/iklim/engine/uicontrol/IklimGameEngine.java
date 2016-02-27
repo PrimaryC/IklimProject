@@ -1,11 +1,11 @@
-package control;
+package iklim.engine.uicontrol;
 
-import ViewModel.ViewModelManager;
-import model.ModelManager;
-import userinterface.ViewManager;
+import iklim.engine.gameInterface.ViewManager;
+import iklim.engine.uidata.ViewModelManager;
+import iklim.itmaru.data.ModelManager;
 
 
-public class ControlManager {
+public class IklimGameEngine {
 	private ViewManager view;
 	private ModelManager model;
 	private ViewModelManager viewModel;
@@ -13,12 +13,7 @@ public class ControlManager {
 	private EventHandler handler;
 	
 	
-	public static void main(String ar[]){
-		ControlManager controlmanager = new ControlManager();
-	}
-	
-	
-	public ControlManager(){
+	public IklimGameEngine(){
 		
 		model = new ModelManager();
 		viewModel = new ViewModelManager();
@@ -32,17 +27,10 @@ public class ControlManager {
 		viewModel.init();
 		view.init(viewModel,btnListener);
 		model.init();
-	
-
-		run();
 	}
 	
 	public void run(){
-	
 		handler.loadFile();
-		
-		
-		
 		view.run();
 		view.repaint();
 	}

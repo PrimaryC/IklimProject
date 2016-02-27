@@ -1,4 +1,4 @@
-package control;
+package iklim.engine.uicontrol;
 
 import java.awt.event.MouseListener;
 

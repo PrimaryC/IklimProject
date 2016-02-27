@@ -1,4 +1,4 @@
-package control;
+package iklim.engine.uicontrol;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -6,8 +6,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import ViewModel.ViewModelManager;
 import ViewModel.layermodel.LogoLayerModel;
+import iklim.engine.uidata.ViewModelManager;
 
 public class EventHandler {
 	private ViewModelManager viewModel;

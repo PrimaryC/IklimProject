@@ -1,4 +1,4 @@
-package userinterface.layer;
+package iklim.engine.gameInterface.layer;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -7,8 +7,8 @@ import java.awt.image.BufferedImage;
 import javax.swing.JButton;
 import javax.swing.border.LineBorder;
 
-import control.SceneContext;
-import ViewModel.ViewModelManager;
+import iklim.engine.uicontrol.SceneContext;
+import iklim.engine.uidata.ViewModelManager;
 import ViewModel.layermodel.LogoLayerModel;
 
 public class TitleLayer extends AbstractLayer{
