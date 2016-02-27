@@ -1,4 +1,4 @@
-package iklim.engine.gameInterface.scene;
+package iklim.engine.gameInterface;
 
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -6,7 +6,6 @@ import java.util.LinkedList;
 
 import javax.swing.JPanel;
 
-import iklim.engine.gameInterface.layer.AbstractLayer;
 import iklim.engine.uicontrol.EventListener;
 import iklim.engine.uidata.AbstractViewModel;
 import iklim.engine.uidata.ViewModelManager;

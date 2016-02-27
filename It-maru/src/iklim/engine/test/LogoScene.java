@@ -6,8 +6,8 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
-import iklim.engine.gameInterface.layer.AbstractLayer;
-import iklim.engine.gameInterface.scene.Scene;
+import iklim.engine.gameInterface.AbstractLayer;
+import iklim.engine.gameInterface.Scene;
 import iklim.engine.uicontrol.EventListener;
 import iklim.engine.uicontrol.SceneContext;
 import iklim.engine.uidata.AbstractViewModel;

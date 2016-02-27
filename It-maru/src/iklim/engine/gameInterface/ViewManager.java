@@ -7,7 +7,6 @@ import java.util.LinkedList;
 import javax.swing.JFrame;
 import javax.swing.border.LineBorder;
 
-import iklim.engine.gameInterface.scene.Scene;
 import iklim.engine.test.LogoScene;
 import iklim.engine.uicontrol.EventListener;
 import iklim.engine.uicontrol.SceneContext;

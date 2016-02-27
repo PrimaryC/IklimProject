@@ -1,5 +1,7 @@
 package iklim.engine;
 
+import iklim.engine.asset.AssetManager;
+import iklim.engine.asset.AssetIDMap;
 import iklim.engine.gameInterface.ViewManager;
 import iklim.engine.uicontrol.EventHandler;
 import iklim.engine.uicontrol.EventListener;
@@ -8,6 +10,7 @@ import iklim.itmaru.data.ModelManager;
 
 
 public class IklimGameEngine {
+	private AssetManager	asset;
 	private ViewManager view;
 	private ModelManager model;
 	private ViewModelManager viewModel;
@@ -37,5 +40,9 @@ public class IklimGameEngine {
 		view.repaint();
 	}
 	
+	public void loadAsset(AssetIDMap map){
+		asset.setAssetMap(map);
+		asset.load();
+	}
 	
 }

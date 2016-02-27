@@ -1,8 +1,9 @@
-package iklim.engine.gameInterface.scene;
+package iklim.engine.test;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
+import iklim.engine.gameInterface.Scene;
 import iklim.engine.uicontrol.EventListener;
 import iklim.engine.uidata.AbstractViewModel;
 import iklim.engine.uidata.ViewModelManager;
