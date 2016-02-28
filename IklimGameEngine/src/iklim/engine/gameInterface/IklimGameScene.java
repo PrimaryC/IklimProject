@@ -32,7 +32,7 @@ public abstract class IklimGameScene extends JPanel {
 		return layerList;
 	}
 
-	public void addLayer(String key,AbstractGameLayer layer){
+	public void addLayer(AbstractGameLayer layer){
 		layerList.add(layer);
 	}
 	

@@ -2,6 +2,7 @@ package iklim.itmaru.control;
 
 import java.awt.Dimension;
 
+import iklim.engine.IklimGameEngine;
 import iklim.engine.configuration.Configuration;
 import iklim.itmaru.control.listener.EventListener;
 import iklim.itmaru.utility.UtilityContext;
@@ -12,20 +13,20 @@ public class IklimGameController {
 	private Tester test;
 	private EventListener eventListener;
 	private String currentSceneName;
+	
+	private IklimGameEngine engine;
 
 	public static void main(String[] ar) {
 		new IklimGameController();
 	}
 
 	public IklimGameController() {
-		test = new Tester();
 		eventListener = new EventListener();
 
 		init();
 	}
 
 	public void init() {
-		test.addListener(eventListener);
 		loadData();
 		
 		addViewModel();
@@ -34,7 +35,7 @@ public class IklimGameController {
 	}
 
 	public void run() {
-
+		engine.run();
 	}
 
 	public void loadData() {
@@ -46,7 +47,9 @@ public class IklimGameController {
 		conf.addImage(MainMenuCentralLayer.EXIT_GAME, "exitGame.PNG");
 		
 	
-		conf.setViewerSize(new Dimension(500,500));
+		conf.setViewerSize(new Dimension(1920,1080));
+		
+		engine = new IklimGameEngine(conf);
 	}
 	
 	public void addScene(){

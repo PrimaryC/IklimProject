@@ -17,12 +17,13 @@ public class IklimGameViewer {
 	private IklimGameScene 		currentScene;
 	private ViewerProperty		viewerProperty;
 
-	public IklimGameViewer(IklimGameViewerDataManager viewModel) {
+	public IklimGameViewer() {
 		mainFrame = new JFrame();
 	}
 
 	public void init() {
 		this.viewerProperty = Configuration.getInstance().getViewerProperty();
+		System.out.println(viewerProperty.getSize().getWidth());
 		mainFrame.setSize(viewerProperty.getSize());
 	}
 
