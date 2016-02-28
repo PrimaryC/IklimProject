@@ -6,9 +6,11 @@ import iklim.engine.IklimGameEngine;
 import iklim.engine.configuration.Configuration;
 import iklim.itmaru.control.listener.EventListener;
 import iklim.itmaru.utility.UtilityContext;
+import iklim.itmaru.view.layer.Location;
 import iklim.itmaru.view.layer.MainMenuCentralLayer;
 import iklim.itmaru.view.scene.MainMenuScene;
 import iklim.itmaru.viewModel.IklimGameViewDataManager;
+import iklim.itmaru.viewModel.MainMenuCentralLayerModel;
 
 public class IklimGameController {
 	private Tester test;
@@ -23,7 +25,6 @@ public class IklimGameController {
 
 	public IklimGameController() {
 		eventListener = new EventListener();
-
 		init();
 	}
 
@@ -59,12 +60,12 @@ public class IklimGameController {
 		mainScene.addLayer(new MainMenuCentralLayer());
 		Configuration conf = Configuration.getInstance();
 		conf.addScene(UtilityContext.scenePrefix + "MainMenu", mainScene);
-			
 		
 	}
 	
 	public void addViewModel(){
-
+		System.out.println(MainMenuCentralLayerModel.class.getName());
+		dataManager.addViewModel(MainMenuCentralLayerModel.class.getName(), new MainMenuCentralLayerModel());
 	}
 
 }

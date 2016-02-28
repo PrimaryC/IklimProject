@@ -19,6 +19,11 @@ public class MainMenuCentralLayer extends AbstractRotateLayer{
 	public static final String CONFIGURATE_GAME = UtilityContext.graphicResourcePrefix + "configuration";
 	public static final String EXIT_GAME = UtilityContext.graphicResourcePrefix + "exitGame";
 	
+	public MainMenuCentralLayer(){
+		this.setCentralX(100);
+		this.setCentralY(800);
+		this.setRadious(300);
+	}
 	
 	public void init(){
 		ImageMap map = ImageMap.getInstance();

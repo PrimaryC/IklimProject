@@ -12,6 +12,13 @@ public abstract class AbstractRotateLayer extends AbstractGameLayer{
 
 	private double radious;
 	
+	public AbstractRotateLayer(){
+		this.centralX = 0;
+		this.centralY = 0;
+		radious = 0;
+	}
+	
+	
 	public double getRadious() {
 		return radious;
 	}

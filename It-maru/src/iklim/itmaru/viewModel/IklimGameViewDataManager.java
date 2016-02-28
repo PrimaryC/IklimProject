@@ -7,6 +7,11 @@ import iklim.engine.uidata.AbstractGameViewerModel;
 public class IklimGameViewDataManager {
 	private HashMap<String,AbstractGameViewerModel> viewModelMap;
 
+	public IklimGameViewDataManager(){
+		viewModelMap = new HashMap<String,AbstractGameViewerModel>();
+	}
+	
+	
 	public HashMap<String, AbstractGameViewerModel> getViewModelMap() {
 		return viewModelMap;
 	}
