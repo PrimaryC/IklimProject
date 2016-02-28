@@ -6,6 +6,8 @@ import java.util.LinkedList;
 
 import javax.swing.JPanel;
 
+import iklim.engine.configuration.Configuration;
+import iklim.engine.configuration.ViewerProperty;
 import iklim.engine.uidata.IklimGameViewerDataManager;
 
 
@@ -19,6 +21,10 @@ public abstract class IklimGameScene extends JPanel {
 	public IklimGameScene(String name){
 		this.context = name;
 		layerList = new LinkedList<AbstractGameLayer>();
+		this.setLayout(null);
+		ViewerProperty view = Configuration.getInstance().getViewerProperty();
+		this.setBounds(0,0,view.getSize().width, view.getSize().height);
+		
 	}
 	
 	public abstract void setViewModel(IklimGameViewerDataManager viewModel);
@@ -29,10 +35,12 @@ public abstract class IklimGameScene extends JPanel {
 	}
 	
 	public LinkedList<AbstractGameLayer> getLayerList() {
+		
 		return layerList;
 	}
 
 	public void addLayer(AbstractGameLayer layer){
+		this.add(layer);
 		layerList.add(layer);
 	}
 	
