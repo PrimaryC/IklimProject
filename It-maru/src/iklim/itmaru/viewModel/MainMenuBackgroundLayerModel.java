@@ -3,9 +3,9 @@ package iklim.itmaru.viewModel;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
-import iklim.engine.uidata.AbstractViewModel;
+import iklim.engine.uidata.AbstractGameViewerModel;
 
-public class MainMenuBackgroundLayerModel implements AbstractViewModel{
+public class MainMenuBackgroundLayerModel implements AbstractGameViewerModel{
 	private HashMap<String, BufferedImage> imageMap;
 	
 	public MainMenuBackgroundLayerModel(){

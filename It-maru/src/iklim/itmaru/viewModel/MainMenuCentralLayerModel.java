@@ -1,9 +1,8 @@
 package iklim.itmaru.viewModel;
 
+import iklim.engine.uidata.AbstractGameViewerModel;
 
-import iklim.engine.uidata.AbstractViewModel;
-
-public class MainMenuCentralLayerModel implements AbstractViewModel{
+public class MainMenuCentralLayerModel implements AbstractGameViewerModel{
 	private SelectionList currentWheel;
 	
 	public enum SelectionList {START_GAME,LOAD_GAME,CONFIGURATION,END_GAME};

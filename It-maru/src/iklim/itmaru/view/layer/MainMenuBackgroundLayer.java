@@ -5,18 +5,16 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import iklim.engine.gameInterface.AbstractLayer;
-import iklim.engine.uidata.ViewModelManager;
+import iklim.engine.gameInterface.AbstractGameLayer;
+import iklim.engine.uidata.IklimGameViewerDataManager;
 import iklim.itmaru.viewModel.MainMenuBackgroundLayerModel;
 
-public class MainMenuBackgroundLayer extends AbstractLayer {
+public class MainMenuBackgroundLayer extends AbstractGameLayer {
 	private MainMenuBackgroundLayerModel model;
-	private HashMap<String, ImageData> imageDataMap;
 	private ArrayList<String> keyList;
 	
 	public MainMenuBackgroundLayer(){
 		model = new MainMenuBackgroundLayerModel();
-		imageDataMap = new HashMap<String,ImageData>();
 		keyList = new ArrayList<String>();
 	}
 	
@@ -25,14 +23,22 @@ public class MainMenuBackgroundLayer extends AbstractLayer {
 	}
 	
 
+	
+
 	@Override
-	public void setModel(ViewModelManager model) {
+	public void drawElements(Graphics g) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void drawElements(Graphics g) {
+	public void setModel(IklimGameViewerDataManager model) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void animate() {
 		// TODO Auto-generated method stub
 		
 	}

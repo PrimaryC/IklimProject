@@ -3,10 +3,10 @@ package iklim.itmaru.view.layer;
 import java.awt.Graphics;
 import java.awt.Point;
 
-import iklim.engine.gameInterface.AbstractLayer;
-import iklim.engine.uidata.ViewModelManager;
+import iklim.engine.gameInterface.AbstractGameLayer;
 
-public abstract class AbstractRotateLayer extends AbstractLayer{
+
+public abstract class AbstractRotateLayer extends AbstractGameLayer{
 	private double centralX;
 	private double centralY;
 
@@ -34,8 +34,8 @@ public abstract class AbstractRotateLayer extends AbstractLayer{
 	public Location calculateObjectLocation(double degree){
 		Location point = new Location();
 		point.setX(centralX + Math.cos(degree));
-		
-		return null;
+		point.setY(centralY + Math.sin(degree));
+		return point;
 	}
 	
 	
