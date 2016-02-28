@@ -4,6 +4,7 @@ import iklim.engine.asset.AssetManager;
 import iklim.engine.configuration.Configuration;
 
 import java.util.HashMap;
+import java.util.Timer;
 
 import iklim.engine.gameInterface.IklimGameViewer;
 import iklim.engine.uidata.IklimGameViewerDataManager;
@@ -17,7 +18,7 @@ public class IklimGameEngine {
 		this.config = cfg;
 		asset = new AssetManager();
 		view = new IklimGameViewer();
-
+		
 		init();
 	}
 

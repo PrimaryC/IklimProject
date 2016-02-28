@@ -22,30 +22,30 @@ public class AssetManager {
 	
 	public void load(){
 		ImageIDMap imgMap = Configuration.getInstance().getImageIDMap();
-//		File file = new File("./asset/");
-//		for (File asset : file.listFiles()) {
-//			try {
-//				String imgName = asset.getCanonicalFile().getName();
-//				if(imgMap.containsKey(imgName)){
-//					BufferedImage bi = ImageIO.read(asset);
-//					String assetID = imgMap.get(imgName);
-//					ImageMap.getInstance().put(assetID, bi);
-//				}
-//				if(asset.getCanonicalFile().getName().equals("Alarm01.wav")){
-//					Player p = Manager.createRealizedPlayer(asset.toURI().toURL());
-//					p.start();
-//				}
-//			
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			} catch (NoPlayerException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			} catch (CannotRealizeException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
+		File file = new File("./asset/");
+		for (File asset : file.listFiles()) {
+			try {
+				String imgName = asset.getCanonicalFile().getName();
+				if(imgMap.containsKey(imgName)){
+					BufferedImage bi = ImageIO.read(asset);
+					String assetID = imgMap.get(imgName);
+					ImageMap.getInstance().put(assetID, bi);
+				}
+				if(asset.getCanonicalFile().getName().equals("Alarm01.wav")){
+					Player p = Manager.createRealizedPlayer(asset.toURI().toURL());
+					p.start();
+				}
+			
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (NoPlayerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (CannotRealizeException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		
 		
 		
