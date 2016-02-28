@@ -23,7 +23,6 @@ public class LogoScene extends Scene{
 		
 		this.setLayout(null);
 		TitleLayer layer = new TitleLayer();
-		System.out.println(this.WIDTH);
 		layer.setBounds(SceneContext.FRAME_WIDTH/ 2 - 100, SceneContext.FRAME_HEIGHT / 2 - 100,200,200);
 		
 		this.addLayer(SceneContext.TitleLayer,layer);

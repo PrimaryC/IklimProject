@@ -1,7 +1,9 @@
 package iklim.engine;
 
 import iklim.engine.asset.AssetManager;
-import iklim.engine.asset.AssetIDMap;
+
+import java.util.HashMap;
+
 import iklim.engine.gameInterface.ViewManager;
 import iklim.engine.uicontrol.EventHandler;
 import iklim.engine.uicontrol.EventListener;
@@ -12,26 +14,26 @@ import iklim.itmaru.data.ModelManager;
 public class IklimGameEngine {
 	private AssetManager	asset;
 	private ViewManager view;
-	private ModelManager model;
 	private ViewModelManager viewModel;
 	private EventListener btnListener;
 	private EventHandler handler;
+	private Configuration config;
 	
-	
-	public IklimGameEngine(){
-		
-		model = new ModelManager();
+	public IklimGameEngine(HashMap<String, String> cfgMap){
+		config = new Configuration(cfgMap);
+		asset = new AssetManager();
 		viewModel = new ViewModelManager();
 		view = new ViewManager(viewModel);
 		handler = new EventHandler(viewModel);
 		btnListener = new EventListener(handler);
+		
 		init();
 	}
 	
 	public void init(){
+		asset.load(config.getAssetIDMap());
 		viewModel.init();
 		view.init(viewModel,btnListener);
-		model.init();
 	}
 	
 	public void run(){
@@ -40,9 +42,5 @@ public class IklimGameEngine {
 		view.repaint();
 	}
 	
-	public void loadAsset(AssetIDMap map){
-		asset.setAssetMap(map);
-		asset.load();
-	}
 	
 }

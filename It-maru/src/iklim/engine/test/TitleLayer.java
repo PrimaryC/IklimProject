@@ -27,8 +27,6 @@ public class TitleLayer extends AbstractLayer{
 	@Override
 	public void paint(Graphics g){
 		
-		System.out.println(vm.getImage() + "fdafdsafa");
-		g.drawImage(vm.getImage(), 0, 0, null);
 	
 	}
 
