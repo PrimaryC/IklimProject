@@ -4,8 +4,8 @@ import java.util.Hashtable;
 
 import javax.swing.JFrame;
 
-import ViewModel.layermodel.LogoLayerModel;
 import iklim.engine.gameInterface.AbstractLayer;
+import iklim.engine.test.layermodel.LogoLayerModel;
 import iklim.engine.uicontrol.SceneContext;
 
 public class ViewModelManager {

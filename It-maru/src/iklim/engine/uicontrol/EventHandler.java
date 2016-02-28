@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import ViewModel.layermodel.LogoLayerModel;
+import iklim.engine.test.layermodel.LogoLayerModel;
 import iklim.engine.uidata.ViewModelManager;
 
 public class EventHandler {

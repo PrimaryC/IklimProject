@@ -1,4 +1,4 @@
-package ViewModel.layermodel;
+package iklim.engine.test.layermodel;
 
 import java.awt.image.BufferedImage;
 

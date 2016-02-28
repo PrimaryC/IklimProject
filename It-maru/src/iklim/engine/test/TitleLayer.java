@@ -8,9 +8,9 @@ import javax.swing.JButton;
 import javax.swing.border.LineBorder;
 
 import iklim.engine.gameInterface.AbstractLayer;
+import iklim.engine.test.layermodel.LogoLayerModel;
 import iklim.engine.uicontrol.SceneContext;
 import iklim.engine.uidata.ViewModelManager;
-import ViewModel.layermodel.LogoLayerModel;
 
 public class TitleLayer extends AbstractLayer{
 	
