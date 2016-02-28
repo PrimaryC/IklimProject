@@ -1,45 +1,33 @@
 package iklim.engine;
 
 import iklim.engine.asset.AssetManager;
+import iklim.engine.configuration.Configuration;
 
 import java.util.HashMap;
 
-import iklim.engine.gameInterface.ViewManager;
-import iklim.engine.uicontrol.EventHandler;
-import iklim.engine.uicontrol.EventListener;
-import iklim.engine.uidata.ViewModelManager;
-
+import iklim.engine.gameInterface.IklimGameViewer;
+import iklim.engine.uidata.IklimGameViewerDataManager;
 
 public class IklimGameEngine {
-	private AssetManager	asset;
-	private ViewManager view;
-	private ViewModelManager viewModel;
-	private EventListener btnListener;
-	private EventHandler handler;
+	private AssetManager asset;
+	private IklimGameViewer view;
+	private IklimGameViewerDataManager viewModel;
 	private Configuration config;
-	
-	public IklimGameEngine(HashMap<String, String> cfgMap){
-		config = new Configuration(cfgMap);
+
+	public IklimGameEngine(Configuration cfg) {
+		this.config = cfg;
 		asset = new AssetManager();
-		viewModel = new ViewModelManager();
-		view = new ViewManager(viewModel);
-		handler = new EventHandler(viewModel);
-		btnListener = new EventListener(handler);
-		
+		viewModel = new IklimGameViewerDataManager();
+		view = new IklimGameViewer(viewModel);
+
 		init();
 	}
-	
-	public void init(){
-		asset.load(config.getAssetIDMap());
+
+	public void init() {
+		asset.load();
 		viewModel.init();
-		view.init(viewModel,btnListener);
+		view.init();
 	}
-	
-	public void run(){
-		handler.loadFile();
-		view.run();
-		view.repaint();
-	}
-	
+
 	
 }
