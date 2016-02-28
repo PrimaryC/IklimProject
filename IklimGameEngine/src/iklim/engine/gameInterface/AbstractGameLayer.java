@@ -14,6 +14,10 @@ public abstract class AbstractGameLayer extends JPanel {
 	private static final long serialVersionUID = -6669890346906001682L;
 	private HashMap<String, LayoutedImage> images;
 
+	public AbstractGameLayer() {
+		images = new HashMap<String, LayoutedImage>();
+	}
+	
 	public abstract void setModel(IklimGameViewerDataManager model);
 
 	public void paint(Graphics g) {
@@ -33,6 +37,7 @@ public abstract class AbstractGameLayer extends JPanel {
 	public Map<String, LayoutedImage> getImageMap() {
 		return images;
 	}
+	
 
 	public abstract void animate();
 }

@@ -11,7 +11,6 @@ import iklim.engine.uidata.IklimGameViewerDataManager;
 
 public abstract class IklimGameScene extends JPanel {
 	private static final long serialVersionUID = -6340898452471020840L;
-	private HashMap<String,AbstractGameLayer> layerTable;
 	private LinkedList<AbstractGameLayer> layerList;
 	
 	private String						context;
@@ -19,15 +18,11 @@ public abstract class IklimGameScene extends JPanel {
 
 	public IklimGameScene(String name){
 		this.context = name;
-		layerTable = new HashMap<String,AbstractGameLayer>();
 		layerList = new LinkedList<AbstractGameLayer>();
 	}
 	
 	public abstract void setViewModel(IklimGameViewerDataManager viewModel);
 	
-	public AbstractGameLayer getLayer(String key){
-		return layerTable.get(key);
-	}
 	
 	public AbstractGameLayer getLayer(int i){
 		return layerList.get(i);
@@ -38,7 +33,6 @@ public abstract class IklimGameScene extends JPanel {
 	}
 
 	public void addLayer(String key,AbstractGameLayer layer){
-		layerTable.put(key, layer);
 		layerList.add(layer);
 	}
 	

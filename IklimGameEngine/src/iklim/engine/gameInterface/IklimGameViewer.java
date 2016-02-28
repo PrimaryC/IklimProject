@@ -8,18 +8,17 @@ import javax.swing.JFrame;
 import javax.swing.border.LineBorder;
 
 import iklim.engine.configuration.Configuration;
+import iklim.engine.configuration.SceneMap;
 import iklim.engine.configuration.ViewerProperty;
 import iklim.engine.uidata.IklimGameViewerDataManager;
 
 public class IklimGameViewer {
-	private HashMap<String, IklimGameScene> sceneMap;
-	private JFrame mainFrame;
-	private IklimGameScene currentScene;
+	private JFrame 				mainFrame;
+	private IklimGameScene 		currentScene;
 	private ViewerProperty		viewerProperty;
 
 	public IklimGameViewer(IklimGameViewerDataManager viewModel) {
 		mainFrame = new JFrame();
-		sceneMap = new HashMap<String, IklimGameScene>();
 	}
 
 	public void init() {
@@ -31,10 +30,6 @@ public class IklimGameViewer {
 		mainFrame.setVisible(true);
 	}
 
-	public void addScene(String sceneName, IklimGameScene scene) {
-		sceneMap.put(sceneName, scene);
-	}
-
 	public void animate() {
 		currentScene.animate();
 	}
@@ -44,6 +39,7 @@ public class IklimGameViewer {
 	}
 	
 	public void showScene(String context){
+		SceneMap sceneMap = Configuration.getInstance().getSceneMap();
 		if(sceneMap.containsKey(context)){
 			this.currentScene = sceneMap.get(context);
 			mainFrame.setContentPane(currentScene);

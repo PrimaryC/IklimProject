@@ -8,16 +8,19 @@ import java.util.LinkedList;
 import java.util.Set;
 
 import iklim.engine.SceneListener;
+import iklim.engine.gameInterface.IklimGameScene;
 
 public class Configuration {
 	private ImageIDMap					imgMap;
 	private SoundIDMap					sndMap;
 	private ViewerProperty				viewPro;
+	private SceneMap					sceneMap;
 	private LinkedList<SceneListener>	sceneListeners;
 		
 	private Configuration() {
 		imgMap = new ImageIDMap();
 		sndMap = new SoundIDMap();
+		sceneMap = new SceneMap();
 		viewPro = new ViewerProperty();
 		sceneListeners = new LinkedList<SceneListener>();
 	}
@@ -50,6 +53,13 @@ public class Configuration {
 
 	public ViewerProperty getViewerProperty() {
 		return viewPro;
-		
+	}
+
+	public SceneMap getSceneMap() {
+		return sceneMap;
+	}
+	
+	public void addScene(String name, IklimGameScene scene){
+		sceneMap.put(name, scene);
 	}
 }

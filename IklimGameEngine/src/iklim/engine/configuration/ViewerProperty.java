@@ -7,7 +7,6 @@ public class ViewerProperty {
 
 	public void setSize(Dimension d) {
 		this.viewerSize = d;
-		
 	}
 	
 	public Dimension getSize(){
