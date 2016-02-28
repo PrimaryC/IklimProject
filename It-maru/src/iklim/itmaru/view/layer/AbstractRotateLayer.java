@@ -1,6 +1,8 @@
 package iklim.itmaru.view.layer;
 
-import iklim.engine.gameInterface.layer.AbstractLayer;
+import java.awt.Graphics;
+
+import iklim.engine.gameInterface.AbstractLayer;
 import iklim.engine.uidata.ViewModelManager;
 
 public class AbstractRotateLayer extends AbstractLayer{
@@ -29,6 +31,11 @@ public class AbstractRotateLayer extends AbstractLayer{
 	
 	@Override
 	public void setModel(ViewModelManager model) {
+		
+	}
+	@Override
+	public void drawElements(Graphics g) {
+		// TODO Auto-generated method stub
 		
 	}
 	
