@@ -8,12 +8,13 @@ import iklim.itmaru.control.listener.EventListener;
 import iklim.itmaru.utility.UtilityContext;
 import iklim.itmaru.view.layer.MainMenuCentralLayer;
 import iklim.itmaru.view.scene.MainMenuScene;
+import iklim.itmaru.viewModel.IklimGameViewDataManager;
 
 public class IklimGameController {
 	private Tester test;
 	private EventListener eventListener;
 	private String currentSceneName;
-	
+	private IklimGameViewDataManager dataManager;
 	private IklimGameEngine engine;
 
 	public static void main(String[] ar) {
@@ -41,11 +42,10 @@ public class IklimGameController {
 	public void loadData() {
 
 		Configuration conf = Configuration.getInstance();
-		conf.addImage(MainMenuCentralLayer.START_GAME, "startGame.PNG");
-		conf.addImage(MainMenuCentralLayer.LOAD_GAME, "loadGame.PNG");
-		conf.addImage(MainMenuCentralLayer.CONFIGURATE_GAME,"configuration.PNG");
-		conf.addImage(MainMenuCentralLayer.EXIT_GAME, "exitGame.PNG");
-		
+		conf.addImage(MainMenuCentralLayer.START_GAME, "startGame.png");
+		conf.addImage(MainMenuCentralLayer.LOAD_GAME, "loadGame.png");
+		conf.addImage(MainMenuCentralLayer.CONFIGURATE_GAME,"configuration.png");
+		conf.addImage(MainMenuCentralLayer.EXIT_GAME, "exitGame.png");
 	
 		conf.setViewerSize(new Dimension(1920,1080));
 		
@@ -53,16 +53,13 @@ public class IklimGameController {
 	}
 	
 	public void addScene(){
-		MainMenuScene mainScene = new MainMenuScene("MainMenu");
+		MainMenuScene mainScene = new MainMenuScene(UtilityContext.scenePrefix + "MainMenu");
 		
 		mainScene.addLayer(new MainMenuCentralLayer());
-		
-		
-	}
+}
 	
 	public void addViewModel(){
-		
-		
+
 	}
 
 }
