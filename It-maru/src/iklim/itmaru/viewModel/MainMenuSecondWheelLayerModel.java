@@ -4,7 +4,9 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class MainMenuSecondWheelLayerModel {
+import iklim.engine.uidata.AbstractViewModel;
+
+public class MainMenuSecondWheelLayerModel implements AbstractViewModel{
 
 	private ArrayList<String> saveFileList;
 
