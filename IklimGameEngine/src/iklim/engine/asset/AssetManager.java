@@ -11,22 +11,26 @@ import javax.media.Manager;
 import javax.media.NoPlayerException;
 import javax.media.Player;
 
+import iklim.engine.configuration.Configuration;
+import iklim.engine.configuration.ImageIDMap;
+
 public class AssetManager {
-	private ImageMap 			imageMap;
 	
 	public AssetManager() {
-		imageMap = new ImageMap();
+		ImageMap.newIntance();
 	}
 	
-	public void load(Map<String, String> assetIDMap){
+	public void load(){
+		ImageIDMap imgMap = Configuration.getInstance().getImageIDMap();
+		
 		File file = new File("./asset/");
 		for (File asset : file.listFiles()) {
 			try {
 				String imgName = asset.getCanonicalFile().getName();
-				if(assetIDMap.containsKey(imgName)){
+				if(imgMap.containsKey(imgName)){
 					BufferedImage bi = ImageIO.read(asset);
-					String assetID = assetIDMap.get(imgName);
-					imageMap.put(assetID, bi);
+					String assetID = imgMap.get(imgName);
+					ImageMap.getInstance().put(assetID, bi);
 				}
 				if(asset.getCanonicalFile().getName().equals("Alarm01.wav")){
 					Player p = Manager.createRealizedPlayer(asset.toURI().toURL());
