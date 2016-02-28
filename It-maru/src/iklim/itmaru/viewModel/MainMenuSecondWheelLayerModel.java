@@ -1,20 +1,20 @@
 package iklim.itmaru.viewModel;
 
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MainMenuSecondWheelLayerModel {
-private HashMap<String,BufferedImage> imageMap;
-	
-	public MainMenuSecondWheelLayerModel(){
-		imageMap = new HashMap<String,BufferedImage>();
-	}
-	
-	public HashMap<String, BufferedImage> getImageMap() {
-		return imageMap;
+
+	private ArrayList<String> saveFileList;
+
+	public ArrayList<String> getSaveFileList() {
+		return saveFileList;
 	}
 
-	public void addImage(String key, BufferedImage image) {
-		this.imageMap.put(key, image);
+	public void addSaveFile(String saveFileList) {
+		this.saveFileList.add(saveFileList);
 	}
+	
+	
 }
