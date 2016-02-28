@@ -43,6 +43,7 @@ public class IklimGameViewer {
 		SceneMap sceneMap = Configuration.getInstance().getSceneMap();
 		if(sceneMap.containsKey(context)){
 			this.currentScene = sceneMap.get(context);
+			this.currentScene.init();
 			mainFrame.setContentPane(currentScene);
 		}
 	}

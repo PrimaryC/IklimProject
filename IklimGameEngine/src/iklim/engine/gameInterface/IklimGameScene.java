@@ -61,4 +61,11 @@ public abstract class IklimGameScene extends JPanel {
 		
 		return this.context;
 	}
+
+	public void init() {
+		for (AbstractGameLayer abstractGameLayer : layerList) {
+			abstractGameLayer.init();
+		}
+		
+	}
 }

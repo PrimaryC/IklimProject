@@ -40,4 +40,6 @@ public abstract class AbstractGameLayer extends JPanel {
 	
 
 	public abstract void animate();
+
+	public abstract void init() ;
 }

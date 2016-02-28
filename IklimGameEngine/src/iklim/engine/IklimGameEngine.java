@@ -29,8 +29,8 @@ public class IklimGameEngine {
 
 	public void run(){
 		Timer t = new Timer();
-		t.schedule(new RepaintTask(view), 100);
 		view.run();
+		t.schedule(new RepaintTask(view), 100);
 	}
 	
 	public void showScene(String sceneName){
