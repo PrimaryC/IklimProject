@@ -8,13 +8,11 @@ import javax.swing.JButton;
 import javax.swing.border.LineBorder;
 
 import iklim.engine.gameInterface.AbstractLayer;
-import iklim.engine.test.layermodel.LogoLayerModel;
 import iklim.engine.uicontrol.SceneContext;
 import iklim.engine.uidata.ViewModelManager;
 
 public class TitleLayer extends AbstractLayer{
 	
-	private LogoLayerModel vm;
 
 	public TitleLayer(){
 	
@@ -32,7 +30,6 @@ public class TitleLayer extends AbstractLayer{
 
 	@Override
 	public void setModel(ViewModelManager model) {
-		this.vm = (LogoLayerModel)model.getLayerModel(SceneContext.TitleLayer);
 	}
 
 	@Override

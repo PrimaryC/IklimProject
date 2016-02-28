@@ -6,7 +6,6 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import iklim.engine.test.layermodel.LogoLayerModel;
 import iklim.engine.uidata.ViewModelManager;
 
 public class EventHandler {
@@ -26,7 +25,5 @@ public class EventHandler {
 			e.printStackTrace();
 		}
 		
-		LogoLayerModel temp = (LogoLayerModel)viewModel.getLayerModel(SceneContext.TitleLayer);
-		temp.setImage(img);
 	}
 }

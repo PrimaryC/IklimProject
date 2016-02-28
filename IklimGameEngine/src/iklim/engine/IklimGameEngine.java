@@ -8,7 +8,6 @@ import iklim.engine.gameInterface.ViewManager;
 import iklim.engine.uicontrol.EventHandler;
 import iklim.engine.uicontrol.EventListener;
 import iklim.engine.uidata.ViewModelManager;
-import iklim.itmaru.data.ModelManager;
 
 
 public class IklimGameEngine {
