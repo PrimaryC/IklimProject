@@ -25,6 +25,7 @@ public class IklimGameController {
 
 	public IklimGameController() {
 		eventListener = new EventListener();
+		dataManager = new IklimGameViewDataManager();
 		init();
 	}
 
@@ -44,7 +45,7 @@ public class IklimGameController {
 	public void loadData() {
 
 		Configuration conf = Configuration.getInstance();
-		conf.addImage(MainMenuCentralLayer.START_GAME, "startGame.png");
+		conf.addImage(MainMenuCentralLayer.START_GAME, "startGame.PNG");
 		conf.addImage(MainMenuCentralLayer.LOAD_GAME, "loadGame.png");
 		conf.addImage(MainMenuCentralLayer.CONFIGURATE_GAME,"configuration.png");
 		conf.addImage(MainMenuCentralLayer.EXIT_GAME, "exitGame.png");

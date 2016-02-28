@@ -2,6 +2,7 @@ package iklim.engine.gameInterface;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,6 +29,10 @@ public abstract class AbstractGameLayer extends JPanel {
 
 	public void paint(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
+		RenderingHints rh = new RenderingHints(
+	             RenderingHints.KEY_INTERPOLATION,
+	             RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+	    g2d.setRenderingHints(rh);
 		for (LayoutedImage img : images.values()) {
 			AffineTransform trans = new AffineTransform();
 			trans.translate(img.getPosX(), img.getPosY());

@@ -21,8 +21,8 @@ public class MainMenuCentralLayer extends AbstractRotateLayer{
 	
 	public MainMenuCentralLayer(){
 		this.setCentralX(100);
-		this.setCentralY(800);
-		this.setRadious(300);
+		this.setCentralY(500);
+		this.setRadious(200);
 	}
 	
 	public void init(){
@@ -57,16 +57,36 @@ public class MainMenuCentralLayer extends AbstractRotateLayer{
 
 	@Override
 	public void setModel(IklimGameViewerDataManager model) {
-		model.getLayerModel("MainMenuCentralLayer");
+		model.getLayerModel(MainMenuCentralLayerModel.class.getName());
 		
 	}
 
 	@Override
 	public void animate() {
-		Location a = this.calculateObjectLocation(30);
+		Location a = this.calculateObjectLocation(Math.toRadians(30));
 		LayoutedImage x = this.getImageMap().get(START_GAME);
+		x.setRotateTheta(30);
 		x.setPosX(a.getX());
 		x.setPosY(a.getY());
+		
+		a = this.calculateObjectLocation(Math.toRadians(60));
+		x = this.getImageMap().get(LOAD_GAME);
+		x.setRotateTheta(60);
+		x.setPosX(a.getX());
+		x.setPosY(a.getY());
+		
+		a = this.calculateObjectLocation(Math.toRadians(90));
+		x = this.getImageMap().get(CONFIGURATE_GAME);
+		x.setRotateTheta(90);
+		x.setPosX(a.getX());
+		x.setPosY(a.getY());
+		
+		a = this.calculateObjectLocation(Math.toRadians(120));
+		x = this.getImageMap().get(EXIT_GAME);
+		x.setRotateTheta(120);
+		x.setPosX(a.getX());
+		x.setPosY(a.getY());
+		
 	}
 
 }
