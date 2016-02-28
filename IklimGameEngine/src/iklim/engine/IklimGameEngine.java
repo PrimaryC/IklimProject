@@ -33,5 +33,8 @@ public class IklimGameEngine {
 		view.run();
 	}
 	
+	public void showScene(String sceneName){
+		view.showScene(sceneName);
+	}
 	
 }
