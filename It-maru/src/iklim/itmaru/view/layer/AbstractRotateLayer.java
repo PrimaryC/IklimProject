@@ -1,42 +1,43 @@
 package iklim.itmaru.view.layer;
 
 import java.awt.Graphics;
+import java.awt.Point;
 
 import iklim.engine.gameInterface.AbstractLayer;
 import iklim.engine.uidata.ViewModelManager;
 
-public class AbstractRotateLayer extends AbstractLayer{
-	private int centralX;
-	private int centralY;
-	private int rotation;
+public abstract class AbstractRotateLayer extends AbstractLayer{
+	private double centralX;
+	private double centralY;
+
+	private double radious;
 	
-	public int getCentralX() {
+	public double getRadious() {
+		return radious;
+	}
+	public void setRadious(double radious) {
+		this.radious = radious;
+	}
+	public double getCentralX() {
 		return centralX;
 	}
-	public void setCentralX(int centralX) {
+	public void setCentralX(double centralX) {
 		this.centralX = centralX;
 	}
-	public int getCentralY() {
+	public double getCentralY() {
 		return centralY;
 	}
-	public void setCentralY(int centralY) {
+	public void setCentralY(double centralY) {
 		this.centralY = centralY;
 	}
-	public int getRotation() {
-		return rotation;
-	}
-	public void setRotation(int rotation) {
-		this.rotation = rotation;
+	
+	public Location calculateObjectLocation(double degree){
+		Location point = new Location();
+		point.setX(centralX + Math.cos(degree));
+		
+		return null;
 	}
 	
-	@Override
-	public void setModel(ViewModelManager model) {
-		
-	}
-	@Override
-	public void drawElements(Graphics g) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 	
 }

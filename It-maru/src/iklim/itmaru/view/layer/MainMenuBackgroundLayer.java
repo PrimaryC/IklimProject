@@ -5,9 +5,11 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import iklim.engine.gameInterface.AbstractLayer;
+import iklim.engine.uidata.ViewModelManager;
 import iklim.itmaru.viewModel.MainMenuBackgroundLayerModel;
 
-public class MainMenuBackgroundLayer extends AbstractRotateLayer {
+public class MainMenuBackgroundLayer extends AbstractLayer {
 	private MainMenuBackgroundLayerModel model;
 	private HashMap<String, ImageData> imageDataMap;
 	private ArrayList<String> keyList;
@@ -19,17 +21,20 @@ public class MainMenuBackgroundLayer extends AbstractRotateLayer {
 	}
 	
 	public void init(){
-		this.setCentralX(50);
-		this.setCentralY(200);
+
 	}
 	
-	public void paint(Graphics g){
-		BufferedImage image;
-		ImageData imageData;
-		for(int i = 0; i < keyList.size();i++){
-			image = model.getImageMap().get(keyList.get(i));
-			imageData = imageDataMap.get(keyList.get(i));
-		}
+
+	@Override
+	public void setModel(ViewModelManager model) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void drawElements(Graphics g) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }
