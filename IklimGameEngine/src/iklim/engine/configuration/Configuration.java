@@ -27,11 +27,9 @@ public class Configuration {
 	
 	private static Configuration instance;
 	
-	public static Configuration getInstance(){
-		synchronized(instance){
-			if(instance == null){
-				instance = new Configuration();
-			}
+	public synchronized static Configuration getInstance(){
+		if(instance == null){
+			instance = new Configuration();
 		}
 		return instance;
 	}
