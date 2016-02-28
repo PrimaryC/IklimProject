@@ -2,16 +2,16 @@ package iklim.itmaru.control;
 
 import iklim.itmaru.control.listener.EventListener;
 
-public class ControlManager {
+public class IklimGameController {
 	private Tester test;
 	private EventListener eventListener;
 	private String currentSceneName;
 	
 	public static void main(String[] ar){
-		new ControlManager();
+		new IklimGameController();
 	}
 	
-	public ControlManager(){
+	public IklimGameController(){
 		test  = new Tester();
 		eventListener = new EventListener();
 		init();

@@ -1,6 +1,6 @@
 package iklim.itmaru.data;
 
-public class ModelManager {
+public class IklimGameData {
 
 	public void init() {
 		// TODO Auto-generated method stub

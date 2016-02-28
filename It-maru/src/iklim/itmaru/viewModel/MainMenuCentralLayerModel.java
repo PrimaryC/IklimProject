@@ -1,28 +1,23 @@
 package iklim.itmaru.viewModel;
 
-import java.awt.image.BufferedImage;
-import java.util.HashMap;
 
 import iklim.engine.uidata.AbstractViewModel;
 
 public class MainMenuCentralLayerModel implements AbstractViewModel{
-	private String currentWheel;
+	private SelectionList currentWheel;
 	
-	public static final String START_GAME = "START_GAME";
-	public static final String LOAD_GAME = "LOAD_GAME";
-	public static final String CONFIGURATION = "CONFIGURATION";
-	public static final String END_GAME = "END_GAME";
+	public enum SelectionList {START_GAME,LOAD_GAME,CONFIGURATION,END_GAME};
 	
 	public MainMenuCentralLayerModel(){
-		this.currentWheel = START_GAME;
+		this.currentWheel = SelectionList.START_GAME;
 	}
 
 	public String getCurrentWheel() {
-		return currentWheel;
+		return currentWheel.name();
 	}
 
-	public void setCurrentWheel(String currentWheel) {
-		this.currentWheel = currentWheel;
+	public void setCurrentWheel(SelectionList wheel) {
+		this.currentWheel = wheel;
 	}
 	
 }
