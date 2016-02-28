@@ -36,6 +36,7 @@ public class IklimGameController {
 	}
 
 	public void run() {
+		engine.showScene(UtilityContext.scenePrefix + "MainMenu");
 		engine.run();
 	}
 
@@ -56,7 +57,11 @@ public class IklimGameController {
 		MainMenuScene mainScene = new MainMenuScene(UtilityContext.scenePrefix + "MainMenu");
 		
 		mainScene.addLayer(new MainMenuCentralLayer());
-}
+		Configuration conf = Configuration.getInstance();
+		conf.addScene(UtilityContext.scenePrefix + "MainMenu", mainScene);
+			
+		
+	}
 	
 	public void addViewModel(){
 

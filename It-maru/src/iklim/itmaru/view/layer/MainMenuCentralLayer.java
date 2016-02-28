@@ -59,7 +59,7 @@ public class MainMenuCentralLayer extends AbstractRotateLayer{
 	@Override
 	public void animate() {
 		Location a = this.calculateObjectLocation(30);
-		LayoutedImage x = this.getImageMap().get(UtilityContext.graphicResourcePrefix + START_GAME);
+		LayoutedImage x = this.getImageMap().get(START_GAME);
 		x.setPosX(a.getX());
 		x.setPosY(a.getY());
 	}
