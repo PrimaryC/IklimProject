@@ -8,6 +8,8 @@ import java.util.Map;
 
 import javax.swing.JPanel;
 
+import iklim.engine.configuration.Configuration;
+import iklim.engine.configuration.ViewerProperty;
 import iklim.engine.uidata.IklimGameViewerDataManager;
 
 public abstract class AbstractGameLayer extends JPanel {
@@ -16,6 +18,10 @@ public abstract class AbstractGameLayer extends JPanel {
 
 	public AbstractGameLayer() {
 		images = new HashMap<String, LayoutedImage>();
+		this.setLayout(null);
+		ViewerProperty view = Configuration.getInstance().getViewerProperty();
+		this.setBounds(0,0,view.getSize().width, view.getSize().height);
+
 	}
 	
 	public abstract void setModel(IklimGameViewerDataManager model);
