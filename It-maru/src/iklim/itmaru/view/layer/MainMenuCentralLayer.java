@@ -14,10 +14,10 @@ import iklim.itmaru.viewModel.MainMenuCentralLayerModel;
 public class MainMenuCentralLayer extends AbstractRotateLayer{
 	private MainMenuCentralLayerModel model;
 
-	public static final String START_GAME = "startGame";
-	public static final String LOAD_GAME = "loadGame";
-	public static final String CONFIGURATE_GAME = "configuration";
-	public static final String EXIT_GAME = "exitGame";
+	public static final String START_GAME = UtilityContext.graphicResourcePrefix + "startGame";
+	public static final String LOAD_GAME = UtilityContext.graphicResourcePrefix + "loadGame";
+	public static final String CONFIGURATE_GAME = UtilityContext.graphicResourcePrefix + "configuration";
+	public static final String EXIT_GAME = UtilityContext.graphicResourcePrefix + "exitGame";
 	
 	
 	public void init(){
@@ -26,21 +26,21 @@ public class MainMenuCentralLayer extends AbstractRotateLayer{
 		BufferedImage image;
 		LayoutedImage lImage;
 		
-		image = map.get(UtilityContext.graphicResourcePrefix + START_GAME);
+		image = map.get(START_GAME);
 		lImage = new LayoutedImage(image);
-		this.getImageMap().put(UtilityContext.graphicResourcePrefix + START_GAME, lImage);
+		this.getImageMap().put(START_GAME, lImage);
 		
-		image = map.get(UtilityContext.graphicResourcePrefix + LOAD_GAME);
+		image = map.get(LOAD_GAME);
 		lImage = new LayoutedImage(image);
-		this.getImageMap().put(UtilityContext.graphicResourcePrefix + LOAD_GAME, lImage);
+		this.getImageMap().put(LOAD_GAME, lImage);
 		
-		image = map.get(UtilityContext.graphicResourcePrefix + CONFIGURATE_GAME);
+		image = map.get(CONFIGURATE_GAME);
 		lImage = new LayoutedImage(image);
-		this.getImageMap().put(UtilityContext.graphicResourcePrefix + CONFIGURATE_GAME, lImage);
+		this.getImageMap().put(CONFIGURATE_GAME, lImage);
 		
-		image = map.get(UtilityContext.graphicResourcePrefix + EXIT_GAME);
+		image = map.get(EXIT_GAME);
 		lImage = new LayoutedImage(image);
-		this.getImageMap().put(UtilityContext.graphicResourcePrefix + EXIT_GAME, lImage);
+		this.getImageMap().put(EXIT_GAME, lImage);
 		
 	}
 	

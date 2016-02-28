@@ -40,18 +40,20 @@ public class IklimGameController {
 	public void loadData() {
 
 		Configuration conf = Configuration.getInstance();
-		conf.addImage(UtilityContext.graphicResourcePrefix + MainMenuCentralLayer.START_GAME, "startGame.jpg");
-		conf.addImage(UtilityContext.graphicResourcePrefix + MainMenuCentralLayer.LOAD_GAME, "loadGame.jpg");
-		conf.addImage(UtilityContext.graphicResourcePrefix + MainMenuCentralLayer.CONFIGURATE_GAME,
-				"configurationMenu.jpg");
-		conf.addImage(UtilityContext.graphicResourcePrefix + MainMenuCentralLayer.EXIT_GAME, "exitGame.jpg");
+		conf.addImage(MainMenuCentralLayer.START_GAME, "startGame.PNG");
+		conf.addImage(MainMenuCentralLayer.LOAD_GAME, "loadGame.PNG");
+		conf.addImage(MainMenuCentralLayer.CONFIGURATE_GAME,"configuration.PNG");
+		conf.addImage(MainMenuCentralLayer.EXIT_GAME, "exitGame.PNG");
 		
+	
 		conf.setViewerSize(new Dimension(500,500));
 	}
 	
 	public void addScene(){
 		MainMenuScene mainScene = new MainMenuScene("MainMenu");
-		mainScene.addLayer("MainMenuCentralLayer", new MainMenuCentralLayer());
+		
+		mainScene.addLayer(new MainMenuCentralLayer());
+		
 		
 	}
 	

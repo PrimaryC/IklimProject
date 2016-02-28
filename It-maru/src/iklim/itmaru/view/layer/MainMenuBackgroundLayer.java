@@ -19,7 +19,7 @@ public class MainMenuBackgroundLayer extends AbstractGameLayer {
 	}
 	
 	public void init(){
-
+		
 	}
 	
 
