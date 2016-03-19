@@ -7,6 +7,7 @@ import iklim.engine.configuration.Configuration;
 import iklim.itmaru.control.listener.EventListener;
 import iklim.itmaru.utility.UtilityContext;
 import iklim.itmaru.view.layer.Location;
+import iklim.itmaru.view.layer.MainMenuBackgroundLayer;
 import iklim.itmaru.view.layer.MainMenuCentralLayer;
 import iklim.itmaru.view.scene.MainMenuScene;
 import iklim.itmaru.viewModel.IklimGameViewDataManager;
@@ -59,6 +60,7 @@ public class IklimGameController {
 		MainMenuScene mainScene = new MainMenuScene(UtilityContext.scenePrefix + "MainMenu");
 		
 		mainScene.addLayer(new MainMenuCentralLayer());
+		mainScene.addLayer(new MainMenuBackgroundLayer());
 		Configuration conf = Configuration.getInstance();
 		conf.addScene(UtilityContext.scenePrefix + "MainMenu", mainScene);
 		

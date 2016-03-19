@@ -20,7 +20,7 @@ public class MainMenuCentralLayer extends AbstractRotateLayer{
 	public static final String EXIT_GAME = UtilityContext.graphicResourcePrefix + "exitGame";
 	
 	public MainMenuCentralLayer(){
-		this.setCentralX(100);
+		this.setCentralX(200);
 		this.setCentralY(500);
 		this.setRadious(200);
 	}
@@ -63,27 +63,27 @@ public class MainMenuCentralLayer extends AbstractRotateLayer{
 
 	@Override
 	public void animate() {
-		Location a = this.calculateObjectLocation(Math.toRadians(30));
+		Location a = this.calculateObjectLocation(Math.toRadians(0));
 		LayoutedImage x = this.getImageMap().get(START_GAME);
-		x.setRotateTheta(30);
+		x.setRotateTheta(Math.toRadians(0));
+		x.setPosX(a.getX());
+		x.setPosY(a.getY());
+		
+		a = this.calculateObjectLocation(Math.toRadians(30));
+		x = this.getImageMap().get(LOAD_GAME);
+		x.setRotateTheta(Math.toRadians(30));
 		x.setPosX(a.getX());
 		x.setPosY(a.getY());
 		
 		a = this.calculateObjectLocation(Math.toRadians(60));
-		x = this.getImageMap().get(LOAD_GAME);
-		x.setRotateTheta(60);
+		x = this.getImageMap().get(CONFIGURATE_GAME);
+		x.setRotateTheta(Math.toRadians(60));
 		x.setPosX(a.getX());
 		x.setPosY(a.getY());
 		
 		a = this.calculateObjectLocation(Math.toRadians(90));
-		x = this.getImageMap().get(CONFIGURATE_GAME);
-		x.setRotateTheta(90);
-		x.setPosX(a.getX());
-		x.setPosY(a.getY());
-		
-		a = this.calculateObjectLocation(Math.toRadians(120));
 		x = this.getImageMap().get(EXIT_GAME);
-		x.setRotateTheta(120);
+		x.setRotateTheta(Math.toRadians(90));
 		x.setPosX(a.getX());
 		x.setPosY(a.getY());
 		
