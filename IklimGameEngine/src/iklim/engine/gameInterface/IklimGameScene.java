@@ -1,6 +1,8 @@
 package iklim.engine.gameInterface;
 
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -11,7 +13,7 @@ import iklim.engine.configuration.ViewerProperty;
 import iklim.engine.uidata.IklimGameViewerDataManager;
 
 
-public abstract class IklimGameScene extends JPanel {
+public abstract class IklimGameScene extends JPanel implements KeyListener{
 	private static final long serialVersionUID = -6340898452471020840L;
 	private LinkedList<AbstractGameLayer> layerList;
 	
@@ -55,7 +57,6 @@ public abstract class IklimGameScene extends JPanel {
 		for (AbstractGameLayer abstractGameLayer : layerList) {
 			abstractGameLayer.animate();
 		}
-		
 	}
 
 	public boolean isOver() {
@@ -66,7 +67,6 @@ public abstract class IklimGameScene extends JPanel {
 	}
 
 	public String getSceneContext() {
-		
 		return this.context;
 	}
 
@@ -74,6 +74,21 @@ public abstract class IklimGameScene extends JPanel {
 		for (AbstractGameLayer abstractGameLayer : layerList) {
 			abstractGameLayer.init();
 		}
-		
 	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		String key = KeyConfiguration.getPressedKeyByValue(e.getKeyCode());
+		keyPressed(key);
+	}
+
+	public abstract void keyPressed(String key);
+
+	@Override
+	public void keyReleased(KeyEvent e) {}
+
+	@Override
+	public void keyTyped(KeyEvent e) {}
+	
+	
 }

@@ -1,11 +1,7 @@
 package iklim.engine.configuration;
 
 import java.awt.Dimension;
-import java.awt.geom.Dimension2D;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Set;
 
 import iklim.engine.SceneListener;
 import iklim.engine.gameInterface.IklimGameScene;
