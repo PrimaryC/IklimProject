@@ -1,5 +1,6 @@
 package iklim.itmaru.view.layer;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -27,7 +28,9 @@ public class MainMenuBackgroundLayer extends AbstractGameLayer {
 
 	@Override
 	public void drawElements(Graphics g) {
-		// TODO Auto-generated method stub
+		System.out.println("fjdklsa");
+		g.setColor(Color.white);
+		g.fillRect(0, 0, 1920, 1080);
 		
 	}
 
