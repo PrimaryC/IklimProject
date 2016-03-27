@@ -1,4 +1,4 @@
-package iklim.itmaru.view.layer;
+package iklim.itmaru.view.scene.mainmenuscene.layer;
 
 public class Location {
 	private double x;

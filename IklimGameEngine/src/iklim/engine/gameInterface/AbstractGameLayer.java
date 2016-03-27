@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 
 import iklim.engine.configuration.Configuration;
 import iklim.engine.configuration.ViewerProperty;
+import iklim.engine.uidata.AbstractGameViewerModel;
 import iklim.engine.uidata.IklimGameViewerDataManager;
 
 public abstract class AbstractGameLayer extends JPanel {
@@ -24,8 +25,6 @@ public abstract class AbstractGameLayer extends JPanel {
 		this.setBounds(0,0,view.getSize().width, view.getSize().height);
 
 	}
-	
-	public abstract void setModel(IklimGameViewerDataManager model);
 
 	public void paint(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;

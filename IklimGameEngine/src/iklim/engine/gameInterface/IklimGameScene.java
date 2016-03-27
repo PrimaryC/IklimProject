@@ -3,6 +3,8 @@ package iklim.engine.gameInterface;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+import java.nio.file.attribute.AclEntry.Builder;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -48,9 +50,12 @@ public abstract class IklimGameScene extends JPanel implements KeyListener{
 	
 	@Override
 	public void paint(Graphics g) {
+		BufferedImage i = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+		Graphics nextFrame = i.getGraphics();
 		for (AbstractGameLayer abstractGameLayer : layerList) {
-			abstractGameLayer.repaint();
+			abstractGameLayer.paint(nextFrame);
 		}
+		g.drawImage(i, 0, 0, null);
 	}
 
 	public void animate() {
@@ -79,7 +84,8 @@ public abstract class IklimGameScene extends JPanel implements KeyListener{
 	@Override
 	public void keyPressed(KeyEvent e) {
 		String key = KeyConfiguration.getPressedKeyByValue(e.getKeyCode());
-		keyPressed(key);
+		if(key != null)
+			keyPressed(key);
 	}
 
 	public abstract void keyPressed(String key);

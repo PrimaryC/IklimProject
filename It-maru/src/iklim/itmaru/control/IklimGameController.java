@@ -4,14 +4,15 @@ import java.awt.Dimension;
 
 import iklim.engine.IklimGameEngine;
 import iklim.engine.configuration.Configuration;
+import iklim.itmaru.charamakingscene.CharaMakingScene;
 import iklim.itmaru.control.listener.EventListener;
 import iklim.itmaru.utility.UtilityContext;
-import iklim.itmaru.view.layer.Location;
-import iklim.itmaru.view.layer.MainMenuBackgroundLayer;
-import iklim.itmaru.view.layer.MainMenuCentralLayer;
-import iklim.itmaru.view.scene.MainMenuScene;
+import iklim.itmaru.view.scene.mainmenuscene.MainMenuScene;
+import iklim.itmaru.view.scene.mainmenuscene.layer.Location;
+import iklim.itmaru.view.scene.mainmenuscene.layer.MainMenuBackgroundLayer;
+import iklim.itmaru.view.scene.mainmenuscene.layer.MainMenuCentralLayer;
+import iklim.itmaru.view.scene.mainmenuscene.viewmodel.MainMenuCentralLayerModel;
 import iklim.itmaru.viewModel.IklimGameViewDataManager;
-import iklim.itmaru.viewModel.MainMenuCentralLayerModel;
 
 public class IklimGameController {
 	private Tester test;
@@ -33,7 +34,6 @@ public class IklimGameController {
 	public void init() {
 		loadData();
 		
-		addViewModel();
 		addScene();
 		run();
 	}
@@ -57,18 +57,13 @@ public class IklimGameController {
 	}
 	
 	public void addScene(){
-		MainMenuScene mainScene = new MainMenuScene(UtilityContext.scenePrefix + "MainMenu");
+		MainMenuScene mainScene = new MainMenuScene(UtilityContext.scenePrefix + "MainMenu",dataManager);
+		CharaMakingScene charaScene = new CharaMakingScene(UtilityContext.scenePrefix + "CharaMaking");
 		
-		mainScene.addLayer(new MainMenuCentralLayer());
-		mainScene.addLayer(new MainMenuBackgroundLayer());
 		Configuration conf = Configuration.getInstance();
 		conf.addScene(UtilityContext.scenePrefix + "MainMenu", mainScene);
+		conf.addScene(UtilityContext.scenePrefix + "CharaMakingScene", charaScene);
 		
 	}
 	
-	public void addViewModel(){
-		System.out.println(MainMenuCentralLayerModel.class.getName());
-		dataManager.addViewModel(MainMenuCentralLayerModel.class.getName(), new MainMenuCentralLayerModel());
-	}
-
 }

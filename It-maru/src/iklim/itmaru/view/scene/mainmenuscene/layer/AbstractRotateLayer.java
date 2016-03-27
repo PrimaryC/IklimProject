@@ -1,4 +1,4 @@
-package iklim.itmaru.view.layer;
+package iklim.itmaru.view.scene.mainmenuscene.layer;
 
 import java.awt.Graphics;
 import java.awt.Point;

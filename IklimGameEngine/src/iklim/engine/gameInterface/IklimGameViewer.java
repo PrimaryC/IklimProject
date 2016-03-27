@@ -25,6 +25,7 @@ public class IklimGameViewer {
 		this.viewerProperty = Configuration.getInstance().getViewerProperty();
 		System.out.println(viewerProperty.getSize().getWidth());
 		mainFrame.setSize(viewerProperty.getSize());
+		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 	public void run() {
@@ -42,9 +43,13 @@ public class IklimGameViewer {
 	public void showScene(String context){
 		SceneMap sceneMap = Configuration.getInstance().getSceneMap();
 		if(sceneMap.containsKey(context)){
+			if(currentScene!=null)
+				this.mainFrame.removeKeyListener(currentScene);
+			
 			this.currentScene = sceneMap.get(context);
 			this.currentScene.init();
 			mainFrame.setContentPane(currentScene);
+			mainFrame.addKeyListener(currentScene);
 		}
 	}
 
