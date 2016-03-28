@@ -40,7 +40,10 @@ public class Configuration {
 	public void setViewerSize(Dimension d){
 		viewPro.setSize(d);
 	}
-
+	public void addSceneListener(SceneListener l){
+		sceneListeners.add(l);
+	}
+	
 	public LinkedList<SceneListener> getSceneListener() {
 		return sceneListeners;
 	}

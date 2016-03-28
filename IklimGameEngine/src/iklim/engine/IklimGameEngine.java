@@ -31,7 +31,10 @@ public class IklimGameEngine {
 		Timer t = new Timer();
 		view.run();
 		t.schedule(new RepaintTask(view),0, 16);
-		
+	}
+	
+	public void addSceneListener(SceneListener sl){
+		Configuration.getInstance().addSceneListener(sl);
 	}
 	
 	public void showScene(String sceneName){
