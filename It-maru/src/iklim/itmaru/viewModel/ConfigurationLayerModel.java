@@ -10,12 +10,11 @@ public class ConfigurationLayerModel extends AbstractViewDataModel {
 	public void setFullscreenChecked(boolean isFullscreenChecked) {
 		this.isFullscreenChecked = isFullscreenChecked;
 	}
-
 	
+		
 	@Override
 	public void inputCommand(String input) {
 		// TODO Auto-generated method stub
-		
 	}
 	
 	

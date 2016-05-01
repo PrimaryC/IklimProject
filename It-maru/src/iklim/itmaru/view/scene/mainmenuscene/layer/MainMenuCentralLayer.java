@@ -104,6 +104,7 @@ public class MainMenuCentralLayer extends AbstractRotateLayer{
 		a = this.calculateObjectLocation(Math.toRadians(currentPosition + 90));
 		x = this.getImageMap().get(EXIT_GAME);
 		x.setRotateTheta(Math.toRadians(currentPosition +90));
+		
 		x.setPosX(a.getX());
 		x.setPosY(a.getY());
 		

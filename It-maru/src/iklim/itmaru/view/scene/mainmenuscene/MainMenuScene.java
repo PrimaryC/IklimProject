@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import iklim.engine.gameInterface.IklimGameScene;
 import iklim.engine.uidata.AbstractGameViewerModel;
 import iklim.engine.uidata.IklimGameViewerDataManager;
+import iklim.itmaru.data.IklimGameData;
 import iklim.itmaru.utility.ViewModelContext;
 import iklim.itmaru.view.scene.mainmenuscene.layer.MainMenuBackgroundLayer;
 import iklim.itmaru.view.scene.mainmenuscene.layer.MainMenuCentralLayer;
@@ -14,17 +15,22 @@ import iklim.itmaru.viewModel.*;
 
 public class MainMenuScene extends IklimGameScene {
 
-	private IklimGameViewDataManager dataManager;
+	private IklimGameData dataManager;
 	private String currentData;
-	private HashMap<String, AbstractGameViewerModel> viewModelMap;
+	
+	private MainMenuBackgroundLayer backgroundLayer;
+	private MainMenuCentralLayer centralLayer;
+	
+	private MainMenuBackgroundLayerModel backgroundModel;
+	private MainMenuCentralLayerModel centralModel;
+	private MainMenuSecondWheelLayerModel secondWheelModel;
 
-	public MainMenuScene(String name, IklimGameViewDataManager dataManager) {
+	public MainMenuScene(String name, IklimGameData dataManager) {
 
 		super(name);
-		viewModelMap = new HashMap<String, AbstractGameViewerModel>();
-		viewModelMap.put(ViewModelContext.MainMenuCentralLayerModel, new MainMenuCentralLayerModel());
-		viewModelMap.put(ViewModelContext.MainMenuBackgroundLayerModel, new MainMenuBackgroundLayerModel());
-		viewModelMap.put(ViewModelContext.MainMenuSecondWheelLayerModel, new MainMenuSecondWheelLayerModel());
+		centralModel =  new MainMenuCentralLayerModel();
+		backgroundModel =  new MainMenuBackgroundLayerModel();
+		secondWheelModel =  new MainMenuSecondWheelLayerModel();
 
 		this.dataManager = dataManager;
 		currentData = ViewModelContext.MainMenuCentralLayerModel;
@@ -36,8 +42,8 @@ public class MainMenuScene extends IklimGameScene {
 		this.addLayer(new MainMenuCentralLayer());
 
 		
-		((MainMenuCentralLayer) this.getLayer(1)).setModel(viewModelMap.get(ViewModelContext.MainMenuCentralLayerModel));
-		((MainMenuBackgroundLayer) this.getLayer(0)).setModel(viewModelMap.get(ViewModelContext.MainMenuBackgroundLayerModel));
+		((MainMenuCentralLayer) this.getLayer(1)).setModel(centralModel);
+		((MainMenuBackgroundLayer) this.getLayer(0)).setModel(backgroundModel);
 		
 		
 		
@@ -46,20 +52,20 @@ public class MainMenuScene extends IklimGameScene {
 
 	@Override
 	public void keyPressed(String key) {
-		System.out.println("keyPressed" + key);
 		if (currentData.equals(ViewModelContext.MainMenuCentralLayerModel)) {
-			MainMenuCentralLayerModel tempModel = (MainMenuCentralLayerModel)viewModelMap.get(ViewModelContext.MainMenuCentralLayerModel);
+	
 			MainMenuCentralLayer layer = ((MainMenuCentralLayer) this.getLayer(1));
 			if (key.equals("Up")) {
-				tempModel.minusCurrentWheelIndex();
-				layer.wheelChanged(tempModel.getCurrentWheel());
+				centralModel.minusCurrentWheelIndex();
+				layer.wheelChanged(centralModel.getCurrentWheel());
 			} else if (key.equals("Down")) {
-				tempModel.addCurrentWheelIndex();
-				layer.wheelChanged(tempModel.getCurrentWheel());
+				centralModel.addCurrentWheelIndex();
+				layer.wheelChanged(centralModel.getCurrentWheel());
 			} else if (key.equals("Left")) {
-			//	currentData.inputCommand("Left");
+			
 			} else if (key.equals("Right")) {
-				//currentData.inputCommand("Right");
+				if(centralModel.getCurrentWheel() == 0)
+					this.setOver(true);
 			}
 		}
 	}

@@ -39,13 +39,21 @@ public abstract class AbstractRotateLayer extends AbstractGameLayer{
 	}
 	
 	public Location calculateObjectLocation(double degree){
+
 		Location point = new Location();
 		point.setX(centralX + radious * Math.cos(degree));
 		point.setY(centralY + radious * Math.sin(degree));
-		System.out.println(point.getX());
+
 		return point;
 	}
 	
+	public Location calculateObjectLocation(double degree, double radious){
+		Location point = new Location();
+		point.setX(centralX + radious * Math.cos(degree));
+		point.setY(centralY + radious * Math.sin(degree));
+
+		return point;
+	}
 	
 	
 }
