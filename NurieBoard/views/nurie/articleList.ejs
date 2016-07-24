@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>게시글 보기</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="/javascripts/jquery.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="/bootstrap/css/bootstrap.min.css">
+	<script src="/bootstrap/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="/nurie/css/articleList.css" />
+	<script type="text/javascript">
+		var data = <%- data %>
+		$(document).ready(function (){
+			console.log(data.length);
+			for (var i = 0; i < data.length; i=i+2) {
+				var tags = data[i+1][1].toString().split(',');
+				var tagsString="";
+				for (var j = 0; j < tags.length; j++) {
+					tagsString = tagsString+"<mark>"+tags[j]+"</mark> "
+				};
+				$("#container").append("<section class='text-center center-block'><div class='row'><article class='col-sm-8 col-sm-offset 2'>"+data[i][1].body+"</article></div><div class='row'><footer class='text-right col-sm-4 col-sm-offset-6'>"+tagsString+"</footer></div></section>");
+			};
+		});
+	</script>
+</head>
+<body>
+<div id="container">
+	<!-- <section class="text-center center-block">
+	  <div class="row center-block">
+	    <article class="col-sm-12 center-block">
+	      글 내용
+	    </article>
+	  </div>
+	  <div class="row">
+	    <footer class="col-sm-12 center-block">
+	      태그들
+	    </footer>
+	  </div>
+	</section> -->
+</div>
+</body>
+</html>

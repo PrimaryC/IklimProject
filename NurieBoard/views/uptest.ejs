@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>업로드 테스트</title>
+</head>
+<body>
+<form action="/works/upload", method="post", enctype="multipart/form-data">
+	<fieldset>
+		시리즈 : <br>
+		<input type="text" name="brandName" /> <br>
+		<input type="file" name="uploadFile" multiple/>
+		<input type="submit" name="Upload"/>	
+	</fieldset>
+</form>
+</body>
+</html>
