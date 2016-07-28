@@ -17,6 +17,7 @@ module.exports = function(input, callback){
   // if(wiki.verbose) d = console.log
   var six = input
   var today = getNow()
+  var footNoteList = []
 
   // XSS 방지와 바보패치
   six = six.replace(/<script>|<\/script>/g, "")
@@ -77,10 +78,13 @@ module.exports = function(input, callback){
   six = six.replace(/\{\{\{\-4\s?(((?!{{{).)*)\}\}\}/g, "<small><small><small><small>$1</small></small></small></small>")
   six = six.replace(/\{\{\{\-5\s?(((?!{{{).)*)\}\}\}/g, "<small><small><small><small><small>$1</small></small></small></small></small>")
 
-  var i = 1
-  six = six.replace(/\[\* ([^\[]*)\]/g, function(){
-    var result = "<span class=\"tooltipped tooltipped-n\" aria-label=\"$1\"><sup>["+i+"]</sup></span>"
-    i++
+  six = six.replace(/\[\* ([^\[]*)\]/g, function(explain){
+    footNoteNumber = footNoteList.length+1
+    explain = explain.substring(3, explain.length -1)
+    var result = "<span class =\"target\" id=\"rfn-"+footNoteNumber+"\"></span><a title=\""+explain+"\" href=\"#fn-"+footNoteNumber+"\">["+footNoteNumber+"]</a>"
+    // <span class="target" id="rfn-footNoteNumber"></span><a title="$1" href="#fn-footNoteNumber">[footNoteNumber]</a>
+    footNoteList.push("<span class=\"footnote-list\"><span class=\"target\" id=\"fn-"+footNoteNumber+"\"></span><a href=\"#rfn-"+footNoteNumber+"\">["+footNoteNumber+"]</a>"+explain+"</span>")
+    // <span class="footnote-list"><span class="target" id="fn-footNoteNumber"></span><a href="#rfn-footNoteNumber">[footNoteNumber]</a> $1</span>
     return result
   }) // 이름 없는 각주
 
@@ -118,7 +122,11 @@ module.exports = function(input, callback){
   six = six.replace(/\[br\]/g, "<br>")
   d('8: '+six)
 
-
+  six += "<div class=\"wiki-macro-footnote\">"
+  for (var i = 0; i < footNoteList.length; i++) {
+    six += footNoteList[i]
+  }
+  six += "</div>"
   callback(six) // My name
   // Thanks for 2DU //
 }
