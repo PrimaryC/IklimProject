@@ -1,4 +1,6 @@
 // var wiki = require('../wiki');
+var wiki = require('')
+
 function getNow() {
   var today = new Date()
   var dd = today.getDate();
@@ -17,6 +19,7 @@ module.exports = function(input, callback){
   // if(wiki.verbose) d = console.log
   var six = input
   var today = getNow()
+  var index = []
   var footNoteList = []
 
   // XSS 방지와 바보패치
@@ -27,7 +30,7 @@ module.exports = function(input, callback){
   d('1: '+six)
 
   // 앞 태그
-  six = six.replace(/\n>\s([^\n]*)/g, "<blockquote style=\"padding: 1em calc(2em + 25px) 1em 1em;background: #eeeeee;border: 2px dashed #ccc;border-left: 5px solid #71BC6D;\">$1</blockquote>")
+  six = six.replace(/\n>\s([^\n]*)/g, "<blockquote>$1</blockquote>")
   six = six.replace(/##([^#\n]*)/g, "<!-- $1 -->")
   six = six.replace(/#redirect\s(.*)/g, "<div class=\"flash\">[[$1]] 문서를 찾고 계신가요?</div>")
   d('2: '+six)
@@ -43,11 +46,36 @@ module.exports = function(input, callback){
   d('3: '+six)
 
   // 제목들
-  six = six.replace(/======\s?([^=]*)\s?======/g, "<h6>$1</h6>")
-  six = six.replace(/=====\s?([^=]*)\s?=====/g, "<h5>$1</h5>")
-  six = six.replace(/====\s?([^=]*)\s?====/g, "<h4>$1</h4>")
-  six = six.replace(/===\s?([^=]*)\s?===/g, "<h3>$1</h3>")
-  six = six.replace(/==\s?([^=]*)\s?==/g, "<h2>$1</h2>")
+  function pushIndex(level, string){
+    //index.push("%%"+level+"%%"+string)
+    index.push(level+string)
+    console.log(level+string)
+    console.log("index.push")
+    return "<h"+level+">"+string+"</h"+level+">"
+  }
+
+  function pushIndex2(match, p1, offset, string){
+    return pushIndex(2,p1)
+  }
+  function pushIndex3(match, p1, offset, string){
+    return pushIndex(3,p1)
+  }
+  function pushIndex4(match, p1, offset, string){
+    return pushIndex(4,p1)
+  }
+  function pushIndex5(match, p1, offset, string){
+    return pushIndex(5,p1)
+  }
+  function pushIndex6(match, p1, offset, string){
+    return pushIndex(6,p1)
+  }
+
+  six = six.replace(/^==\s?([^=]*)\s?==$/gm, pushIndex2)
+  six = six.replace(/^===\s?([^=]*)\s?===$/gm, pushIndex3)
+  six = six.replace(/^====\s?([^=]*)\s?====$/gm, pushIndex4)
+  six = six.replace(/^=====\s?([^=]*)\s?=====$/gm, pushIndex5)
+  six = six.replace(/^======\s?([^=]*)\s?======$/gm, pushIndex6)
+  
   d('4: '+six)
 
   // 고급 태그
@@ -81,9 +109,9 @@ module.exports = function(input, callback){
   six = six.replace(/\[\* ([^\[]*)\]/g, function(explain){
     footNoteNumber = footNoteList.length+1
     explain = explain.substring(3, explain.length -1)
-    var result = "<span class =\"target\" id=\"rfn-"+footNoteNumber+"\"></span><a title=\""+explain+"\" href=\"#fn-"+footNoteNumber+"\">["+footNoteNumber+"]</a>"
+    var result = "<span class =\"target\" id=\"rfn-"+footNoteNumber+"\"></span><a class=\"wiki-footnote-link\" title=\""+explain+"\" href=\"#fn-"+footNoteNumber+"\">["+footNoteNumber+"]</a>"
     // <span class="target" id="rfn-footNoteNumber"></span><a title="$1" href="#fn-footNoteNumber">[footNoteNumber]</a>
-    footNoteList.push("<span class=\"footnote-list\"><span class=\"target\" id=\"fn-"+footNoteNumber+"\"></span><a href=\"#rfn-"+footNoteNumber+"\">["+footNoteNumber+"]</a>"+explain+"</span>")
+    footNoteList.push("<span class=\"footnote-list\"><span class=\"target\" id=\"fn-"+footNoteNumber+"\"></span><a class=\"wiki-footnote-link\" href=\"#rfn-"+footNoteNumber+"\">["+footNoteNumber+"]</a>"+explain+"</span>")
     // <span class="footnote-list"><span class="target" id="fn-footNoteNumber"></span><a href="#rfn-footNoteNumber">[footNoteNumber]</a> $1</span>
     return result
   }) // 이름 없는 각주
@@ -122,7 +150,58 @@ module.exports = function(input, callback){
   six = six.replace(/\[br\]/g, "<br>")
   d('8: '+six)
 
-  six += "<div class=\"wiki-macro-footnote\">"
+  console.log(index)
+
+  var indexHTML = "<ol class=\"wiki-macro-index\">"
+  var indexDepth = 2;
+
+  //generate index
+  for(var i in index){
+     //  str.replace(/^%%\s?([^=]*)\s?%%$/gm, function(match, p1, offset, string){
+
+     //    if(p1 == indexDepth){
+     //      str = "<li>"+str+"</li>"
+     //    } else if(p1 > indexDepth){
+     //      str = "<ol><li>"+str+"</li>"
+     //    } else if(p1 < indexDepth){
+     //      str = "<li>"+str+"</li></ol>"
+     //    }
+        
+     //     return ""
+     // })
+
+     console.log(index[i])
+      console.log(index[i])
+      if(index[i].charAt(0) == indexDepth){
+        console.log(index[i])
+        index[i] = index[i].slice(1)
+        console.log(index[i])
+        index[i] = "<li>"+index[i]+"</li>"
+      } else if(index[i].charAt(0) > indexDepth){
+        indexDepth = index[i].charAt(0)
+        index[i] = index[i].slice(1)
+        index[i] = "<ol><li>"+index[i]+"</li>"
+
+      } else if(index[i].charAt(0) < indexDepth){
+        indexDepth = index[i].charAt(0)
+        index[i] = index[i].slice(1)
+        index[i] = "<li>"+index[i]+"</li></ol>"
+      }
+
+      indexHTML += index[i]
+  }
+
+  if(indexDepth > 2){
+    console.log("indexDepth = "+indexDepth)
+    for (var i = indexDepth; i >= 2; i--) {
+      console.log("indexDepth = "+indexDepth)
+      indexHTML += "</ol>"
+    }
+  }
+  six = indexHTML + six
+
+  //generate footnote
+  six += "<div>"
   for (var i = 0; i < footNoteList.length; i++) {
     six += footNoteList[i]
   }

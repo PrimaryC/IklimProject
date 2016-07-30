@@ -1,0 +1,21 @@
+.wiki-edit-menu > ul > li {
+    float: left;
+    list-style-type: none;
+    height: 25px;
+    width: 100px;
+    border-color: black;
+    border-width: 1px;
+    background-color: green;
+    border-style: groove;
+    text-align: center;
+    color: white;
+    cursor: pointer;
+}
+
+.wiki-edit-menu > ul {
+    display: block;
+}
+
+.wiki-edit-menu {
+    display: flex;
+}
