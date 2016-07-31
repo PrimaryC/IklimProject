@@ -23,13 +23,13 @@ function getDocument(name, callback){
     db.hmget(name, "doc", "permission").then(callback)
 }
 
-router.get('/w/:page', function(req, res, next) {
-    checkDocument(req.params.page, function (result){
+router.get(/\/w\/([^]*)/g, function(req, res, next) {
+    checkDocument(req.params[0], function (result){
         if(result == 1){
-            getDocument(req.params.page, function (result){
-                db.hmget(req.params.page,"doc","permission").then(function(result) {
+            getDocument(req.params[0], function (result){
+                db.hmget(req.params[0],"doc","permission").then(function(result) {
                     parseNamu(result[0], (markedDocument) => {
-                        res.render('wiki/wikiDocument', { title: req.params.page, content: markedDocument })
+                        res.render('wiki/wikiDocument', { title: req.params[0], content: markedDocument })
                         res.end()
                     })
                 })
@@ -37,24 +37,23 @@ router.get('/w/:page', function(req, res, next) {
         } else{
             //redirect to Edit File
             res.writeHead(302, {
-                'Location' : 'http://127.0.0.1:8080/wiki/edit/'+encodeURIComponent(req.params.page)
+                'Location' : 'http://127.0.0.1:8080/wiki/edit/'+encodeURIComponent(req.params[0])
             })
             res.end()
             return;
         }
     })
-  
 });
 
-router.get('/edit/:page', function(req,res,next){
-    checkDocument(req.params.page, function(result){
+router.get(/\/edit\/([^]*)/g, function(req,res,next){
+    checkDocument(req.params[0], function(result){
         if(result == 1){
-            getDocument(req.params.page, function(result){
+            getDocument(req.params[0], function(result){
                 console.log(result)
-                res.render('wiki/edit', {docname:req.params.page, content:result[0]})
+                res.render('wiki/edit', {docname:req.params[0], content:result[0]})
             })
         } else {
-            res.render('wiki/edit',{docname:req.params.page,content:""}) 
+            res.render('wiki/edit',{docname:req.params[0],content:""}) 
             res.end()
         }
         
@@ -62,9 +61,9 @@ router.get('/edit/:page', function(req,res,next){
     
 })
 
-router.get('/raw/:page', function(req, res, next) {
-    getDocument(req.params.page, function(result){
-        res.render('wiki/rawDocument', {title: req.params.page, content: result[0]})
+router.get(/\/raw\/([^]*)/g, function(req, res, next) {
+    getDocument(req.params[0], function(result){
+        res.render('wiki/rawDocument', {title: req.params[0], content: result[0]})
     })
 })
 
