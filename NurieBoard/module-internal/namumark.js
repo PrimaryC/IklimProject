@@ -1,13 +1,15 @@
 // var wiki = require('../wiki');
-var wiki = require('')
+
 
 var index = []
+var d = console.log
+var today = getNow()
 
 function getNow() {
-  var today = new Date()
-  var dd = today.getDate();
-  var mm = today.getMonth()+1; //1월이 0월이 되는 마아-법!
-  var yyyy = today.getFullYear();
+  var _today = new Date()
+  var dd = _today.getDate();
+  var mm = _today.getMonth()+1; //1월이 0월이 되는 마아-법!
+  var yyyy = _today.getFullYear();
   if(dd<10) {
       dd='0'+dd
   }
@@ -39,7 +41,7 @@ function PostTranslation(input){
 }
 
 function StyleTranslation(input){
-  var doc
+  var doc = input
   // 감싸는 태그
   doc = doc.replace(/-{4,11}/g, "<hr>") // 수평선
   doc = doc.replace(/\'\'\'([^\']*)\'\'\'/g, "<strong>$1</strong>") // 강조, 굵게
@@ -53,7 +55,7 @@ function StyleTranslation(input){
 }
 
 function TitleTranslation(input, array){
-  var doc
+  var doc = input
 
   function pushIndex(level, string){
     //index.push("%%"+level+"%%"+string)
@@ -90,7 +92,7 @@ function TitleTranslation(input, array){
 }
 
 function AdvancedTagTranslation(input, footNoteArray){
-  var doc
+  var doc = input
   // 고급 태그
   doc = doc.replace(/\[\[(https?:\/\/[^\n가-힣ㄱ-ㅎ]*[^\n]*[^\[\]]*)\|([^\[\]]*)]]/g, "<a href=\"$1\">$2</a>") // 커스텀 이름의 다른 곳 링크
   doc = doc.replace(/\[\[(https?:\/\/[^\n가-힣ㄱ-ㅎ]*[^\n]*[^[\[\]]*)]]/g, "<a href=\"$1\">$1</a>") // 다른 곳 링크
@@ -140,7 +142,7 @@ function AdvancedTagTranslation(input, footNoteArray){
   return doc
 }
 function ListTranslation(input){
-  var doc
+  var doc = input
 
   // 리스트
   doc = doc.replace(/\s\*\s?([^\n]*)/g, "<li>$1</li>")
@@ -152,7 +154,7 @@ function ListTranslation(input){
   return doc
 }
 function MacroTranslation(input){
-  var doc
+  var doc = input
   // 매크로
   // doc = doc.replace(/\[include\((.*)\)]/g, wiki.include["$1"]) // 틀
 
@@ -170,7 +172,7 @@ function MacroTranslation(input){
   return doc
 }
 function WhitespaceTranslation(input){
-  var doc
+  var doc = input
   // 개행 담당
   doc = doc.replace(/<br>/g, "")
   doc = doc.replace(/\n\n|\r\n\r\n/g, "<br>")
@@ -179,6 +181,7 @@ function WhitespaceTranslation(input){
   return doc
 }
 function IndexProcess(input, indexArray){
+  var doc = input
   //generate index
   var indexHTML = "<ol class=\"wiki-macro-index\">"
   var indexDepth = 2;
@@ -213,10 +216,11 @@ function IndexProcess(input, indexArray){
     }
   }
   doc = indexHTML + doc
+  return doc
 }
 
-function FootNoteProcess(input, footnoteArray){
-  var doc
+function FootNoteProcess(input, footNoteArray){
+  var doc = input
   //generate footnote
   doc += "<div>"
   for (var i = 0; i < footNoteArray.length; i++) {
@@ -227,9 +231,7 @@ function FootNoteProcess(input, footnoteArray){
 }
 
 module.exports = function(input, callback){
-  var d = console.log
   var doc = input
-  var today = getNow()
   var index = []
   var footNoteArray = []
 
@@ -242,9 +244,7 @@ module.exports = function(input, callback){
   doc = MacroTranslation(doc)
   doc = WhitespaceTranslation(doc)
   doc = IndexProcess(doc,index)
-  doc = footNoteProcess(doc,footNoteArray)
-
-  console.log(index)  
+  doc = FootNoteProcess(doc,footNoteArray)
 
   callback(doc) // My name
   // Thanks for 2DU //

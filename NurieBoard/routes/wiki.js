@@ -23,7 +23,7 @@ function getDocument(name, callback){
     db.hmget(name, "doc", "permission").then(callback)
 }
 
-router.get(/\/w\/([^]*)/g, function(req, res, next) {
+router.get(/\/w\/([^]*)/, function(req, res, next) {
     checkDocument(req.params[0], function (result){
         if(result == 1){
             getDocument(req.params[0], function (result){
@@ -45,7 +45,7 @@ router.get(/\/w\/([^]*)/g, function(req, res, next) {
     })
 });
 
-router.get(/\/edit\/([^]*)/g, function(req,res,next){
+router.get(/\/edit\/([^]*)/, function(req,res,next){
     checkDocument(req.params[0], function(result){
         if(result == 1){
             getDocument(req.params[0], function(result){
@@ -61,7 +61,7 @@ router.get(/\/edit\/([^]*)/g, function(req,res,next){
     
 })
 
-router.get(/\/raw\/([^]*)/g, function(req, res, next) {
+router.get(/\/raw\/([^]*)/, function(req, res, next) {
     getDocument(req.params[0], function(result){
         res.render('wiki/rawDocument', {title: req.params[0], content: result[0]})
     })
