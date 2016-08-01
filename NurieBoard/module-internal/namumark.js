@@ -183,6 +183,9 @@ function WhitespaceTranslation(input){
 function IndexProcess(input, indexArray){
   var doc = input
   //generate index
+  if(indexArray.length == 0) {
+    return input;
+  }
   var indexHTML = "<ol class=\"wiki-macro-index\">"
   var indexDepth = 2;
 
@@ -221,6 +224,9 @@ function IndexProcess(input, indexArray){
 
 function FootNoteProcess(input, footNoteArray){
   var doc = input
+  if(footNoteArray.length == 0){
+    return input
+  }
   //generate footnote
   doc += "<div>"
   for (var i = 0; i < footNoteArray.length; i++) {
