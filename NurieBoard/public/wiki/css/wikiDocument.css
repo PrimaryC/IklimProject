@@ -1,21 +1,66 @@
 .wiki-edit-menu > ul > li {
     float: left;
     list-style-type: none;
-    height: 25px;
+    /* height: 100%; */
     width: 100px;
-    border-color: black;
-    border-width: 1px;
-    background-color: green;
-    border-style: groove;
+    border-right-color: #f7b1f7;
+    border-left-color: #ffffff;
+    border-width: 0px;
+    border-right-width: 1px;
+    border-left-width: 1px;
+    background-color: #ffdaff;
+    border-style: solid;
+    vertical-align: middle;
     text-align: center;
     color: white;
     cursor: pointer;
+    padding: 17.2px;
 }
 
 .wiki-edit-menu > ul {
     display: block;
+    /* height: 55px; */
+    margin: 0px;
+    padding: 0px;
 }
 
 .wiki-edit-menu {
     display: flex;
+    background-color: #ffdaff;
+    /* height: 55px; */
+    padding: 0px;
+    margin: 0px;
+    border-width: 3px;
+    border-style: solid;
+    border-color: #ccb0cc;
+    border-top-width: 0;
+    border-left-width: 0;
+}
+
+.container {
+    max-width: 1300px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: white;
+    padding: 0;
+    /* border-color: #5d005d; */
+    /* border-style: solid; */
+    /* border-width: 1px; */
+}
+
+body {
+    background-color: #fffaff;
+    margin: 0px;
+}
+
+.wiki-edit-menu > ul > li:hover {
+    background-color: #ff7eff;
+}
+
+.wiki-content {
+    padding: 15px;
+}
+
+del {
+    display:none;
 }

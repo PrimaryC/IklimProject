@@ -156,7 +156,7 @@ function ListTranslation(input){
 function MacroTranslation(input){
   var doc = input
   // 매크로
-  // doc = doc.replace(/\[include\((.*)\)]/g, wiki.include["$1"]) // 틀
+  doc = doc.replace(/\[include\((.*)\)]/g, "<del>$1</del>") // 틀
 
   doc = doc.replace(/\[youtube\((.*)\)]/g, "<iframe src=\"https://www.youtube.com/embed/$1\" frameborder=\"0\" allowfullscreen></iframe>")
   doc = doc.replace(/\[youtube\(([^,]*),\s?width=(.*),\s?height=(.*)\)]/g, "<iframe width=\"$2\" height=\"$3\" src=\"https:\/\/www.youtube.com\/embed\/$1\" frameborder=\"0\" allowfullscreen><\/iframe>")
