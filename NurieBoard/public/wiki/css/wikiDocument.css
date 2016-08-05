@@ -37,16 +37,16 @@
     border-left-width: 0;
 }
 
-.container {
+/*.container {
     max-width: 1300px;
     margin-left: auto;
     margin-right: auto;
     background-color: white;
-    padding: 0;
+    padding: 0; */
     /* border-color: #5d005d; */
     /* border-style: solid; */
     /* border-width: 1px; */
-}
+/*}*/
 
 body {
     background-color: #fffaff;
@@ -63,4 +63,16 @@ body {
 
 del {
     display:none;
+}
+
+ol {
+    counter-reset: item;
+}
+li {
+    display: block;
+}
+
+ol > li:before {
+    content: counters(item, ".") " ";
+    counter-increment:item;
 }

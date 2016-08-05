@@ -65,9 +65,20 @@ $(document).ready(function () {
     replaceAsync($("body").html(), includeRegex, searchSubDoc).then(function(result){
         console.log("result = " + result)
         $("body").html($("body").html().replace(includeRegex, replaceSubDoc))
+        prepareButton()
     })
     // console.log("-----Array Check-----")
     // console.log(subDocNameArray)
     // console.log(subDocContentArray)
     
 });
+
+function prepareButton() {
+    console.log("prepare button")
+    $(".wiki-edit-menu > ul > li").click(function(){
+        var pathname = window.location.pathname;
+        var classList = $(this).attr('class').split(/\s+/);
+        console.log(pathname.replace("/w/","/"+classList[1]+"/"))
+        window.location.href = pathname.replace("/w/","/"+classList[1]+"/")
+    })
+}

@@ -96,10 +96,10 @@ function AdvancedTagTranslation(input, footNoteArray){
   // 고급 태그
   doc = doc.replace(/\[\[(https?:\/\/[^\n가-힣ㄱ-ㅎ]*[^\n]*[^\[\]]*)\|([^\[\]]*)]]/g, "<a href=\"$1\">$2</a>") // 커스텀 이름의 다른 곳 링크
   doc = doc.replace(/\[\[(https?:\/\/[^\n가-힣ㄱ-ㅎ]*[^\n]*[^[\[\]]*)]]/g, "<a href=\"$1\">$1</a>") // 다른 곳 링크
-  doc = doc.replace(/\[\[(((?!\[\[).)*)\|(((?!\[\[).)*)]]/g, "<a href=\"/w/$1\">$3</a>") // 커스텀 이름의 링크
+  doc = doc.replace(/\[\[(((?!\[\[).)*)\|(((?!\[\[).)*)]]/g, "<a href=\"/wiki/w/$1\">$3</a>") // 커스텀 이름의 링크
   doc = doc.replace(/\[\[(#((?!\[\[).)*)\|(((?!\[\[).)*)]]/g, "<a href=\"$1\">$3</a>") // 앵커에 커스텀 이름의 링크
   doc = doc.replace(/\[\[(#((?!\[\[).)*)\]\]/g, "<a href=\"$1\">$1</a>") // 앵커에 링크
-  doc = doc.replace(/\[\[(((?!\[\[).)*)\]\]/g, "<a href=\"/w/$1\">$1</a>") // 링크
+  doc = doc.replace(/\[\[(((?!\[\[).)*)\]\]/g, "<a href=\"/wiki/w/$1\">$1</a>") // 링크
 
   doc = doc.replace(/([^\n]*\.(jpeg|jpg|gif|png))/g, "<img src=\"$1\">") // 이미지
   doc = doc.replace(/([^\n]*\.(jpeg|jpg|gif|png))\?width=([^\n]*)/g, "<img width=\"$3\" src=\"$1\">")
