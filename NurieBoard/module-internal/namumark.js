@@ -156,7 +156,7 @@ function ListTranslation(input){
 function MacroTranslation(input){
   var doc = input
   // 매크로
-  doc = doc.replace(/\[include\((.*)\)]/g, "<del>$1</del>") // 틀
+  // doc = doc.replace(/\[include\((.*)\)]/g, "<del>$1</del>") // 틀
 
   doc = doc.replace(/\[youtube\((.*)\)]/g, "<iframe src=\"https://www.youtube.com/embed/$1\" frameborder=\"0\" allowfullscreen></iframe>")
   doc = doc.replace(/\[youtube\(([^,]*),\s?width=(.*),\s?height=(.*)\)]/g, "<iframe width=\"$2\" height=\"$3\" src=\"https:\/\/www.youtube.com\/embed\/$1\" frameborder=\"0\" allowfullscreen><\/iframe>")
@@ -236,23 +236,48 @@ function FootNoteProcess(input, footNoteArray){
   return doc
 }
 
-module.exports = function(input, callback){
-  var doc = input
-  var index = []
-  var footNoteArray = []
+module.exports = {
+  callbackMark: function(input, callback){
+      var doc = input
+      var index = []
+      var footNoteArray = []
 
-  doc = XSStranslation(input)
-  doc = PostTranslation(doc)
-  doc = StyleTranslation(doc)
-  doc = TitleTranslation(doc, index)
-  doc = AdvancedTagTranslation(doc, footNoteArray)
-  doc = ListTranslation(doc)
-  doc = MacroTranslation(doc)
-  doc = WhitespaceTranslation(doc)
-  doc = IndexProcess(doc,index)
-  doc = FootNoteProcess(doc,footNoteArray)
+      doc = XSStranslation(input)
+      doc = PostTranslation(doc)
+      doc = StyleTranslation(doc)
+      doc = TitleTranslation(doc, index)
+      doc = AdvancedTagTranslation(doc, footNoteArray)
+      doc = ListTranslation(doc)
+      doc = MacroTranslation(doc)
+      doc = WhitespaceTranslation(doc)
+      doc = IndexProcess(doc,index)
+      doc = FootNoteProcess(doc,footNoteArray)
 
-  callback(doc) // My name
-  // Thanks for 2DU //
+      callback(doc) // My name
+      // Thanks for 2DU //
+    },
+  promiseMark: function(input){
+      return new Promise(function (resolve, reject){
+        var doc = input
+        var index = []
+        var footNoteArray = []
+
+        doc = XSStranslation(input)
+        doc = PostTranslation(doc)
+        doc = StyleTranslation(doc)
+        doc = TitleTranslation(doc, index)
+        doc = AdvancedTagTranslation(doc, footNoteArray)
+        doc = ListTranslation(doc)
+        doc = MacroTranslation(doc)
+        doc = WhitespaceTranslation(doc)
+        doc = IndexProcess(doc,index)
+        doc = FootNoteProcess(doc,footNoteArray)
+
+        // Thanks for 2DU //
+      })
+  }
 }
+
+
+
 function doNothing(a) {}
