@@ -1,0 +1,32 @@
+test
+	description : "이건 [[테스트]] 문서입니다. 딱히 별다른 서술은 존재하지 않습니다."
+
+test:index
+	SubDoc_0
+	SubDoc_1
+
+SubDoc_0
+	title : 테스트1 서브문단
+	description:	this is just only test.
+
+SubDoc_0:RelDoc
+	test
+
+SubDoc_1
+	title : 테스트2 서브문단
+	description:	what the hack were you think?
+
+SubDoc_1:RelDoc
+	test
+
+test:Frame
+	testFrame
+
+Frame:testFrame
+	'''this is the test frame!'''
+
+Index
+	test
+
+SubDocCount
+	2

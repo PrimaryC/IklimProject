@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<title><%= title %></title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- <link rel="stylesheet" type="text/css" href="/wiki/css/Document.css"> -->
+	<link rel="stylesheet" type="text/css" href="/bootstrap/css/bootstrap.min.css">
+	<script src="/javascripts/jquery.min.js"></script>
+	<script src="/wiki/js/Document.js"></script>
+	<script src="/bootstrap/js/bootstrap.min.js"></script>
+
+	<script type="text/javascript">
+		var documentData = {
+			"title":"<%- title %>",
+			"description": "<%- description %>",
+			"frameList" : "<%- frameList %>",
+			"subDocIndex" : <%- subDocIndex %>
+		}
+		console.log(documentData)
+		createDocument(documentData)
+	
+	</script>
+	
+</head>
+<body>
+<div class="container">
+	<div class="row">
+		<div class="col-sm-12 wiki-edit-menu">
+			<ul>
+				<li class="btn edit">편집</li>
+				<li class="btn history">역사</li>	
+				<li class="btn raw">비문법</li>
+			</ul>	
+		</div>
+		
+	</div>
+	<div class="row">
+		<div class="col-sm-8 wiki-document-container"></div>
+	</div>
+</div>
+</body>
+</html>
