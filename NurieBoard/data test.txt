@@ -1,7 +1,7 @@
 test
 	description : "이건 [[테스트]] 문서입니다. 딱히 별다른 서술은 존재하지 않습니다."
 
-test:index
+test:Index
 	SubDoc_0
 	SubDoc_1
 
@@ -30,3 +30,6 @@ Index
 
 SubDocCount
 	2
+
+
+title / description / frameList / subDocIndex

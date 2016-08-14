@@ -64,8 +64,9 @@ router.get(docURLRegex, function(req, res, next) {
     db.zscore("Index",docName).then(function(result){
         console.log("zscore Index result = " + result)
         //문서가 존재하는지 확인
-        if(result != 0){
+        if(result != undefined){
             //있다면
+            console.log("there is document.")
             console.log("DocName = " + docName)
             var getDocument = db.hget(docName, "Description");
             var getFrameList = db.lrange(docName + ":Frame", 0, -1);
@@ -75,16 +76,21 @@ router.get(docURLRegex, function(req, res, next) {
                 var title = docName;
                 var description = values[0];
                 var frameList = values[1];
-                var subDocIndex = JSON.stringify(values[2]);
+                var subDocIndex = values[2];
 
-                // console.log(Array.isArray(subDocIndex));
+                
 
-                console.log(title +"//"+ description +"//"+ frameList +"//"+ subDocIndex);
+                parseNamu.promiseMark(description).then(function(doc){
+                    // console.log(Array.isArray(subDocIndex));
 
-                res.render("wiki/Document", {"title":title, "description" : description, "frameList" : frameList, "subDocIndex" : subDocIndex});
+                    console.log(title +"//"+ doc +"//"+ frameList +"//"+ subDocIndex);
+                    var data = {"title":title, "description" : doc, "frameList" : frameList, "subDocIndex" : subDocIndex}
+                    res.render("wiki/Document", {"data":JSON.stringify(data), "title":docName});
+                })
             });
         } else {
-            res.render("wiki/Document", {"title":title, "description":"문서가 없습니다. 편집하여 생성해 주세요."})
+            var data = {"title":docName, "description" : "문서가 없습니다. 편집하여 생성해 주세요."}
+            res.render("wiki/Document", {"data":JSON.stringify(data), "title":docName})
         }
     });
 });
@@ -93,11 +99,16 @@ router.get(docURLRegex, function(req, res, next) {
 router.get("/frame", function(req, res, next){
     var frameName = req.query.frameName;
     var frameTier = req.query.frameTier;
-    console.log(frameName)
+    console.log(frameName + frameTier)
     db.hget("Frame:"+frameName,frameTier).then(function(result){
         console.log("frame called. result : " + result)
-        res.set('Content-Type','text/plain');
-        res.send(result);
+        
+        parseNamu.promiseMark(result).then(function (doc){
+            console.log("what the hack")
+            result = doc;
+            res.set('Content-Type','text/plain').status(200).send(result);
+        })
+        
     })
 })
 

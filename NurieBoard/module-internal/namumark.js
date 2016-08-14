@@ -274,6 +274,7 @@ module.exports = {
         doc = FootNoteProcess(doc,footNoteArray)
 
         // Thanks for 2DU //
+        resolve(doc)
       })
   }
 }

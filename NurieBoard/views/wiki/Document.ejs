@@ -11,14 +11,9 @@
 	<script src="/bootstrap/js/bootstrap.min.js"></script>
 
 	<script type="text/javascript">
-		var documentData = {
-			"title":"<%- title %>",
-			"description": "<%- description %>",
-			"frameList" : "<%- frameList %>",
-			"subDocIndex" : <%- subDocIndex %>
-		}
+		var documentData = <%- data %>
 		console.log(documentData)
-		createDocument(documentData)
+		// createDocument(documentData)
 	
 	</script>
 	
