@@ -27,7 +27,7 @@ var parseNamu = require('../module-internal/namumark');
 
 //custom command for TEST
 router.get("/test/001",function(req, res, next){
-    var a = db.hset("test","Description","이건 [[테스트]]문서입니다. 별다른 서술은 존재하지 않습니다.");
+    var a = db.hset("test","Description","이건 [[테스트]]문서입니다. 별다른 서술은 존재하지 않습니다.이건 [[테스트]]문서입니다. 별다른 서술은 존재하지 않습니다.이건 [[테스트]]문서입니다. 별다른 서술은 존재하지 않습니다.이건 [[테스트]]문서입니다. 별다른 서술은 존재하지 않습니다.이건 [[테스트]]문서입니다. 별다른 서술은 존재하지 않습니다.이건 [[테스트]]문서입니다. 별다른 서술은 존재하지 않습니다.이건 [[테스트]]문서입니다. 별다른 서술은 존재하지 않습니다.이건 [[테스트]]문서입니다. 별다른 서술은 존재하지 않습니다.이건 [[테스트]]문서입니다. 별다른 서술은 존재하지 않습니다.이건 [[테스트]]문서입니다. 별다른 서술은 존재하지 않습니다.이건 [[테스트]]문서입니다. 별다른 서술은 존재하지 않습니다.이건 [[테스트]]문서입니다. 별다른 서술은 존재하지 않습니다.이건 [[테스트]]문서입니다. 별다른 서술은 존재하지 않습니다.이건 [[테스트]]문서입니다. 별다른 서술은 존재하지 않습니다.이건 [[테스트]]문서입니다. 별다른 서술은 존재하지 않습니다.이건 [[테스트]]문서입니다. 별다른 서술은 존재하지 않습니다.이건 [[테스트]]문서입니다. 별다른 서술은 존재하지 않습니다.");
     var b = db.rpush("test:Index","SubDoc_0","SubDoc_1");
     
     var c = db.hmset("SubDoc_0","Title","테스트1 '''서브문단'''","Description","this is just only start.");
@@ -53,7 +53,7 @@ router.get("/test/001",function(req, res, next){
 
 
 var docURLRegex = /\/doc\/([^]+)/;
-var subdocURLRegex = /\/sd\/([^]+)/;
+
 var editURLRegex = /\/edit\/([^]+)/;
 var frameListURLRegex = /\/frame_list\/([^]+)/;
 
@@ -66,8 +66,8 @@ router.get(docURLRegex, function(req, res, next) {
         //문서가 존재하는지 확인
         if(result != undefined){
             //있다면
-            console.log("there is document.")
-            console.log("DocName = " + docName)
+            console.log("there is document.");
+            console.log("DocName = " + docName);
             var getDocument = db.hget(docName, "Description");
             var getFrameList = db.lrange(docName + ":Frame", 0, -1);
             var getSubDocIndex = db.lrange(docName + ":Index", 0, -1);
@@ -112,23 +112,57 @@ router.get("/frame", function(req, res, next){
     })
 })
 
-router.get(subdocURLRegex, function(req, res, next){
-    function sendData(html, index, paraList, reldoc, frame){
-        var data = {
-            "html": html,
-            "paraList": subdoc,
-            "reldoc": reldoc,
-            "frame": frame
-        }
-        res.set('Content-Type', 'application/json');
-        res.send(data);
-        //send it.
-    }
+var subdocURLRegex = {
+    "Title":    /\/sdti\/([^]+)/,
+    "Desc":     /\/sdde\/([^]+)/,
+    "Frame":    /\/sdfr\/([^]+)/,
+    "Index":    /\/sdin\/([^]+)/,
+    "Rel":      /\/sdre\/([^]+)/,
+    "Full":     /\/sdfu\/([^]+)/
+}
 
-    var subDocSubjectContentQuery = db.hmget(req.params[0], "title", "description");
+router.get(subdocURLRegex.Title, function(req, res, next){
+    db.hget(req.params[0], "Title").then(function(result) {
+        parseNamu.promiseMark(result).then(function(doc){
+            res.set('Content-Type', 'text/plain').send(doc);
+        })
+    })
+})
+
+router.get(subdocURLRegex.Desc, function(req, res, next){
+    db.hget(req.params[0], "Description").then(function(result) {
+        parseNamu.promiseMark(result).then(function(doc){
+            res.set('Content-Type', 'text/plain').send(doc);
+        })
+    })
+})
+
+router.get(subdocURLRegex.Frame, function(req, res, next){
+    db.lrange(req.params[0]+":Frame", 0, -1).then(function(result) {
+        res.set('Content-Type', 'text/plain').send(result);
+    })
+})
+
+router.get(subdocURLRegex.Index, function(req, res, next){
+    db.lrange(req.params[0]+":Index", 0, -1).then(function(result) {
+        res.set('Content-Type', 'text/plain').send(result);
+    })
+})
+
+router.get(subdocURLRegex.Rel, function(req, res, next){
+    db.lrange(req.params[0]+":RelDoc", 0, -1).then(function(result) {
+        res.set('Content-Type', 'text/plain').send(result);
+    })
+})
+
+router.get(subdocURLRegex.Full, function(req, res, next){
+    console.log("Full : "+req.params[0])
+
+
+    var subDocSubjectContentQuery = db.hmget(req.params[0], "Title", "Description");
     var subDocFrameQuery = db.lrange(req.params[0]+":Index", 0, -1);
-    var subDocRelDocQuery = db.smembers(req.params[0]+":relDoc");
-    var subDocSubDocQuery = db.smembers(req.params[0]+":subDoc");
+    var subDocRelDocQuery = db.smembers(req.params[0]+":RelDoc");
+    var subDocSubDocQuery = db.smembers(req.params[0]+":SubDoc");
 
     Promise.all([subDocSubjectContentQuery, subDocFrameQuery, subDocRelDocQuery, subDocSubDocQuery]).then(function(values) {
         var title = values[0][0];
@@ -141,16 +175,29 @@ router.get(subdocURLRegex, function(req, res, next){
         var paragList = values[3];
 
         Promise.all([parse]).then(function(values){
-
-          
+            console.log(values);
             var resultList = values[0].split("|tiTleDescRipTiOn|");
+            console.log(resultList);
             title = resultList[0];
+            console.log(title);
             description = resultList[1];
+            console.log(description);
 
             var parsedContent = values[0];
-            var html = express.render("/wiki/subDocuent", {"title":title,"description":values[0]});
+            // var html = express.render("/wiki/subDocument", {"title":title,"description":values[0]});
+            // console.log(html)
 
-            sendData(html, index, subdoc, reldoc, frame);
+            console.log("send data")
+            var data = {
+                // "html": html,
+                "title" : title,
+                "description" : description,
+                "subDocList": paragList,
+                "relDoc": relDocList,
+                "frame": frameList
+            }
+            res.status(200).set('Content-Type', 'application/json').send(data);
+            //send it.
         })
         
     })

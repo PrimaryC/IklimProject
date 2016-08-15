@@ -19,14 +19,26 @@ function createDocument(documentData){
 function writeMainDocument(title, description, element){
     return new Promise(function(resolve, reject){
         element.append(
-            $("<header/>",{'class':"mainDocument"}).append( // frame placeholder
-                $("<h1/>",{'class':"mainDocument"}).text(title)
-            ) 
-        ).append(
-                $("<article/>",{'class':"mainDocument"}).html(description)
-        ).append(
+            $("<article/>",{'class':'mainDocument'}).append(
+                $("<header/>",{'class':"mainDocument"}).append( // frame placeholder
+                    $("<h1/>",{'class':"mainDocument"}).text(title)
+                )
+            ).append(
+                $("<p/>",{'class':"mainDocument"}).html(description)
+            ).append(
                 $("<footer/>",{'class':"mainDocument"})
-        );
+            )
+        )
+
+        // element.append(
+        //     $("<header/>",{'class':"mainDocument"}).append( // frame placeholder
+        //         $("<h1/>",{'class':"mainDocument"}).text(title)
+        //     ) 
+        // ).append(
+        //         $("<article/>",{'class':"mainDocument"}).html(description)
+        // ).append(
+        //         $("<footer/>",{'class':"mainDocument"})
+        // );
         resolve("ok");
     });
 }
@@ -37,9 +49,8 @@ function createFrameList(frameList, element){
             if(Array.isArray(frameList)){
                 var frameTier = frameList.length>5 ? "Full" : "Simple";
                 for (var i = 0; i < frameList.length; i++) {
-                    
                     $.get("/wiki/frame",{"frameName":frameList[i], frameTier}).then(function(result){
-                        console.log(result)
+                        element.children("article").children("header").children("h1").after(result);
                     }, function(err){console.log(err)});
                 }
             } else {
@@ -48,7 +59,9 @@ function createFrameList(frameList, element){
                 $.get("/wiki/frame",{
                     "frameName":frameList, 
                     "frameTier":frameTier
-                }, function(result){console.log(result)})
+                }, function(result){
+                    element.children("article").children("header").children("h1").after(result);
+                })
             }
         } else {
             console.log("there is no frame.")
@@ -59,19 +72,34 @@ function createFrameList(frameList, element){
 
 function createSubDocIndex(title,subDocList, element){
     return new Promise(function(resolve, reject){
+        var listElement = $("<ul/>",{"class":"mainDocument"});
+        var titleItemElement = '<li class="mainDocument"><strong>목차</strong></li>';
+        var itemElement = $("<li/>",{"class":"mainDocument"});
+        var btnElement = $("<a/>",{"class":"mainDocument btn btn-default"});
+        listElement.append(titleItemElement);
+
         if(subDocList != undefined){
             if(Array.isArray(subDocList)){
                 var elementArray = $();
+                var x = 0;
+                elementArray = elementArray.add(titleItemElement);
                 for (var i = 0; i < subDocList.length; i++) {
-                    elementArray = elementArray.add('<li>' + subDocList[i] + "</li>");
+                    var sdID = subDocList[i];
+                    $.get("/wiki/sdti/"+sdID).then(function(res){
+                        var btnEle = btnElement.clone().attr("data-subdoc-id",subDocList[x++]).html(res)
+                        btnEle.click(function(){
+                            toggleSubDocument($(this).parents("section"),$(this).attr("data-subdoc-id"));
+                        })
+                        var itemEle = itemElement.clone().html(btnEle)
+                        listElement.append(itemEle);
+                    })
                 }    
-                var subDocIndexElement = $("<ul/>",{"class":"mainDocument"});
-                subDocIndexElement.append(elementArray);
-                element.prepend(subDocIndexElement);
-                resolve("ok");        
+                element.children("article").children("header").append(listElement)
+
+                resolve("ok");
             } else { // if it isn't array
-                var sd = $("<ul/>",{"class":"mainDocument"}).append($("<li/>").text(subDocList));
-                element.prepend(sd);
+                listElement.append(itemElement.clone().html(btnElement.clone().html(subDocList)));
+                element.children("article").children("header").append(listElement);
 
             }
         } else { // if subDocList is undefined
@@ -82,12 +110,28 @@ function createSubDocIndex(title,subDocList, element){
 
 }
 
-function attachSubDocument(subDocID){
-    $.get("/sd/"+subDocID).then(function(data, status){
-        console.log("----attach Sub Document!----")
-        console.log(status)
-        console.log(data)
-    })
+function toggleSubDocument(parent,subDocID){
+    console.log("attach call : " + subDocID);
+    if(parent.find(".subDocument[data-subdoc-id="+subDocID+"]").length == 0){
+         $.get("/wiki/sdfu/"+subDocID).then(function(data, status){
+            console.log("----attach Sub Document!----")
+            console.log(status)
+            console.log(data)
+            var subdocElement = $("<article/>",{"class":"subDocument", "data-subdoc-id":subDocID}).append(
+                    $("<header/>", {"class":"subDocuemnt"}).append(
+                        $("<h1/>", {"class":"subDocument"}).html(data.title)
+                    )
+                ).append(
+                    $("<p/>", {"class":"subDocuemnt"}).html(data.description)
+                ).append(
+                    $("<footer/>",{'class':"subDocument"})
+                )
+            parent.append(subdocElement);
+            subdocElement.show("fast");
+        })
+    } else {
+        parent.children("article.subDocument[data-subdoc-id="+subDocID+"]").hide("fast", function(){$(this).remove()});
+    }
 }
 
 function replaceAsync(str, re, callback) {
@@ -166,9 +210,6 @@ $(document).ready(function () {
 function prepareButton() {
     console.log("prepare button");
     $(".wiki-edit-menu > ul > li").click(function(){
-        var pathname = window.location.pathname;
-        var classList = $(this).attr('class').split(/\s+/);
-        console.log(pathname.replace("/w/","/"+classList[1]+"/"));
-        window.location.href = pathname.replace("/w/","/"+classList[1]+"/");
+        console.log($(this));
     })
 }
