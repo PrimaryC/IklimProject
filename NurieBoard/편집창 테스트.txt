@@ -1,0 +1,49 @@
+  <form role="form">
+    <div class="form-group">
+      <label for="SubDoc_1-edit-title">제목:</label>
+      <input type="text" class="form-control" id="SubDoc_1-edit-title" placeholder="문단 제목을 입력해주세요.">
+    </div>
+    <div class="form-group">
+      <label for="SubDoc_1-edit-description">내용:</label>
+      <textarea type="text" class="form-control" id="SubDoc_1-edit-description" placeholder="문단 내용을 입력해주세요."></textarea>
+    </div>
+    <div class="form-group">
+      <label for="SubDoc_1-edit-subdoclist">하위 문서:</label>
+      <input type="text" class="form-control" id="SubDoc_1-edit-subdoclist" placeholder="하위 문서(임시)">
+    </div>
+    <button type="submit" class="btn btn-default">Submit</button>
+  </form>
+
+        var formElement = $("<form/>",{"role":"form"});
+
+        formElement.append(
+            $("<div/>",{"class":"form-group"}).append(
+                $("<label/>",{"for":docIDWithEdit+"title"}).text("제목:")
+            ).append(
+                $("<input/>",{"type":"text","class":"form-control","id":docIDWithEdit+"title","placeholder":"문단 제목을 입력해주세요."}).attr("value",result.title==null?docID:result.title)
+            )
+        ).append(
+            $("<div/>",{"class":"form-group"}).append(
+                $("<label/>",{"for":docIDWithEdit+"framelist"}).text("틀 리스트")
+            ).append(
+                $("<input/>",{"type":"text","class":"form-control","id":docIDWithEdit+"framelist","placeholder":"틀과 틀은 쉼표로 구분됩니다.(선택)"}).attr("value",result.frame.toString())
+            )
+        ).append(
+            $("<div/>",{"class":"form-group"}).append(
+                $("<label/>",{"for":docIDWithEdit+"description"}).text("내용")
+            ).append(
+                $("<textarea/>",{"type":"text","class":"form-control","id":docIDWithEdit+"description","placeholder":"문단 내용을 입력해주세요."}).text(result.description)
+            )
+        ).append(
+            $("<div/>",{"class":"form-group"}).append(
+                $("<label/>",{"for":docIDWithEdit+"subdoclist"}).text("하위 문단 리스트")
+            ).append(
+                $("<input/>",{"type":"text","class":"form-control","id":docIDWithEdit+"subdoclist","placeholder":"하위 문단의 ID를 입력해주세요."}).attr("value",result.subDocList.toString())
+            )
+        ).append(
+            $("<div/>",{"class":"form-group"}).append(
+                $("<label/>",{"for":docIDWithEdit+"reldoc"}).text("관련 문서")
+            ).append(
+                $("<input/>",{"type":"text","class":"form-control","id":docIDWithEdit+"title","placeholder":"문단 제목을 입력해주세요."}).attr("value",result.relDoc.toString())
+            )
+        );

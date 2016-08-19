@@ -53,7 +53,6 @@ router.get("/test/001",function(req, res, next){
 
 
 var docURLRegex = /\/doc\/([^]+)/;
-
 var editURLRegex = /\/edit\/([^]+)/;
 var frameListURLRegex = /\/frame_list\/([^]+)/;
 
@@ -77,8 +76,6 @@ router.get(docURLRegex, function(req, res, next) {
                 var description = values[0];
                 var frameList = values[1];
                 var subDocIndex = values[2];
-
-                
 
                 parseNamu.promiseMark(description).then(function(doc){
                     // console.log(Array.isArray(subDocIndex));
@@ -118,7 +115,9 @@ var subdocURLRegex = {
     "Frame":    /\/sdfr\/([^]+)/,
     "Index":    /\/sdin\/([^]+)/,
     "Rel":      /\/sdre\/([^]+)/,
-    "Full":     /\/sdfu\/([^]+)/
+    "Full":     /\/sdfu\/([^]+)/,
+    "Raw":      /\/sdra\/([^]+)/,
+    "Edit":     "/sded"
 }
 
 router.get(subdocURLRegex.Title, function(req, res, next){
@@ -160,9 +159,9 @@ router.get(subdocURLRegex.Full, function(req, res, next){
 
 
     var subDocSubjectContentQuery = db.hmget(req.params[0], "Title", "Description");
-    var subDocFrameQuery = db.lrange(req.params[0]+":Index", 0, -1);
+    var subDocFrameQuery = db.lrange(req.params[0]+":Frame", 0, -1);
     var subDocRelDocQuery = db.smembers(req.params[0]+":RelDoc");
-    var subDocSubDocQuery = db.smembers(req.params[0]+":SubDoc");
+    var subDocSubDocQuery = db.lrange(req.params[0]+":Index", 0, -1);
 
     Promise.all([subDocSubjectContentQuery, subDocFrameQuery, subDocRelDocQuery, subDocSubDocQuery]).then(function(values) {
         var title = values[0][0];
@@ -203,62 +202,133 @@ router.get(subdocURLRegex.Full, function(req, res, next){
     })
 })
 
+router.get(subdocURLRegex.Raw, function(req, res, next){
+    console.log("Raw : "+req.params[0])
+
+    var subDocSubjectContentQuery = db.hmget(req.params[0], "Title", "Description");
+    var subDocFrameQuery = db.lrange(req.params[0]+":Frame", 0, -1);
+    var subDocRelDocQuery = db.smembers(req.params[0]+":RelDoc");
+    var subDocSubDocQuery = db.lrange(req.params[0]+":Index", 0, -1);
+
+    Promise.all([subDocSubjectContentQuery, subDocFrameQuery, subDocRelDocQuery, subDocSubDocQuery]).then(function(values) {
+        var title = values[0][0];
+        var description = values[0][1];
+
+        var frameList = values[1];
+        var relDocList = values[2];
+        var paragList = values[3];
+
+        
+        console.log(values);
+        // console.log(description);
+
+        var parsedContent = values[0];
+        // var html = express.render("/wiki/subDocument", {"title":title,"description":values[0]});
+        // console.log(html)
+
+        console.log("send RAW formated data")
+        var data = {
+            // "html": html,
+            "title" : title,
+            "description" : description,
+            "subDocList": paragList,
+            "relDoc": relDocList,
+            "frame": frameList
+        }
+        res.status(200).set('Content-Type', 'application/json').send(data);
+        //send it.
+        
+    })
+})
+
+//"Edit":     /\/sded\/([^]+)/
 // -------- post -----------
-router.post(subdocURLRegex, function(req, res, next){
+router.post(subdocURLRegex.Edit, function(req, res, next){
+    console.log(JSON.stringify(req.body))
 
-    var paragID = req.body.paragID;             //string(subdoc's ID)
+    function listPostProcess(_list){
+        var list;
+        if(!Array.isArray(_list)){
+            if(typeof _list == "undefined"){
+                list = [];
+            } else if(_list == ""){
+                list = [];
+            } else {
+                list = [_list];
+            }
+        }
+        return list;
+    }
+
+    var docID = req.body.docID;             //string(subdoc's ID)
     var title = req.body.title;                 //wikiML...?
-    var description = req.body.description;     //wikiML
-    //title/descrption done.(paragUpdate);
-    var index = req.body.index;                 //[parag ID]
-    // done.
-    var relDocList = req.body.relDocList;       //[Document ID]
-    // relDocList update done.(finddiffandupdate(reldoc));
-    var frameList = req.body.frameList;         //[frames ID]
-    // frameList update done.
+    var description = req.body.description;
+    var subdoclist = listPostProcess(req.body.subdoclist);
+    var framelist = listPostProcess(req.body.framelist);
+    var reldoclist = listPostProcess(req.body.reldoclist);
 
-    function paragUpdate(paragID, title, description){  
-        return db.hmset(paragID, "title", title, "description", description)
+    console.log(typeof docID);
+    console.log("docID is : "+docID)
+    if(typeof docID == "undefined"){
+        console.log("typeof title is undefined!")
+        docID = title;
+    }
+    
+    console.log(docID + "//" + title + "//" + description + "//" + subdoclist + "//" + framelist + "//" + reldoclist);
+    console.log(typeof docID + "//" + typeof title + "//" + typeof description + "//" + typeof subdoclist + "//" + typeof framelist + "//" + typeof reldoclist);
+    
+
+    function paragUpdate(docID, title, description){  
+        db.hmset(docID, "Title", title, "Description", description).then(function(result){
+            console.log(result);
+        })
     }
 
-    function updateSet(paragID,cl,dataList){
-        //1. 기존 Frame list와 변경된 Frame list간 다른 점을 찾기 위해 diff 실행.(제거된 프레임을 찾아냄)
-        var diffQueryArgList = [paragID + ":" + cl]
-        diffQueryArgList.push.apply(diffQueryArgList, dataList)
-        db.sdiff(list).then(function(result){
-            console.log("sdiff run : " + result)
-            //2. 찾아낸 차이점을 바탕으로 srem 실행.
-            var remQueryArgList = [paragID + ":" + cl]
-            remQueryArgList.push.apply(remQueryArgList,result)
-            db.srem(remQueryArgList).then(function(result){
-                console.log("srem run : " + result)
-                //3. 제거할 Item들을 제거했으니 삽입할 Item을 DB에 넣는다.
-                db.sadd(diffQueryArgList).then(function(result){
-                    console.log("sadd run : " + result)
+    function updateSet(docID,cl,dataList){
+        var list = dataList
+        if(dataList == null){
+            list = [];
+        } else if(!Array.isArray(dataList)) {
+            list = [dataList];
+        }
+        console.log(list);
+        console.log("list is : ")
+        console.log(list)
+        db.del(docID+":"+cl).then(function(result){
+            console.log("updateSet Del result : "+result)
+            db.sadd(docID+":"+cl, list).then(function(result){
+                console.log("updateSet sadd result : " + result)
+            });
+        })
+    }
+
+    function updateList(docID, cl, dataList){
+        console.log("dataList is : " + typeof dataList)
+        console.log(dataList)
+        var list = dataList
+        console.log(list);
+        console.log("list isempty = " + list.length)
+
+        if(list.length != 0){
+            db.del(docID+":"+cl).then(function(result){
+                console.log("updateList Del result : "+result)
+                db.lpush(docID+":"+cl, list).then(function(result){
+                    console.log("updateList lpush result : "+result)
                 })
-            })
-        })
+            })      
+        } else {
+            db.del(docID+":"+cl)
+        }
+        
     }
 
-    function updateList(paragID, cl, dataList){
-        db.del(paragID+":"+cl).then(function(result){
-            dataList = dataList.push.apply([paragID+":Frame"], dataList)
-            db.lpush(dataList).then(function(result){
-                console.log(result)
-            })
-        })
-    }
+    paragUpdate(docID, title, description)
+    updateSet(docID, "RelDoc", reldoclist)
+    updateList(docID,"Frame",framelist)
+    updateList(docID,"Index",subdoclist)
 
-    paragUpdate(paragID, title, description)
-
-
-    updateSet(paragID, "RelDoc", relDocList)
-
-    updateList(paragID,"Frame",frameList)
-    updateList(paragID,"Index",index)
-
-    // db.del(paragID+":Frame").then(function(result){
-    //     frameList = frameList.push.apply([paragID+":Frame"], frameList)
+    // db.del(docID+":Frame").then(function(result){
+    //     frameList = frameList.push.apply([docID+":Frame"], frameList)
     //     db.lpush(frameList).then(function(result){
     //         console.log(result)
     //     })
@@ -266,22 +336,22 @@ router.post(subdocURLRegex, function(req, res, next){
     // })
 
 
-    // mainSubDocUpdate(paragID, title, description).then(function(result){
-    //     updateSet(paragID, "subdoc", index)
-    //     updateSet(paragID, "reldoc", relDocList)
-    //     updateSet(paragID, "frame", frameList)    
+    // mainSubDocUpdate(docID, title, description).then(function(result){
+    //     updateSet(docID, "subdoc", subdoclist)
+    //     updateSet(docID, "reldoc", relDocList)
+    //     updateSet(docID, "frame", frameList)    
     // })
 
     
 
     // function subDocFrameListUpdate(frameList){
     //     //1. 기존 Frame list와 변경된 Frame list간 다른 점을 찾기 위해 diff 실행.(제거된 프레임을 찾아냄)
-    //     var diffQueryArgList = [paragID + ":subdoc"]
+    //     var diffQueryArgList = [docID + ":subdoc"]
     //     diffQueryArgList.push.apply(diffQueryArgList, frameList)
     //     db.sdiff(list).then(function(result){
     //         console.log(result)
     //         //2. 찾아낸 차이점을 바탕으로 srem 실행.
-    //         var remQueryArgList = [paragID + ":subdoc"]
+    //         var remQueryArgList = [docID + ":subdoc"]
     //         remQueryArgList.push.apply(remQueryArgList,result)
     //         db.srem(remQueryArgList).then(function(result){
     //             console.log(result)
@@ -292,8 +362,7 @@ router.post(subdocURLRegex, function(req, res, next){
     //         })
     //     })
     // }
-    
-
+    res.send('ok');
 })
 
 router.get('/RecentChanges')

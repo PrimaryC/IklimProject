@@ -4,7 +4,7 @@ var testVariable
 
 function createDocument(documentData){
     //title, description, frameList, subDocList
-    var mainDocumentElement = $("<section/>",{'class':"mainDocument", "id":documentData.title});
+    var mainDocumentElement = $("<section/>",{'class':"mainDocument", "data-doc-id":documentData.title});
     writeMainDocument(documentData.title, documentData.description, mainDocumentElement)
         .then( function() {return createFrameList(documentData.frameList, mainDocumentElement); })
         .then( function() {return createSubDocIndex(documentData.title, documentData.subDocIndex, mainDocumentElement); })
@@ -13,15 +13,40 @@ function createDocument(documentData){
             console.log(mainDocumentElement.html())
             $("div.wiki-document-container").append(mainDocumentElement);
             testVariable = mainDocumentElement;
-        })
+        }
+    )
 }
+
+function createDocElementFromID(docID){
+    $.get("/wiki/sdfu/"+docID).then(function(result){
+        console.log(result);
+    })
+}
+
 
 function writeMainDocument(title, description, element){
     return new Promise(function(resolve, reject){
         element.append(
-            $("<article/>",{'class':'mainDocument'}).append(
+            $("<article/>",{'class':'mainDocument', "data-doc-id":title}).append(
                 $("<header/>",{'class':"mainDocument"}).append( // frame placeholder
                     $("<h1/>",{'class':"mainDocument"}).text(title)
+                ).prepend(
+                    $("<button/>",{"type":"button","class":"btn btn-default float-right"})
+                    .append($("<span/>",{"class":"glyphicon glyphicon-pencil", "aria-hidden":"true"}))
+                    .click(
+                        function(){
+                            enterEditMode($(this).parents("article"))
+                        }
+                    )
+                ).prepend(
+                    $("<button/>",{"type":"button","class":"btn btn-default float-right"})
+                    .append($("<span/>",{"class":"glyphicon glyphicon-remove", "aria-hidden":"true"}))
+                    .click(
+                        function(){
+                            $(this).parents("section")
+                                .hide("fast",function(){$(this).remove()});
+                        }
+                    )   
                 )
             ).append(
                 $("<p/>",{'class':"mainDocument"}).html(description)
@@ -50,7 +75,7 @@ function createFrameList(frameList, element){
                 var frameTier = frameList.length>5 ? "Full" : "Simple";
                 for (var i = 0; i < frameList.length; i++) {
                     $.get("/wiki/frame",{"frameName":frameList[i], frameTier}).then(function(result){
-                        element.children("article").children("header").children("h1").after(result);
+                        element.children("article").children("header").children("h1").after($("<p/>").html(result));
                     }, function(err){console.log(err)});
                 }
             } else {
@@ -72,7 +97,7 @@ function createFrameList(frameList, element){
 
 function createSubDocIndex(title,subDocList, element){
     return new Promise(function(resolve, reject){
-        var listElement = $("<ul/>",{"class":"mainDocument"});
+        var listElement = $("<ul/>",{"class":"mainDocument subdocindex"});
         var titleItemElement = '<li class="mainDocument"><strong>목차</strong></li>';
         var itemElement = $("<li/>",{"class":"mainDocument"});
         var btnElement = $("<a/>",{"class":"mainDocument btn btn-default"});
@@ -86,9 +111,9 @@ function createSubDocIndex(title,subDocList, element){
                 for (var i = 0; i < subDocList.length; i++) {
                     var sdID = subDocList[i];
                     $.get("/wiki/sdti/"+sdID).then(function(res){
-                        var btnEle = btnElement.clone().attr("data-subdoc-id",subDocList[x++]).html(res)
+                        var btnEle = btnElement.clone().attr("data-doc-id",subDocList[x++]).html(res)
                         btnEle.click(function(){
-                            toggleSubDocument($(this).parents("section"),$(this).attr("data-subdoc-id"));
+                            toggleSubDocument($(this).parents("article"),$(this).attr("data-doc-id"));
                         })
                         var itemEle = itemElement.clone().html(btnEle)
                         listElement.append(itemEle);
@@ -110,16 +135,35 @@ function createSubDocIndex(title,subDocList, element){
 
 }
 
+var x;
+
 function toggleSubDocument(parent,subDocID){
     console.log("attach call : " + subDocID);
-    if(parent.find(".subDocument[data-subdoc-id="+subDocID+"]").length == 0){
+    if(parent.find(".subDocument[data-doc-id="+subDocID+"]").length == 0){
          $.get("/wiki/sdfu/"+subDocID).then(function(data, status){
             console.log("----attach Sub Document!----")
             console.log(status)
             console.log(data)
-            var subdocElement = $("<article/>",{"class":"subDocument", "data-subdoc-id":subDocID}).append(
+            var subdocElement = $("<article/>",{"class":"subDocument", "data-doc-id":subDocID}).append(
                     $("<header/>", {"class":"subDocuemnt"}).append(
                         $("<h1/>", {"class":"subDocument"}).html(data.title)
+                    ).prepend(
+                        $("<button/>",{"type":"button","class":"btn btn-default float-right"})
+                        .append($("<span/>",{"class":"glyphicon glyphicon-pencil", "aria-hidden":"true"}))
+                        .click(
+                            function(){
+                                enterEditMode($(this).parents("article.subDocument"))
+                            }
+                        )
+                    ).prepend(
+                        $("<button/>",{"type":"button","class":"btn btn-default float-right"})
+                        .append($("<span/>",{"class":"glyphicon glyphicon-remove", "aria-hidden":"true"}))
+                        .click(
+                            function(){
+                                $(this).parents("article.subDocument")
+                                    .hide("fast",function(){$(this).remove()});
+                            }
+                        )   
                     )
                 ).append(
                     $("<p/>", {"class":"subDocuemnt"}).html(data.description)
@@ -130,8 +174,94 @@ function toggleSubDocument(parent,subDocID){
             subdocElement.show("fast");
         })
     } else {
-        parent.children("article.subDocument[data-subdoc-id="+subDocID+"]").hide("fast", function(){$(this).remove()});
+        parent.children("article.subDocument[data-doc-id="+subDocID+"]").hide("fast", function(){$(this).remove()});
     }
+}
+
+function enterEditMode(targetElem){
+    $.get("/wiki/sdra/"+targetElem.attr("data-doc-id")).then(function(result){
+        console.log("--result--");
+        console.log(result);
+        console.log("--targetElem--");
+        console.log(targetElem);
+        
+        var docID = targetElem.attr("data-doc-id");
+        var docIDWithEdit = docID + "-edit-";
+
+        targetElem.children("p").remove()
+        
+        var formElement = $("<form/>",{"role":"form", "method":"post", "data-doc-id":docID, "action":"/wiki/sded/"}).submit(submitSubDocument);
+
+        formElement.append(
+            $("<div/>",{"class":"form-group"}).append(
+                $("<label/>",{"for":docIDWithEdit+"title"}).text("제목:")
+            ).append(
+                $("<input/>",{"type":"text","class":"form-control","id":docIDWithEdit+"title","placeholder":"문단 제목을 입력해주세요.", "name":"wikidoc-title"}).attr("value",result.title==null?docID:result.title)
+            )
+        ).append(
+            $("<div/>",{"class":"form-group"}).append(
+                $("<label/>",{"for":docIDWithEdit+"framelist"}).text("틀 리스트")
+            ).append(
+                $("<input/>",{"type":"text","class":"form-control","id":docIDWithEdit+"framelist","placeholder":"틀과 틀은 쉼표로 구분됩니다.(선택)", "name":"wikidoc-framelist"}).attr("value",result.frame.toString())
+            )
+        ).append(
+            $("<div/>",{"class":"form-group"}).append(
+                $("<label/>",{"for":docIDWithEdit+"description"}).text("내용")
+            ).append(
+                $("<textarea/>",{"type":"text","class":"form-control","id":docIDWithEdit+"description","placeholder":"문단 내용을 입력해주세요.", "name":"wikidoc-description"}).text(result.description)
+            )
+        ).append(
+            $("<div/>",{"class":"form-group"}).append(
+                $("<label/>",{"for":docIDWithEdit+"subdoclist"}).text("하위 문단 리스트")
+            ).append(
+                $("<input/>",{"type":"text","class":"form-control","id":docIDWithEdit+"subdoclist","placeholder":"하위 문단의 ID를 입력해주세요.", "name":"wikidoc-subdoclist"}).attr("value",result.subDocList.toString())
+            )
+        ).append(
+            $("<div/>",{"class":"form-group"}).append(
+                $("<label/>",{"for":docIDWithEdit+"reldoc"}).text("관련 문서")
+            ).append(
+                $("<input/>",{"type":"text","class":"form-control","id":docIDWithEdit+"reldoclist","placeholder":"상위 문서를 입력해주세요.", "name":"wikidoc-reldoclist"}).attr("value",result.relDoc.toString())
+            )
+        ).append(
+            $("<button/>", {"class":"btn btn-default","type":"submit"}).text("저장")
+        );
+        formElement.insertAfter(targetElem.children("header"));
+    })
+}
+
+function submitSubDocument(event){
+    event.preventDefault();
+    var     $form = $(this),
+            docID = $form.attr("data-doc-id"),
+            title = $form.find("input[name='wikidoc-title']").val(),
+            description = $form.find("textarea[name='wikidoc-description']").val(),
+            subdoclist = $form.find("input[name='wikidoc-subdoclist']").val(),
+            framelist = $form.find("input[name='wikidoc-framelist']").val(),
+            reldoclist = $form.find("input[name='wikidoc-reldoclist']").val(),
+            url = $form.attr("action");
+
+    var data = {
+        "docID":docID,
+        "title":title,
+        "description":description,
+        "subdoclist":subdoclist,
+        "framelist":framelist,
+        "reldoclist":reldoclist
+    }
+    var posting = $.post(url, data);
+    posting.done(function(data){
+        console.log("done! data is : ");
+        console.log(data);
+        if(data=="ok"){
+            refreshDocument(docID);
+        }
+    })
+}
+
+function refreshDocument(docID){
+    var element = $.find("article[data-doc-id='"+docID+"']");
+    console.log(element)
+    element.empty()
 }
 
 function replaceAsync(str, re, callback) {
@@ -203,7 +333,7 @@ $(document).ready(function () {
     // console.log("-----Array Check-----")
     // console.log(subDocNameArray)
     // console.log(subDocContentArray)
-    createDocument(documentData)
+    createDocument(documentData[0])
     prepareButton()
 });
 

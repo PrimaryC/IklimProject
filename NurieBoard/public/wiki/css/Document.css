@@ -93,3 +93,7 @@ li.mainDocument {
 article.subDocument {
     display:none;
 }
+
+.float-right {
+    float:right;
+}
