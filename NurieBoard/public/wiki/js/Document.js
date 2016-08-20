@@ -1,70 +1,57 @@
 var subDocNameArray = []
 var subDocContentArray = []
-var testVariable
 
-function createDocument(documentData){
+function createDocument(documentData, docID){
     //title, description, frameList, subDocList
-    var mainDocumentElement = $("<section/>",{'class':"mainDocument", "data-doc-id":documentData.title});
-    writeMainDocument(documentData.title, documentData.description, mainDocumentElement)
-        .then( function() {return createFrameList(documentData.frameList, mainDocumentElement); })
+
+    var mainDocumentElement;
+    return writeMainDocument(documentData.title, documentData.description, docID)
+        .then( function(element) {
+            mainDocumentElement = element;
+            return createFrameList(documentData.frameList, mainDocumentElement); })
         .then( function() {return createSubDocIndex(documentData.title, documentData.subDocIndex, mainDocumentElement); })
-        .then( function() {
-            console.log(mainDocumentElement);
-            console.log(mainDocumentElement.html())
-            $("div.wiki-document-container").append(mainDocumentElement);
-            testVariable = mainDocumentElement;
-        }
+        .then( function() {return mainDocumentElement;}
     )
 }
 
-function createDocElementFromID(docID){
-    $.get("/wiki/sdfu/"+docID).then(function(result){
-        console.log(result);
-    })
+function createDocElementFromID(docID, callback){
+    $.get("/wiki/sdfu/"+docID)
+    .then(function(result) {return createDocument(result, docID)})
+    .then(function(result) {callback(result)})
 }
 
 
-function writeMainDocument(title, description, element){
+function writeMainDocument(title, description, docID){
     return new Promise(function(resolve, reject){
-        element.append(
-            $("<article/>",{'class':'mainDocument', "data-doc-id":title}).append(
-                $("<header/>",{'class':"mainDocument"}).append( // frame placeholder
-                    $("<h1/>",{'class':"mainDocument"}).text(title)
-                ).prepend(
-                    $("<button/>",{"type":"button","class":"btn btn-default float-right"})
-                    .append($("<span/>",{"class":"glyphicon glyphicon-pencil", "aria-hidden":"true"}))
-                    .click(
-                        function(){
-                            enterEditMode($(this).parents("article"))
-                        }
-                    )
-                ).prepend(
-                    $("<button/>",{"type":"button","class":"btn btn-default float-right"})
-                    .append($("<span/>",{"class":"glyphicon glyphicon-remove", "aria-hidden":"true"}))
-                    .click(
-                        function(){
-                            $(this).parents("section")
-                                .hide("fast",function(){$(this).remove()});
-                        }
-                    )   
+    var element = $("<article/>",{'class':(typeof docID=="undefined"?"mainDocument":"subDocument"), "data-doc-id":(typeof docID=="undefined"?title:docID)}).append(
+            $("<header/>",{'class':"mainDocument"}).append( // frame placeholder
+                $("<h1/>",{'class':"mainDocument"}).html(title)
+            ).prepend(
+                $("<button/>",{"type":"button","class":"btn btn-default float-right"})
+                .append($("<span/>",{"class":"glyphicon glyphicon-pencil", "aria-hidden":"true"}))
+                .click(
+                    function(){
+                        enterEditMode($(this).parents("article"))
+                    }
                 )
-            ).append(
-                $("<p/>",{'class':"mainDocument"}).html(description)
-            ).append(
-                $("<footer/>",{'class':"mainDocument"})
+            ).prepend(
+                $("<button/>",{"type":"button","class":"btn btn-default float-right"})
+                .append($("<span/>",{"class":"glyphicon glyphicon-remove", "aria-hidden":"true"}))
+                .click(
+                    function(){
+                        $(this).parents("article[data-doc-id='"+title+"']")
+                            .hide("fast",function(){$(this).remove()});
+                    }
+                )   
             )
+        ).append(
+            $("<p/>",{'class':"mainDocument"}).html(description)
+        ).append(
+            $("<footer/>",{'class':"mainDocument"})
         )
+    
 
-        // element.append(
-        //     $("<header/>",{'class':"mainDocument"}).append( // frame placeholder
-        //         $("<h1/>",{'class':"mainDocument"}).text(title)
-        //     ) 
-        // ).append(
-        //         $("<article/>",{'class':"mainDocument"}).html(description)
-        // ).append(
-        //         $("<footer/>",{'class':"mainDocument"})
-        // );
-        resolve("ok");
+        resolve(element);
     });
 }
 
@@ -75,7 +62,7 @@ function createFrameList(frameList, element){
                 var frameTier = frameList.length>5 ? "Full" : "Simple";
                 for (var i = 0; i < frameList.length; i++) {
                     $.get("/wiki/frame",{"frameName":frameList[i], frameTier}).then(function(result){
-                        element.children("article").children("header").children("h1").after($("<p/>").html(result));
+                        element.children("header").children("h1").after($("<p/>").html(result));
                     }, function(err){console.log(err)});
                 }
             } else {
@@ -85,7 +72,7 @@ function createFrameList(frameList, element){
                     "frameName":frameList, 
                     "frameTier":frameTier
                 }, function(result){
-                    element.children("article").children("header").children("h1").after(result);
+                    element.children("header").children("h1").after(result);
                 })
             }
         } else {
@@ -119,12 +106,12 @@ function createSubDocIndex(title,subDocList, element){
                         listElement.append(itemEle);
                     })
                 }    
-                element.children("article").children("header").append(listElement)
+                element.children("header").append(listElement)
 
                 resolve("ok");
             } else { // if it isn't array
                 listElement.append(itemElement.clone().html(btnElement.clone().html(subDocList)));
-                element.children("article").children("header").append(listElement);
+                element.children("header").append(listElement);
 
             }
         } else { // if subDocList is undefined
@@ -258,10 +245,18 @@ function submitSubDocument(event){
     })
 }
 
+var testVAR;
+
 function refreshDocument(docID){
-    var element = $.find("article[data-doc-id='"+docID+"']");
-    console.log(element)
-    element.empty()
+    var element = $("article").find("article[data-doc-id='"+docID+"']");
+    createDocElementFromID(docID,function(result){
+        result.then(function(result){
+            console.log("replace object : ")
+            console.log(result)
+            element.replaceWith(result.css("display","block"))
+        })
+
+    });
 }
 
 function replaceAsync(str, re, callback) {
@@ -294,46 +289,11 @@ function replaceAsync(str, re, callback) {
     });
 }
 
-// function searchSubDoc(match, p1, offset, string){
-//     var subDocName = p1;
-//     subDocName = subDocName.split("|");
-//     var url = "http://127.0.0.1:8080/wiki/in/"+subDocName[0];
-//     return $.ajax({
-//         url: url,
-//         type: 'GET',
-//         data: {},
-//         success: function(data){
-//             subDocNameArray.push(p1)
-//             subDocContentArray.push(data)
-//             // console.log("-----on searchSubDoc replace happened-----")
-//             // console.log(subDocNameArray[subDocNameArray.length -1])
-//             // console.log(subDocContentArray[subDocContentArray.length -1])
-//         }
-//     });
-//     return "<del>"+string+"</del>";
-// }
-
-// var includeRegex = /<del>([^]*)<\/del>/g;
-
-// function replaceSubDoc(match, p1, offset, string){
-//     var arrayIndexNo = subDocNameArray.indexOf(p1);
-//     var argArray = p1.split("|");
-//     var result = subDocContentArray[arrayIndexNo].replace(/\$([0-9]+)/,function(match, p, offset, string){
-//         return argArray[p];
-//     })
-//     return result;
-// }
-
 $(document).ready(function () { 
-    // replaceAsync($("body").html(), includeRegex, searchSubDoc).then(function(result){
-    //     console.log("result = " + result);
-    //     $("body").html($("body").html().replace(includeRegex, replaceSubDoc));
-    //     prepareButton();
-    // })
-    // console.log("-----Array Check-----")
-    // console.log(subDocNameArray)
-    // console.log(subDocContentArray)
-    createDocument(documentData[0])
+    createDocument(documentData[0]).then(function(result){
+        $("div.wiki-document-container").append(result);
+    })
+
     prepareButton()
 });
 
