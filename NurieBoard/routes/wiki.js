@@ -52,44 +52,53 @@ router.get("/test/001",function(req, res, next){
 });
 
 
-var docURLRegex = /\/doc\/([^]+)/;
+var docURLRegex = /\/doc\/([^]*)/;
 var editURLRegex = /\/edit\/([^]+)/;
 var frameListURLRegex = /\/frame_list\/([^]+)/;
 
 // url = "/wiki/sd/subdoc_0142039"
 // --------------- get ------------
 router.get(docURLRegex, function(req, res, next) {
-    var docName = req.params[0];
-    db.zscore("Index",docName).then(function(result){
-        console.log("zscore Index result = " + result)
-        //문서가 존재하는지 확인
-        if(result != undefined){
-            //있다면
-            console.log("there is document.");
-            console.log("DocName = " + docName);
-            var getDocument = db.hget(docName, "Description");
-            var getFrameList = db.lrange(docName + ":Frame", 0, -1);
-            var getSubDocIndex = db.lrange(docName + ":Index", 0, -1);
+    // var docName = req.params[0];
+    // console.log("docname is = " + typeof docName);
+    // if(docName != ""){
+    //     db.zscore("Index",docName).then(function(result){
+    //         console.log("zscore Index result = " + result)
+    //         //문서가 존재하는지 확인
+    //         if(result != undefined){
+    //             //있다면
+    //             console.log("there is document.");
+    //             console.log("DocName = " + docName);
+    //             var getDocument = db.hget(docName, "Description");
+    //             var getFrameList = db.lrange(docName + ":Frame", 0, -1);
+    //             var getSubDocIndex = db.lrange(docName + ":Index", 0, -1);
 
-            Promise.all([getDocument, getFrameList, getSubDocIndex]).then(function(values){
-                var title = docName;
-                var description = values[0];
-                var frameList = values[1];
-                var subDocIndex = values[2];
+    //             Promise.all([getDocument, getFrameList, getSubDocIndex]).then(function(values){
+    //                 var title = docName;
+    //                 var description = values[0];
+    //                 var frameList = values[1];
+    //                 var subDocIndex = values[2];
 
-                parseNamu.promiseMark(description).then(function(doc){
-                    // console.log(Array.isArray(subDocIndex));
+    //                 parseNamu.promiseMark(description).then(function(doc){
+    //                     // console.log(Array.isArray(subDocIndex));
 
-                    console.log(title +"//"+ doc +"//"+ frameList +"//"+ subDocIndex);
-                    var data = {"title":title, "description" : doc, "frameList" : frameList, "subDocIndex" : subDocIndex}
-                    res.render("wiki/Document", {"data":JSON.stringify(data), "title":docName});
-                })
-            });
-        } else {
-            var data = {"title":docName, "description" : "문서가 없습니다. 편집하여 생성해 주세요."}
-            res.render("wiki/Document", {"data":JSON.stringify(data), "title":docName})
-        }
-    });
+    //                     console.log(title +"//"+ doc +"//"+ frameList +"//"+ subDocIndex);
+    //                     var data = {"title":title, "description" : doc, "frameList" : frameList, "subDocList" : subDocIndex}
+    //                     res.render("wiki/Document", {"data":JSON.stringify(data), "title":docName});
+    //                 })
+    //             });
+    //         } else {
+    //             var data = {"title":docName, "description" : "문서가 없습니다. 편집하여 생성해 주세요."}
+    //             res.render("wiki/Document", {"data":JSON.stringify(data), "title":docName})
+    //         }
+    //     });    
+    // } else {
+    //     var data = {"title":docName, "description" : "문서가 없습니다. 편집하여 생성해 주세요."}
+    //     res.render("wiki/Document", {"data":JSON.stringify(data), "title":docName})
+    // }
+
+    res.render("wiki/Document");
+    
 });
 
 
@@ -155,52 +164,104 @@ router.get(subdocURLRegex.Rel, function(req, res, next){
 })
 
 router.get(subdocURLRegex.Full, function(req, res, next){
-    console.log("Full : "+req.params[0])
+    var title, description, frameList, relDocList, subDocList;
+    var docID = req.params[0];
+    console.log(req.query.doctype == "main");
+    db.exists(docID).then(function(isExist){
+        if(isExist == 1){
+            if(req.query.doctype=="main"){
+                var mainDocContentQuery = db.hget(docID, "Description")
+                var mainDocFrameQuery = db.lrange(docID+":Frame", 0, -1);
+                var mainDocRelDocQuery = db.smembers(docID+":RelDoc");
+                var mainDocSubDocQuery = db.lrange(docID+":Index", 0, -1);
+
+                Promise.all([mainDocContentQuery,mainDocFrameQuery,mainDocRelDocQuery,mainDocSubDocQuery]).then(function(values){
+                    parseNamu.promiseMark(values[0]).then(function(result){
+                        description = result;
+
+                        frameList = values[1];
+                        relDocList = values[2];
+                        subDocList = values[3];
 
 
-    var subDocSubjectContentQuery = db.hmget(req.params[0], "Title", "Description");
-    var subDocFrameQuery = db.lrange(req.params[0]+":Frame", 0, -1);
-    var subDocRelDocQuery = db.smembers(req.params[0]+":RelDoc");
-    var subDocSubDocQuery = db.lrange(req.params[0]+":Index", 0, -1);
+                        var data = {
+                            "description" : description,
+                            "subDocList": subDocList,
+                            "relDoc": relDocList,
+                            "frameList": frameList
+                        }
+                        sendData(res,data);
+                    })
+                })
+            } else {
+                var subDocSubjectContentQuery = db.hmget(docID, "Title", "Description");
+                var subDocFrameQuery = db.lrange(docID+":Frame", 0, -1);
+                var subDocRelDocQuery = db.smembers(docID+":RelDoc");
+                var subDocSubDocQuery = db.lrange(docID+":Index", 0, -1);
 
-    Promise.all([subDocSubjectContentQuery, subDocFrameQuery, subDocRelDocQuery, subDocSubDocQuery]).then(function(values) {
-        var title = values[0][0];
-        var description = values[0][1];
-        
-        var parse = parseNamu.promiseMark(title+"|tiTleDescRipTiOn|"+description);
+                Promise.all([subDocSubjectContentQuery, subDocFrameQuery, subDocRelDocQuery, subDocSubDocQuery]).then(function(values) {
+                    title = values[0][0];
+                    description = values[0][1];
+                    
+                    var parse = parseNamu.promiseMark(title+"|tiTleDescRipTiOn|"+description);
 
-        var frameList = values[1];
-        var relDocList = values[2];
-        var paragList = values[3];
+                    frameList = values[1];
+                    relDocList = values[2];
+                    subDocList = values[3];
 
-        Promise.all([parse]).then(function(values){
-            console.log(values);
-            var resultList = values[0].split("|tiTleDescRipTiOn|");
-            console.log(resultList);
-            title = resultList[0];
-            console.log(title);
-            description = resultList[1];
-            console.log(description);
+                    Promise.all([parse]).then(function(values){
+                        // console.log(values);
+                        var resultList = values[0].split("|tiTleDescRipTiOn|");
+                        // console.log(resultList);
+                        title = resultList[0];
+                        // console.log(title);
+                        description = resultList[1];
+                        // console.log(description);
 
-            var parsedContent = values[0];
-            // var html = express.render("/wiki/subDocument", {"title":title,"description":values[0]});
-            // console.log(html)
-
-            console.log("send data")
-            var data = {
-                // "html": html,
-                "title" : title,
-                "description" : description,
-                "subDocList": paragList,
-                "relDoc": relDocList,
-                "frame": frameList
+                        var data = {
+                            "title" : title,
+                            "description" : description,
+                            "subDocList": subDocList,
+                            "relDoc": relDocList,
+                            "frameList": frameList
+                        }
+                        sendData(res, data);
+                    })
+                    
+                })
             }
-            res.status(200).set('Content-Type', 'application/json').send(data);
-            //send it.
-        })
-        
+        } else {
+            if(req.query.doctype == "main"){
+                var data = {
+                    "description" : "문서가 없습니다. 작성해주세요!",
+                    "subDocList": "",
+                    "relDoc": "",
+                    "frameList": ""
+                }
+                sendData(res,data);
+            } else {
+                var data = {
+                    "title" : "없는 문서",
+                    "description" : "문서가 없습니다. 작성해주세요!",
+                    "subDocList": "",
+                    "relDoc": "",
+                    "frameList": ""
+                }
+                sendData(res,data);
+            }
+        }
     })
+    
+    console.log("Full : "+req.params[0]);
+
+    
 })
+
+function sendData(res, data){
+    console.log("send data")
+    res.status(200).set('Content-Type', 'application/json').send(data);
+    //send it.
+}
 
 router.get(subdocURLRegex.Raw, function(req, res, next){
     console.log("Raw : "+req.params[0])
@@ -216,7 +277,7 @@ router.get(subdocURLRegex.Raw, function(req, res, next){
 
         var frameList = values[1];
         var relDocList = values[2];
-        var paragList = values[3];
+        var subDocList = values[3];
 
         
         console.log(values);
@@ -231,7 +292,7 @@ router.get(subdocURLRegex.Raw, function(req, res, next){
             // "html": html,
             "title" : title,
             "description" : description,
-            "subDocList": paragList,
+            "subDocList": subDocList,
             "relDoc": relDocList,
             "frame": frameList
         }
@@ -295,10 +356,13 @@ router.post(subdocURLRegex.Edit, function(req, res, next){
         console.log("list is : ")
         console.log(list)
         db.del(docID+":"+cl).then(function(result){
-            console.log("updateSet Del result : "+result)
-            db.sadd(docID+":"+cl, list).then(function(result){
-                console.log("updateSet sadd result : " + result)
-            });
+            if(list.length != 0){
+                console.log("updateSet Del result : "+result)
+                db.sadd(docID+":"+cl, list).then(function(result){
+                    console.log("updateSet sadd result : " + result)
+                });    
+            }
+            
         })
     }
 
@@ -322,10 +386,23 @@ router.post(subdocURLRegex.Edit, function(req, res, next){
         
     }
 
+    function addDocToIndex(docID){
+        db.zscore("Index",docID).then(function(result){
+            console.log(result);
+            if(result == undefined){
+                db.zadd("Index",1,docID).then(function(result){
+                    console.log("zadd to Index!");
+                    console.log(result);
+                })
+            }
+        })
+    }
+
     paragUpdate(docID, title, description)
     updateSet(docID, "RelDoc", reldoclist)
     updateList(docID,"Frame",framelist)
     updateList(docID,"Index",subdoclist)
+    addDocToIndex(docID)
 
     // db.del(docID+":Frame").then(function(result){
     //     frameList = frameList.push.apply([docID+":Frame"], frameList)

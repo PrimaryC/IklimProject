@@ -1,56 +1,81 @@
 var subDocNameArray = []
 var subDocContentArray = []
 
-function createDocument(documentData, docID){
+function createDocumentElement(documentData, docID){
     //title, description, frameList, subDocList
-
+    console.log(documentData);
     var mainDocumentElement;
-    return writeMainDocument(documentData.title, documentData.description, docID)
+    return writeDocument(documentData.title, documentData.description, docID)
         .then( function(element) {
             mainDocumentElement = element;
             return createFrameList(documentData.frameList, mainDocumentElement); })
-        .then( function() {return createSubDocIndex(documentData.title, documentData.subDocIndex, mainDocumentElement); })
+        .then( function() {return createSubDocIndex(documentData.title, documentData.subDocList, mainDocumentElement); })
         .then( function() {return mainDocumentElement;}
     )
 }
 
-function createDocElementFromID(docID, callback){
-    $.get("/wiki/sdfu/"+docID)
-    .then(function(result) {return createDocument(result, docID)})
-    .then(function(result) {callback(result)})
+function createDocElementFromID(docID, doctype, callback){
+    return $.get("/wiki/sdfu/"+docID,{"doctype":doctype}).then(function(result) {
+        var x = createDocumentElement(result, docID)
+        console.log(x);
+        return x.then(function(result){
+            console.log(result)
+            return result
+        });
+    }).then(function(result) {
+        callback(result);
+        return result;
+    })
 }
 
+function attachMainDocument(docID){
+    createDocElementFromID(docID, "main", function(result){
+        result.then(function(resDoc){
+            console.log(result);
+            $(".wiki-document-container").append(resDoc);
+            resDoc.show("fast");
+        })
+    })
+}
 
-function writeMainDocument(title, description, docID){
+function writeDocument(title, description, docID){
     return new Promise(function(resolve, reject){
-    var element = $("<article/>",{'class':(typeof docID=="undefined"?"mainDocument":"subDocument"), "data-doc-id":(typeof docID=="undefined"?title:docID)}).append(
+    console.log("docID = "+docID+" // title="+title)
+    console.log("docID type = " + typeof docID + " // title type = " + typeof title)
+    var element = $("<article/>",{'class':"viewmode "+(typeof title=="undefined"?"mainDocument":"subDocument"), "data-doc-id":(docID)}).append(
             $("<header/>",{'class':"mainDocument"}).append( // frame placeholder
-                $("<h1/>",{'class':"mainDocument"}).html(title)
+                $("<h1/>",{'class':"mainDocument"}).html((typeof title=="undefined"?docID:title))
             ).prepend(
-                $("<button/>",{"type":"button","class":"btn btn-default float-right"})
+                $("<button/>",{"type":"button","class":"btn btn-default float-right", "data-doc-id":docID})
                 .append($("<span/>",{"class":"glyphicon glyphicon-pencil", "aria-hidden":"true"}))
                 .click(
                     function(){
-                        enterEditMode($(this).parents("article"))
+                        toggleEditMode($(this))
                     }
                 )
             ).prepend(
-                $("<button/>",{"type":"button","class":"btn btn-default float-right"})
+                $("<button/>",{"type":"button","class":"btn btn-default float-right", "data-doc-id":docID})
                 .append($("<span/>",{"class":"glyphicon glyphicon-remove", "aria-hidden":"true"}))
                 .click(
                     function(){
-                        $(this).parents("article[data-doc-id='"+title+"']")
+                        $(this).parents("article[data-doc-id='"+$(this).attr("data-doc-id")+"']")
                             .hide("fast",function(){$(this).remove()});
                     }
-                )   
+                )
+            ).prepend(
+                $("<button/>",{"type":"button","class":"btn btn-default float-right", "data-doc-id":docID})
+                .append($("<span/>",{"class":"glyphicon glyphicon-tree-deciduous", "aria-hidden":"true"}))
+                .click(
+                    function(){
+                        toggleRawMode($(this))
+                    }
+                )
             )
         ).append(
-            $("<p/>",{'class':"mainDocument"}).html(description)
+            $("<div/>",{'class':"mainDocument"}).html(description)
         ).append(
             $("<footer/>",{'class':"mainDocument"})
         )
-    
-
         resolve(element);
     });
 }
@@ -58,10 +83,11 @@ function writeMainDocument(title, description, docID){
 function createFrameList(frameList, element){
     return new Promise(function(resolve, reject){
         if(frameList != undefined){
+            console.log(Array.isArray(frameList))
             if(Array.isArray(frameList)){
                 var frameTier = frameList.length>5 ? "Full" : "Simple";
                 for (var i = 0; i < frameList.length; i++) {
-                    $.get("/wiki/frame",{"frameName":frameList[i], frameTier}).then(function(result){
+                    $.get("/wiki/frame",{"frameName":frameList[i], "frameTier" : frameTier}).then(function(result){
                         element.children("header").children("h1").after($("<p/>").html(result));
                     }, function(err){console.log(err)});
                 }
@@ -72,13 +98,14 @@ function createFrameList(frameList, element){
                     "frameName":frameList, 
                     "frameTier":frameTier
                 }, function(result){
+                    console.log(result);
                     element.children("header").children("h1").after(result);
                 })
             }
         } else {
             console.log("there is no frame.")
         }
-        resolve("ok");
+        resolve(element);
     })
 }
 
@@ -117,75 +144,71 @@ function createSubDocIndex(title,subDocList, element){
         } else { // if subDocList is undefined
             console.log("there is no subDoc.")
         }
-        resolve("ok")
+        resolve(element)
     })
-
 }
-
-var x;
 
 function toggleSubDocument(parent,subDocID){
     console.log("attach call : " + subDocID);
     if(parent.find(".subDocument[data-doc-id="+subDocID+"]").length == 0){
-         $.get("/wiki/sdfu/"+subDocID).then(function(data, status){
-            console.log("----attach Sub Document!----")
-            console.log(status)
-            console.log(data)
-            var subdocElement = $("<article/>",{"class":"subDocument", "data-doc-id":subDocID}).append(
-                    $("<header/>", {"class":"subDocuemnt"}).append(
-                        $("<h1/>", {"class":"subDocument"}).html(data.title)
-                    ).prepend(
-                        $("<button/>",{"type":"button","class":"btn btn-default float-right"})
-                        .append($("<span/>",{"class":"glyphicon glyphicon-pencil", "aria-hidden":"true"}))
-                        .click(
-                            function(){
-                                enterEditMode($(this).parents("article.subDocument"))
-                            }
-                        )
-                    ).prepend(
-                        $("<button/>",{"type":"button","class":"btn btn-default float-right"})
-                        .append($("<span/>",{"class":"glyphicon glyphicon-remove", "aria-hidden":"true"}))
-                        .click(
-                            function(){
-                                $(this).parents("article.subDocument")
-                                    .hide("fast",function(){$(this).remove()});
-                            }
-                        )   
-                    )
-                ).append(
-                    $("<p/>", {"class":"subDocuemnt"}).html(data.description)
-                ).append(
-                    $("<footer/>",{'class':"subDocument"})
-                )
-            parent.append(subdocElement);
-            subdocElement.show("fast");
+        var subdocElement;
+        createDocElementFromID(subDocID, "sub", function(result){
+            console.log(result);
+            result.then(function(res){
+                console.log(res);
+                subdocElement = res;
+                parent.append(subdocElement);
+                subdocElement.show("fast");
+            })
         })
     } else {
         parent.children("article.subDocument[data-doc-id="+subDocID+"]").hide("fast", function(){$(this).remove()});
     }
 }
 
-function enterEditMode(targetElem){
-    $.get("/wiki/sdra/"+targetElem.attr("data-doc-id")).then(function(result){
+
+function toggleClass(target, classname){
+    target.removeClass(function (index, css) {
+        return (css.match (/\w*mode/g) || []).join(' ');
+    }).addClass(classname);
+}
+
+function toggleEditMode(target){
+    var docID = target.attr("data-doc-id");
+    var targetElem = target.parents("article[data-doc-id="+docID+"]");
+    if(!targetElem.hasClass("editmode")){
+        // targetElem.children("div").remove()
+        createEditForm(docID,function(result){
+            console.log(result);
+            targetElem.children("header").children("ul").remove()
+            targetElem.children("div").replaceWith(result);
+            toggleClass(targetElem, "editmode");
+        })
+    } else {
+        refreshDocument(docID);
+        toggleClass(targetElem, "viewmode");
+    }
+}
+
+function createEditForm(docID, callback){
+    $.get("/wiki/sdra/"+docID).then(function(result){
         console.log("--result--");
         console.log(result);
-        console.log("--targetElem--");
-        console.log(targetElem);
         
-        var docID = targetElem.attr("data-doc-id");
         var docIDWithEdit = docID + "-edit-";
-
-        targetElem.children("p").remove()
         
         var formElement = $("<form/>",{"role":"form", "method":"post", "data-doc-id":docID, "action":"/wiki/sded/"}).submit(submitSubDocument);
 
-        formElement.append(
-            $("<div/>",{"class":"form-group"}).append(
-                $("<label/>",{"for":docIDWithEdit+"title"}).text("제목:")
-            ).append(
-                $("<input/>",{"type":"text","class":"form-control","id":docIDWithEdit+"title","placeholder":"문단 제목을 입력해주세요.", "name":"wikidoc-title"}).attr("value",result.title==null?docID:result.title)
+        if(result.title != null){
+            formElement.append(
+                $("<div/>",{"class":"form-group"}).append(
+                    $("<label/>",{"for":docIDWithEdit+"title"}).text("제목:")
+                ).append(
+                    $("<input/>",{"type":"text","class":"form-control","id":docIDWithEdit+"title","placeholder":"문단 제목을 입력해주세요.", "name":"wikidoc-title"}).attr("value",result.title==null?docID:result.title)
+                )
             )
-        ).append(
+        }
+        formElement.append(
             $("<div/>",{"class":"form-group"}).append(
                 $("<label/>",{"for":docIDWithEdit+"framelist"}).text("틀 리스트")
             ).append(
@@ -212,7 +235,7 @@ function enterEditMode(targetElem){
         ).append(
             $("<button/>", {"class":"btn btn-default","type":"submit"}).text("저장")
         );
-        formElement.insertAfter(targetElem.children("header"));
+        callback(formElement);
     })
 }
 
@@ -245,11 +268,29 @@ function submitSubDocument(event){
     })
 }
 
-var testVAR;
+function toggleRawMode(target){7
+    var docID = target.attr("data-doc-id");
+    var targetElem = target.parents("article[data-doc-id="+docID+"]");
+    if(!targetElem.hasClass("rawmode")){
+        $.get("/wiki/sdra/"+docID).then(function(result){
+            createDocumentElement(result, docID).then(function(result){
+                result.css("display","block");
+                toggleClass(result, "rawmode");
+                targetElem.replaceWith(result);
+                console.log(result);
+            })
+        })        
+    } else {
+        refreshDocument(docID);
+        toggleClass(targetElem, "viewmode");
+    }
+}
 
 function refreshDocument(docID){
-    var element = $("article").find("article[data-doc-id='"+docID+"']");
-    createDocElementFromID(docID,function(result){
+    var element = $("body").find("article[data-doc-id='"+docID+"']");
+    var doctype = (element.hasClass("mainDocument")?"main":"sub")
+    console.log(element)
+    createDocElementFromID(docID,doctype,function(result){
         result.then(function(result){
             console.log("replace object : ")
             console.log(result)
@@ -258,6 +299,7 @@ function refreshDocument(docID){
 
     });
 }
+
 
 function replaceAsync(str, re, callback) {
     // http://es5.github.io/#x15.5.4.11
@@ -290,16 +332,33 @@ function replaceAsync(str, re, callback) {
 }
 
 $(document).ready(function () { 
-    createDocument(documentData[0]).then(function(result){
-        $("div.wiki-document-container").append(result);
-    })
-
-    prepareButton()
+    initiate();
+    prepareButton();
+    prepareSearch();
 });
+
+function initiate(){
+    var pathname = window.location.pathname.split("/");
+    var docname = pathname[3];
+    if(pathname[3] == ""){
+        console.log(pathname);    
+    } else {
+        attachMainDocument(docname);    
+    }
+}
 
 function prepareButton() {
     console.log("prepare button");
     $(".wiki-edit-menu > ul > li").click(function(){
         console.log($(this));
+    })
+}
+
+function prepareSearch() {
+    $("nav > form").submit(function(event){
+        event.preventDefault();
+        var $form = $(this);
+        var docID = $form.find("input[name=wiki-search-by-tag]").val();
+        attachMainDocument(docID);
     })
 }
