@@ -46,30 +46,11 @@ function writeDocument(title, description, docID){
             $("<header/>",{'class':"mainDocument"}).append( // frame placeholder
                 $("<h1/>",{'class':"mainDocument"}).html((typeof title=="undefined"?docID:title))
             ).prepend(
-                $("<button/>",{"type":"button","class":"btn btn-default float-right", "data-doc-id":docID})
-                .append($("<span/>",{"class":"glyphicon glyphicon-pencil", "aria-hidden":"true"}))
-                .click(
-                    function(){
-                        toggleEditMode($(this))
-                    }
-                )
+                createEditButton(docID)
             ).prepend(
-                $("<button/>",{"type":"button","class":"btn btn-default float-right", "data-doc-id":docID})
-                .append($("<span/>",{"class":"glyphicon glyphicon-remove", "aria-hidden":"true"}))
-                .click(
-                    function(){
-                        $(this).parents("article[data-doc-id='"+$(this).attr("data-doc-id")+"']")
-                            .hide("fast",function(){$(this).remove()});
-                    }
-                )
+                createRemoveButton(docID)
             ).prepend(
-                $("<button/>",{"type":"button","class":"btn btn-default float-right", "data-doc-id":docID})
-                .append($("<span/>",{"class":"glyphicon glyphicon-tree-deciduous", "aria-hidden":"true"}))
-                .click(
-                    function(){
-                        toggleRawMode($(this))
-                    }
-                )
+                createRawButton(docID)
             )
         ).append(
             $("<div/>",{'class':"mainDocument"}).html(description)
@@ -78,6 +59,37 @@ function writeDocument(title, description, docID){
         )
         resolve(element);
     });
+}
+
+function createEditButton(docID){
+    return $("<button/>",{"type":"button","class":"btn btn-default float-right", "data-doc-id":docID})
+    .append($("<span/>",{"class":"glyphicon glyphicon-pencil", "aria-hidden":"true"}))
+    .click(
+        function(){
+            toggleEditMode($(this))
+        }
+    )
+}
+
+function createRemoveButton(docID){
+    return $("<button/>",{"type":"button","class":"btn btn-default float-right", "data-doc-id":docID})
+    .append($("<span/>",{"class":"glyphicon glyphicon-remove", "aria-hidden":"true"}))
+    .click(
+        function(){
+            $(this).parents("article[data-doc-id='"+$(this).attr("data-doc-id")+"']")
+                .hide("fast",function(){$(this).remove()});
+        }
+    )
+}
+
+function createRawButton(docID){
+    return $("<button/>",{"type":"button","class":"btn btn-default float-right", "data-doc-id":docID})
+    .append($("<span/>",{"class":"glyphicon glyphicon-tree-deciduous", "aria-hidden":"true"}))
+    .click(
+        function(){
+            toggleRawMode($(this))
+        }
+    )
 }
 
 function createFrameList(frameList, element){
@@ -176,9 +188,10 @@ function toggleClass(target, classname){
 function toggleEditMode(target){
     var docID = target.attr("data-doc-id");
     var targetElem = target.parents("article[data-doc-id="+docID+"]");
+    var doctype = targetElem.hasClass("mainDocument")?"main":"sub";
     if(!targetElem.hasClass("editmode")){
         // targetElem.children("div").remove()
-        createEditForm(docID,function(result){
+        createEditForm(docID,doctype,function(result){
             console.log(result);
             targetElem.children("header").children("ul").remove()
             targetElem.children("div").replaceWith(result);
@@ -190,8 +203,8 @@ function toggleEditMode(target){
     }
 }
 
-function createEditForm(docID, callback){
-    $.get("/wiki/sdra/"+docID).then(function(result){
+function createEditForm(docID, doctype, callback){
+    $.get("/wiki/sdra/"+docID,{"doctype":doctype}).then(function(result){
         console.log("--result--");
         console.log(result);
         
@@ -212,7 +225,7 @@ function createEditForm(docID, callback){
             $("<div/>",{"class":"form-group"}).append(
                 $("<label/>",{"for":docIDWithEdit+"framelist"}).text("틀 리스트")
             ).append(
-                $("<input/>",{"type":"text","class":"form-control","id":docIDWithEdit+"framelist","placeholder":"틀과 틀은 쉼표로 구분됩니다.(선택)", "name":"wikidoc-framelist"}).attr("value",result.frame.toString())
+                $("<input/>",{"type":"text","class":"form-control","id":docIDWithEdit+"framelist","placeholder":"틀과 틀은 쉼표로 구분됩니다.(선택)", "name":"wikidoc-framelist"}).attr("value",result.frameList.toString())
             )
         ).append(
             $("<div/>",{"class":"form-group"}).append(
@@ -268,11 +281,14 @@ function submitSubDocument(event){
     })
 }
 
-function toggleRawMode(target){7
+function toggleRawMode(target){
     var docID = target.attr("data-doc-id");
     var targetElem = target.parents("article[data-doc-id="+docID+"]");
+    var doctype = targetElem.hasClass("mainDocument")?"main":"sub";
     if(!targetElem.hasClass("rawmode")){
-        $.get("/wiki/sdra/"+docID).then(function(result){
+        $.get("/wiki/sdra/"+docID,{"doctype":doctype}).then(function(result){
+            console.log("sdra createDoc data : ");
+            console.log(result);
             createDocumentElement(result, docID).then(function(result){
                 result.css("display","block");
                 toggleClass(result, "rawmode");
