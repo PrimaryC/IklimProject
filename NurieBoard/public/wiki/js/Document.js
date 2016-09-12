@@ -225,7 +225,7 @@ function createEditForm(docID, doctype, callback){
             $("<div/>",{"class":"form-group"}).append(
                 $("<label/>",{"for":docIDWithEdit+"framelist"}).text("틀 리스트")
             ).append(
-                $("<input/>",{"type":"text","class":"form-control","id":docIDWithEdit+"framelist","placeholder":"틀과 틀은 쉼표로 구분됩니다.(선택)", "name":"wikidoc-framelist"}).attr("value",result.frameList.toString())
+                $("<input/>",{"type":"text","class":"form-control","id":docIDWithEdit+"framelist","placeholder":"틀과 틀은 쉼표로 구분됩니다.(선택)", "name":"wikidoc-framelist"}).attr("value",(result.frameList==undefined?"":result.frameList.toString()))
             )
         ).append(
             $("<div/>",{"class":"form-group"}).append(
@@ -237,13 +237,13 @@ function createEditForm(docID, doctype, callback){
             $("<div/>",{"class":"form-group"}).append(
                 $("<label/>",{"for":docIDWithEdit+"subdoclist"}).text("하위 문단 리스트")
             ).append(
-                $("<input/>",{"type":"text","class":"form-control","id":docIDWithEdit+"subdoclist","placeholder":"하위 문단의 ID를 입력해주세요.", "name":"wikidoc-subdoclist"}).attr("value",result.subDocList.toString())
+                $("<input/>",{"type":"text","class":"form-control","id":docIDWithEdit+"subdoclist","placeholder":"하위 문단의 ID를 입력해주세요.", "name":"wikidoc-subdoclist"}).attr("value",(result.subDocList==undefined?"":result.subDocList.toString()))
             )
         ).append(
             $("<div/>",{"class":"form-group"}).append(
                 $("<label/>",{"for":docIDWithEdit+"reldoc"}).text("관련 문서")
             ).append(
-                $("<input/>",{"type":"text","class":"form-control","id":docIDWithEdit+"reldoclist","placeholder":"상위 문서를 입력해주세요.", "name":"wikidoc-reldoclist"}).attr("value",result.relDoc.toString())
+                $("<input/>",{"type":"text","class":"form-control","id":docIDWithEdit+"reldoclist","placeholder":"상위 문서를 입력해주세요.", "name":"wikidoc-reldoclist"}).attr("value",(result.relDoc==undefined?"":result.relDoc.toString()))
             )
         ).append(
             $("<button/>", {"class":"btn btn-default","type":"submit"}).text("저장")

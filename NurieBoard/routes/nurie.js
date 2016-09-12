@@ -31,33 +31,44 @@ router.get('/',function(req,res,next){
   res.render('nurie/iklimCloud');
 });
 
+function dbGetTagList(){
+  return db.zrevrangebyscore("nurie:tag","+inf","-inf","withscores","LIMIT","0","100");
+}
+
 router.get('/taglist', function(req, res, next) {
   var nodesArray=[];
   var temp;
-  db.zrevrangebyscore("nurie:tag","+inf","-inf","withscores","LIMIT","0","100", function(err, result){
+  var query = dbGetTagList()
+  query.then(function(result){
     temp=result;
     for (var i = 0; i < temp.length; i=i+2) {
-      nodesArray.push({id:temp[i],value:temp[i+1],label:temp[i].toString().split(':')[2],writeable: true});
+      nodesArray.push({
+        "id":temp[i],
+        "value":temp[i+1],
+        "label":temp[i].toString().split(':')[2],
+        "writeable": true
+      });
     };
-    // console.log(result);
-    // console.log(nodesArray);
     res.send(nodesArray);
   });
 });
 
+function dbGetKeyset(keyset){
+  return db.hmget("nurie:relation", keyset)
+}
+
 router.get('/linklist', function(req,res,next){
   var tagsArray = [];
-  // console.log(req.query.keyset);
   var keyset = req.query.keyset;
-  // console.log('the?');
-  keyset.unshift('nurie:relation');
-  keyset.unshift('hmget');
-  // console.log(keyset);
-  db.pipeline([keyset]).exec(function(err,doc){
-    // console.log(doc+ " + "+ err);
-    res.send(doc);
-  });
+
+  var query = dbGetKeyset(keyset);
+  query.then(function(result){
+    console.log(result);
+    res.send(result);
+  })
 });
+
+// dbIncrArticleCount()
 
 router.post('/articleupload', function(req, res, next){
    db.incr('nurie:Article:Count', function(err, rep){

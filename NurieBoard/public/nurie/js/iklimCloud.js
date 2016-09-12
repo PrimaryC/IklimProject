@@ -1,17 +1,18 @@
-var relation, iklims, edgesArray, 
-    keyset=[];
+var iklims, edgesArray, keyset=[];
 var networkInterval;
 var nodes, edges, container, data, options, network = null;
 var selectedNodes = [];
 var tempiklim = [];
 var nextIklims = [];
+
 $(document).ready(function (){
     networkInit();
     editorInit();
+    initTagList();
     articleListRefresh();
     setEventListener();
     $("header").draggable();
-    $("#editor").draggable().droppable({
+    $("#editor").draggable({cancel: "div#editor-tags"}).droppable({
         hoverClass: "editor-hoveringtag",
         drop: function(event,ui) {
             tagDropEvent(event,ui);
@@ -28,15 +29,14 @@ function networkInit() {
         container = null;
         data = null;
         options = null;
-        relation = null;
         iklims = null;
         edgesArray = null;
         keyset = [];
         selectedNodes = [];
         tempiklim = [];
     }
-    $.get("/nurie/taglist", function(data, status) {
 
+    $.get("/nurie/taglist", function(data, status) {
         //태그리스트 받아 옴!
         iklims = JSON.parse(JSON.stringify(data));
         console.log(iklims);
@@ -47,9 +47,6 @@ function networkInit() {
         for (var i = 0; i < iklims.length; i++) {
             var newColor = Math.floor((Math.random() * 255 * 255 * 255));
             iklims[i].color = '#' + newColor.toString(16);
-            // newColor = 16777215 - newColor;
-            // iklims[i].font = {};
-            // iklims[i].font.color = '#' + newColor.toString(16);
             tempiklim.push(iklims[i].id);
             //tempiklim에 태그들 밀어넣음
         };
@@ -64,14 +61,12 @@ function networkInit() {
         console.log(keyset);
         $.get("/nurie/linklist",{"keyset[]": keyset}, function(data, status){
             //키셋으로 태그 사이 관계 받아옴
-            relation = data[0][1];
-            console.log(data[0][1])
             console.log("data : " + data + "\nstatus : " + status);
             edgesArray = [];
             for (var i = 0; i < keyset.length; i++) {
-                if(data[0][1][i]!=null){
+                if(data[i]!=null){
                     var a = keyset[i].split(":");
-                    edgesArray.push({from: "nurie:tag:"+a[0], to:"nurie:tag:"+a[1], value:parseInt(data[0][1][i]),id:(Math.random() * 1e7).toString(32),writeable: true});
+                    edgesArray.push({from: "nurie:tag:"+a[0], to:"nurie:tag:"+a[1], value:parseInt(data[i]),id:(Math.random() * 1e7).toString(32),writeable: true});
                     //엣지들 
                 }
             };
@@ -105,12 +100,8 @@ function networkInit() {
                 // }
             };
             network = new vis.Network(container,data,options);
-            network.on("click", function(params) {
-                onNodeClickEvent(params);
-            });
-            network.on("dragEnd", function(params) {
-            onNodeDragEndEvent(params);
-            });
+            network.on("click", onNodeClickEvent);
+            network.on("dragEnd", onNodeDragEndEvent);
         });
     });  
     if(networkInterval == null) {
@@ -247,17 +238,21 @@ function editorInit() {
                 bodyStyle: // style to assign to document body contained within the editor
                     "margin:4px; font:10pt Arial,Verdana; cursor:text"
             });
+
         $('#form').submit(function(event) {
             event.preventDefault();
-            var str = $("#tags").text().toString().split(',').sort();
+            var str = $("#editor-tags").text().toString().split(',').sort();
             for (var i = 0; i < str.length; i++) {
                 str[i] = str[i].trim().replace(/ /gi,'_');
+                if(str[i]==""){
+
+                }
             };
             // alert(str);
              console.log(typeof str);
              console.log(str);
-            $("#tags").text(str.toString());
-            console.log($("#tags").val());
+            $("#editor-tags").text(str.toString());
+            console.log($("#editor-tags").val());
 
             console.log("success!");
             // alert(str);
@@ -276,6 +271,7 @@ function editorInit() {
                     articleListRefresh();
                     // alert("data : "+ data + "\nStatus :" + status);
                     // $('body').empty().append(data);
+                    clearEditor();
                 } 
             });
         });
@@ -301,6 +297,10 @@ function editorInit() {
         $('#editor > form').slideToggle('fast');
         console.log('toggled!');
     });
+}
+
+function initTagList(){
+
 }
 
 //query get
@@ -368,10 +368,10 @@ function setEventListener() {
             'bottom': '20px'
         })
     });
-    $('#tags').keypress(function(event){
+    $('#editor-tags').keypress(function(event){
         if(event.charCode == 44){
             event.preventDefault();
-            var str = $("#tags").text().toString().split(',').sort();
+            var str = $("#editor-tags").text().toString().split(',').sort();
             var temptags = ""
             // "<ul class='taglist'>"
             for (var i = 0; i < str.length; i++) {
@@ -381,11 +381,11 @@ function setEventListener() {
                 if(i != str.length) {temptags += ",";};
             };
             // temptags += "</ul>";
-            $('#tags').html(temptags);
+            $('#editor-tags').html(temptags);
 
             var range, selection;
             range = document.createRange();
-            range.selectNodeContents($("#tags")[0]);
+            range.selectNodeContents($("#editor-tags")[0]);
             range.collapse(false);
             selection = window.getSelection();
             selection.removeAllRanges();
@@ -442,7 +442,7 @@ function tagDropEvent(event, ui){
     console.log(event);
     console.log(ui);
     var str = "<mark>" + ui.draggable.text() + "</mark>,"
-    var temp = $("#tags").html();
+    var temp = $("#editor-tags").html();
     temp += str;
-    $("#tags").html(temp);
+    $("#editor-tags").html(temp);
 }

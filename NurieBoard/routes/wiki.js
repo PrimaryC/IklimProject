@@ -26,7 +26,6 @@ var Promise = require('bluebird');
 //     next();
 // })
 
-
 //custom command for TEST
 router.get("/test/001",function(req, res, next){
     var a = db.hset("test","Description","이건 [[테스트]]문서입니다. 별다른 서술은 존재하지 않습니다.이건 [[테스트]]문서입니다. 별다른 서술은 존재하지 않습니다.이건 [[테스트]]문서입니다. 별다른 서술은 존재하지 않습니다.이건 [[테스트]]문서입니다. 별다른 서술은 존재하지 않습니다.이건 [[테스트]]문서입니다. 별다른 서술은 존재하지 않습니다.이건 [[테스트]]문서입니다. 별다른 서술은 존재하지 않습니다.이건 [[테스트]]문서입니다. 별다른 서술은 존재하지 않습니다.이건 [[테스트]]문서입니다. 별다른 서술은 존재하지 않습니다.이건 [[테스트]]문서입니다. 별다른 서술은 존재하지 않습니다.이건 [[테스트]]문서입니다. 별다른 서술은 존재하지 않습니다.이건 [[테스트]]문서입니다. 별다른 서술은 존재하지 않습니다.이건 [[테스트]]문서입니다. 별다른 서술은 존재하지 않습니다.이건 [[테스트]]문서입니다. 별다른 서술은 존재하지 않습니다.이건 [[테스트]]문서입니다. 별다른 서술은 존재하지 않습니다.이건 [[테스트]]문서입니다. 별다른 서술은 존재하지 않습니다.이건 [[테스트]]문서입니다. 별다른 서술은 존재하지 않습니다.이건 [[테스트]]문서입니다. 별다른 서술은 존재하지 않습니다.");
@@ -60,6 +59,7 @@ var frameListURLRegex = /\/frame_list\/([^]+)/;
 
 function sendParsedData(query, res) {
     query.then(function(data){
+        console.log(data + query);
         return parseNamu.promiseMark(data)  
     }).then(function(doc){
         res.set('Content-Type', 'text/plain').send(doc);
@@ -109,6 +109,7 @@ function dbGetTitle(docID){
 
 router.get(subdocURLRegex.Title, function(req, res, next){
     var query = dbGetTitle(req.params[0]);
+    console.log("sdti:"+req.params[0]);
     sendParsedData(query, res);
 })
 
@@ -141,11 +142,11 @@ router.get(subdocURLRegex.Index, function(req, res, next){
 })
 
 function dbGetRelDocList(docID){
-    return db.lrange(docID+":RelDoc", 0, -1)
+    return db.smembers(docID+":RelDoc")
 }
 
 router.get(subdocURLRegex.Rel, function(req, res, next){
-    var query = db.lrange(req.params[0]+":RelDoc", 0, -1);
+    var query = dbGetRelDocList(req.params[0])
     sendData(query, res)
 })
 
@@ -165,6 +166,7 @@ router.get(subdocURLRegex.Full, function(req, res, next){
 
     dbIsDocExist(docID).then(function(isExist){
         if(isExist == 1){
+            console.log("there is doc")
             var promiseList = [
                 dbGetDescription(docID), 
                 dbGetFrameList(docID), 
@@ -174,10 +176,10 @@ router.get(subdocURLRegex.Full, function(req, res, next){
             if(req.query.doctype != "main"){
                 promiseList.push(dbGetTitle(docID));
             }
-
             return Promise.all(promiseList)
         } else {
             return new Promise(function (resolve, reject){
+                console.log("there is no doc")
                 var response = ["없는 문서입니다.", undefined, undefined, undefined]
                 resolve(response)
             })
@@ -187,7 +189,7 @@ router.get(subdocURLRegex.Full, function(req, res, next){
         frameList = values[1];
         relDocList = values[2];
         subDocList = values[3];
-
+        console.log("after promise, values : " + values)
         var parse = [parseNamu.promiseMark(description)]
         if(req.query.doctype != "main"){
             title = values[4];
@@ -294,7 +296,7 @@ router.post(subdocURLRegex.Edit, function(req, res, next){
 
     function paragUpdate(docID, title, description){  
         db.hmset(docID, "Title", title, "Description", description).then(function(result){
-            console.log(result);
+            console.log("paragupdate result : " + result);
         })
     }
 
@@ -305,14 +307,12 @@ router.post(subdocURLRegex.Edit, function(req, res, next){
         } else if(!Array.isArray(dataList)) {
             list = [dataList];
         }
-        console.log(list);
-        console.log("list is : ")
-        console.log(list)
+        console.log("list is : " + list)
         db.del(docID+":"+cl).then(function(result){
             if(list.length != 0){
-                console.log("updateSet Del result : "+result)
+                console.log("updateSet Del result : "+result + "//" + cl)
                 db.sadd(docID+":"+cl, list).then(function(result){
-                    console.log("updateSet sadd result : " + result)
+                    console.log("updateSet sadd result : " + result + "//" + cl)
                 })
             }
             
@@ -320,33 +320,37 @@ router.post(subdocURLRegex.Edit, function(req, res, next){
     }
 
     function updateList(docID, cl, dataList){
-        console.log("dataList is : " + typeof dataList)
-        console.log(dataList)
+        console.log("dataList is : " + typeof dataList + "//" + cl)
         var list = dataList
-        console.log(list);
-        console.log("list isempty = " + list.length)
+        console.log("list isempty = " + list.length + "//" + cl)
 
         if(list.length != 0){
             db.del(docID+":"+cl).then(function(result){
-                console.log("updateList Del result : "+result)
+                console.log("updateList Del result : "+result + "//" + cl)
                 db.lpush(docID+":"+cl, list).then(function(result){
-                    console.log("updateList lpush result : "+result)
+                    console.log("updateList lpush result : "+result + "//" + cl)
                 })
             })      
         } else {
-            db.del(docID+":"+cl)
+            console.log("time to del" + "//" + cl)
+            db.del(docID+":"+cl,function(result){
+                console.log("del completed");
+            })
         }
         
     }
 
     function addDocToIndex(docID){
+        console.log("time to Add Document in Index")
         db.zscore("Index",docID).then(function(result){
-            console.log(result);
+            console.log(result + "//" + "ZADD");
             if(result == undefined){
                 db.zadd("Index",1,docID).then(function(result){
                     console.log("zadd to Index!");
                     console.log(result);
                 })
+            } else {
+
             }
         })
     }
