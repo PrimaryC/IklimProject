@@ -8,11 +8,9 @@ router.use(function (req, res, next) {
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.render('index');
 });
 
-router.get('/uptest/', function(req,res,next) {
-  res.render('uptest');
-});
+router.get('/')
 
 module.exports = router;

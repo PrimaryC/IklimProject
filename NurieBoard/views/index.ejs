@@ -1,13 +1,33 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <title>이끌림의 세상</title>
+    <meta charset="utf-8">
+    
+   	<meta name="viewport" content="width=device-width, initial-scale=1">
+   	
+	<script src="/javascripts/jquery.min.js"></script>
+	
+	<link rel="stylesheet" type="text/css" href="/bootstrap/css/bootstrap.min.css">
+	<script src="/bootstrap/js/bootstrap.min.js"></script>
+	
+	<link rel="stylesheet" type="text/css" href="/frontpage/css/index.css">
+	<script src="/frontpage/js/index.js"></script>
+	
+	<script type="text/javascript">
+		//for someday
+	</script>
+	
   </head>
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-    <a href="/nurie/">누리에 엿보기</a>
-    <a href="/works/uptest/">업로드 시스템</a>
+  <% include navbar.ejs %>
+    <div class="container text-center">
+    <h1>Welcome to our page</h1>
+    	<div class="row">
+    		<div class="col-sm-12 maincontent">
+    			<p>~introduce our project here~</p>
+    		</div>
+    	</div>
+    </div>
   </body>
 </html>

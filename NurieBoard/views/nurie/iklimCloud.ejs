@@ -2,7 +2,9 @@
 <html>
 <head>
 	<title>IKLIM CLOUD</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">	
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+		
 	<link rel="stylesheet" type="text/css" href="/cleditor/jquery.cleditor.css">
 	<script src="/javascripts/jquery.min.js"></script>
 	<script src="/javascripts/jquery-ui.min.js"></script>
@@ -11,14 +13,19 @@
 	<link rel="stylesheet" type="text/css" href="/nurie/css/iklimCloud.css"/>
 	<script src="/cleditor/jquery.cleditor.js"></script>
 	<style type="text/css">
-    	/* 혹시나 CSS를 쓴다면 */
+    	
   	</style>
+  	
+  	<link rel="stylesheet" type="text/css" href="/bootstrap/css/bootstrap.min.css">
+	<script src="/bootstrap/js/bootstrap.min.js"></script>
+  	
   	<script src="/nurie/js/iklimCloud.js"></script>
 	<script type="text/javascript">
-		// init();	// 혹시나 스크립트를 쓴다면?
+		// init();	
 	</script>
 </head>
 <body>
+<% include ../navbar.ejs %>
 <header><h1>게시글 목록</h1><p></p><span></span></header>
 <div id="container" class="full-size"></div>
 <div id="editor">
