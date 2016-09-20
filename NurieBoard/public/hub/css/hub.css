@@ -1,0 +1,40 @@
+.sortable-placeholder {
+    margin-left: 0 !important;
+    border: 1px solid #ccc;
+    background-color: yellow;
+}
+
+html,body {
+    height:100%;
+ 	overflow: hidden;
+}
+
+.container {
+    display:table;
+    width: 100%;
+    margin-top: -50px;
+    padding: 0 0 0 0; /*set left/right padding according to needs*/
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    height: calc(100% - 51px);
+}
+
+.row {
+    height: 100%;
+    display: table-row;
+}
+
+.app {
+	float:none;
+	display:table-cell;
+
+}
+
+.app-placeholder {
+	border : 2px solid #CC0;
+	border-radius: 4px
+}
+
+.app .panel {
+	height : 100%;
+}
