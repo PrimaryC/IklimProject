@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<title>IKLIM CLOUD</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">		
+	
+	<script src="/javascripts/jquery.min.js"></script>
+	<script src="/javascripts/jquery-ui.min.js"></script>
+
+	<script src="/cleditor/jquery.cleditor.js"></script>
+	<link rel="stylesheet" type="text/css" href="/cleditor/jquery.cleditor.css">
+	
+	<link rel="stylesheet" type="text/css" href="/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="/bootstrap/css/bootstrap-horizon.css">
+	<script src="/bootstrap/js/bootstrap.min.js"></script>
+	
+	<style type="text/css">
+    	/*나중을 위해*/
+  	</style>
+  	
+  	<link rel="stylesheet" type="text/css" href="/nurie/css/nurieBoard.css"/>
+  	<script src="/nurie/js/nurieBoard.js"></script>
+  	
+	<script type="text/javascript">
+		$(document).ready(function (){
+		    editorInit();
+		    getArticleList();
+		    setEventListener();
+		});
+	</script>
+</head>
+<body>
+<% include ../navbar.ejs %>
+
+<div class="container">
+	<div class="row row-horizon nurieboard-row-horizon">
+		<div class="col-md-5 nurieboard-panel">
+			<header class="page-header"><h1><span>찾는 이끌림 : </span><ul class="nurieboard-iklimlist"></ul></h1></header>
+			
+			
+			<section class="nurieboard-articlelist media-list">
+				<article class="nurieboard-article media" data-article-id="">
+					<div class="media-left media-top"><!-- 작성자 정보는 여기로 -->
+						<img class="media-object iklim-profile-128" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PCEtLQpTb3VyY2UgVVJMOiBob2xkZXIuanMvNjR4NjQKQ3JlYXRlZCB3aXRoIEhvbGRlci5qcyAyLjYuMC4KTGVhcm4gbW9yZSBhdCBodHRwOi8vaG9sZGVyanMuY29tCihjKSAyMDEyLTIwMTUgSXZhbiBNYWxvcGluc2t5IC0gaHR0cDovL2ltc2t5LmNvCi0tPjxkZWZzPjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+PCFbQ0RBVEFbI2hvbGRlcl8xNTc3ZmI5OGYzZCB0ZXh0IHsgZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQgfSBdXT48L3N0eWxlPjwvZGVmcz48ZyBpZD0iaG9sZGVyXzE1NzdmYjk4ZjNkIj48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSIxNC41IiB5PSIzNi41Ij42NHg2NDwvdGV4dD48L2c+PC9nPjwvc3ZnPg==">
+					</div>
+					<section class="nurieboard-article-content media-body">
+						<header class="media-header"><h4>이끌림<ul class="nurieboard-iklimlist list-inline"><li><span class="label label-primary">이끌림</span></li><li><span class="label label-primary">따위가</span></li><li><span class="label label-primary">있을까보냐</span></li></ul></h4></header>
+						<!-- 컨텐트는 여기로 -->그러타! 이게 바로 글 내용이다!
+					</section>
+					
+					<div class="nurieboard-toggle-button">달린 글 N개 - 펼치기</div>
+					
+				</article>
+			</section>
+			
+		</div>
+		<div class="col-md-5 nurieboard-panel">
+			<header class="page-header"><h1><span>찾는 이끌림 : </span><ul class="nurieboard-iklimlist"></ul></h1></header>
+			
+			
+			<section class="nurieboard-articlelist media-list">
+				<article class="nurieboard-article media" data-article-id="">
+					<div class="media-left media-top"><!-- 작성자 정보는 여기로 -->
+						<img class="media-object iklim-profile-128" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PCEtLQpTb3VyY2UgVVJMOiBob2xkZXIuanMvNjR4NjQKQ3JlYXRlZCB3aXRoIEhvbGRlci5qcyAyLjYuMC4KTGVhcm4gbW9yZSBhdCBodHRwOi8vaG9sZGVyanMuY29tCihjKSAyMDEyLTIwMTUgSXZhbiBNYWxvcGluc2t5IC0gaHR0cDovL2ltc2t5LmNvCi0tPjxkZWZzPjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+PCFbQ0RBVEFbI2hvbGRlcl8xNTc3ZmI5OGYzZCB0ZXh0IHsgZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQgfSBdXT48L3N0eWxlPjwvZGVmcz48ZyBpZD0iaG9sZGVyXzE1NzdmYjk4ZjNkIj48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSIxNC41IiB5PSIzNi41Ij42NHg2NDwvdGV4dD48L2c+PC9nPjwvc3ZnPg==">
+					</div>
+					<section class="nurieboard-article-content media-body">
+						<header class="media-header">이끌림 : <ul class="nurieboard-iklimlist list-inline"><li>이끌림</li><li>따위가</li><li>있을까보냐</li></ul></header>
+						<!-- 컨텐트는 여기로 -->그러타! 이게 바로 글 내용이다!
+					</section>
+					
+					<div class="nurieboard-toggle-button">달린 글 N개 - 펼치기</div>
+					
+				</article>
+			</section>
+			
+		</div>
+		<div class="col-md-5 nurieboard-panel">
+			<header class="page-header"><h1><span>찾는 이끌림 : </span><ul class="nurieboard-iklimlist"></ul></h1></header>
+			
+			
+			<section class="nurieboard-articlelist media-list">
+				<article class="nurieboard-article media" data-article-id="">
+					<div class="media-left media-top"><!-- 작성자 정보는 여기로 -->
+						<img class="media-object iklim-profile-128" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PCEtLQpTb3VyY2UgVVJMOiBob2xkZXIuanMvNjR4NjQKQ3JlYXRlZCB3aXRoIEhvbGRlci5qcyAyLjYuMC4KTGVhcm4gbW9yZSBhdCBodHRwOi8vaG9sZGVyanMuY29tCihjKSAyMDEyLTIwMTUgSXZhbiBNYWxvcGluc2t5IC0gaHR0cDovL2ltc2t5LmNvCi0tPjxkZWZzPjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+PCFbQ0RBVEFbI2hvbGRlcl8xNTc3ZmI5OGYzZCB0ZXh0IHsgZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQgfSBdXT48L3N0eWxlPjwvZGVmcz48ZyBpZD0iaG9sZGVyXzE1NzdmYjk4ZjNkIj48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSIxNC41IiB5PSIzNi41Ij42NHg2NDwvdGV4dD48L2c+PC9nPjwvc3ZnPg==">
+					</div>
+					<section class="nurieboard-article-content media-body">
+						<header class="media-header">이끌림 : <ul class="nurieboard-iklimlist list-inline"><li>이끌림</li><li>따위가</li><li>있을까보냐</li></ul></header>
+						<!-- 컨텐트는 여기로 -->그러타! 이게 바로 글 내용이다!
+					</section>
+					
+					<div class="nurieboard-toggle-button">달린 글 N개 - 펼치기</div>
+					
+				</article>
+			</section>
+			
+		</div>
+	</div>
+
+	<!-- <div class="nurieboard-editor">
+		<form class="nurieboard-editor-form" action="/nurie/articleupload" method="post">
+			<textarea class="nurieboard-editor-content" name="input"></textarea>
+			새로운 태그 입력 : <div class="nurieboard-editor-tags" contenteditable="true"></div><br>
+			<input type="Submit">
+		</form>
+		<div class="nurieboard-editor-button">에디터 열기</div>
+	</div> --> 
+	
+	
+</div>
+
+</body>
+</html>

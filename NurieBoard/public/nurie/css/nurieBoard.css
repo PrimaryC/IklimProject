@@ -1,0 +1,36 @@
+.container {
+  display: table;
+  width: 100%;
+  margin-top: -50px;
+  padding: 0 0 0 0;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  height: calc(100% - 51px);
+}
+.row {
+  height: 100%;
+  display: table-row;
+}
+html,
+body {
+  height: 100%;
+}
+.nurieboard-article > footer {
+  clear: both;
+}
+ul.nurieboard-iklimlist.list-inline {
+  display: inline-block;
+}
+article.nurieboard-article {
+  border: 1px inset #069;
+}
+div.nurieboard-toggle-button {
+  text-align: center;
+}
+.iklim-profile-128 {
+  width: 128px;
+  height: 128px;
+}
+.inline {
+  display: inline-block;
+}

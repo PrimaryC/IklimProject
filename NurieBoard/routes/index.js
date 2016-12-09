@@ -20,11 +20,11 @@ router.get('/page/iklim', function(req, res, next){
 });
 
 router.get('/page/nurie', function(req, res, next){
-	res.render("nurie/nurie")
+	res.render("nurie/nurieBoard")
 });
 
-router.get('/page/wiki', function(req, res, next){
-	res.render("wiki/Document")
+router.get('/page/wiki/doc', function(req, res, next){
+	res.render("wiki/iklimWiki")
 });
 
 module.exports = router;
