@@ -12,6 +12,14 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
+router.get('/game', function(req, res, next){
+	res.render("game-screen", {title:"Welcome to Nonologic!"});
+})
+
+router.get('/editor', function(req,res,next){
+	res.render("editor", {title:"Welcome to Editor!"});
+});
+
 router.get('/counter',function(req, res, next){
 	db.get("nonogram:count").then(function(value){
 		res.send(value);

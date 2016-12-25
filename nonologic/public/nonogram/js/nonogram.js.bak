@@ -54,7 +54,8 @@ Nonogram.modules.uiManager = function(box){
 			targetElem.switchClass("game-grid-cell-marked","game-grid-cell",200);
 		}
 
-		box.checkPicture(gameObject);
+		if(gameObject.isPlaying)
+			box.checkPicture(gameObject);
 	}
 
 	function getMaxLength(array){
@@ -115,7 +116,7 @@ Nonogram.modules.uiManager = function(box){
 		return element;
 	}
 
-	function createGameGrid(col, row){
+	box.createGameGrid = function(col, row){
 		var element = $("<table/>",{"class":"game-grid"});
 		var rowElement, cellElement;
 		for (var i = 0; i < row; i++) {
@@ -127,11 +128,11 @@ Nonogram.modules.uiManager = function(box){
 			}
 			element.append(rowElement);
 		}
+		gameObject.Map = box.createBaseMapArray(row,col);
 		return element;
 	}
 
-	function createGameElement(data){
-		$(".game.game-screen").empty();
+	box.createGameTableElement = function(data){
 
 		var gameTable = $("<table/>");
 		var colMaxLength = 0;
@@ -142,7 +143,7 @@ Nonogram.modules.uiManager = function(box){
 		rowMaxLength = getMaxLength(data.Rule.Row);
 		var rowRuleTable = createRowTableElement(data.Rule.Row, rowMaxLength);
 
-		var gameGrid = createGameGrid(data.Rule.Col.length, data.Rule.Row.length);
+		var gameGrid = box.createGameGrid(data.Rule.Col.length, data.Rule.Row.length);
 
 		gameTable	.append($("<tr/>")
 						.append($("<td/>"))
@@ -153,8 +154,6 @@ Nonogram.modules.uiManager = function(box){
 
 		var x = data.Rule.Col.length,
 			y = data.Rule.Row.length;
-
-		gameObject.Map = box.createBaseMapArray(x,y);
 
 		return gameTable;
 	}
@@ -187,10 +186,21 @@ Nonogram.modules.uiManager = function(box){
 		var pageNum = $("li.active").attr("data-lp");
 		var listNum = pageNum==undefined ? id : id - pageNum*12;
 		var stageObject = stageList[id];
-		var gameElement = createGameElement(stageObject);
+		$(".game.game-screen").empty();
+		var gameElement = box.createGameTableElement(stageObject);
+		gameObject.isPlaying = true;
 		gameObject.ID = id;
 		return gameElement;
+	}
 
+	box.createEditPanel = function(col, row){
+		var gridTable = createGameGrid(col, row);
+		var button = $("<button/>",{"class":"btn btn-default"}).text("Analyze And Submit");
+		button.click(box.check)
+		return {
+			"gridElement" : grid
+
+		}
 	}
 }
 
@@ -219,7 +229,6 @@ Nonogram.modules.mapper = function(box){
 	}
 
 	box.checkPicture = function(gameObject){
-
 		$.post('/nonogram/answer', {"ID": gameObject.ID,"Map":JSON.stringify(gameObject.Map)}, function(data, textStatus, xhr) {
 			console.log(data);
 			if(data == "correct"){
@@ -235,6 +244,7 @@ Nonogram.modules.mapper = function(box){
 			initStageSelect();
 		})
 		console.log("clear!");
+		gameObject.isPlaying=false;
 	}
 
 }
@@ -277,7 +287,8 @@ Nonogram.modules.checker = function(box){
 	
 		// x = [[3], [2,1], [3,2], [2,2], [6], [1,5], [6], [1], [2]]
 		// y = [[1,2], [3,1], [1,5], [7,1], [5], [3], [4], [3]]
-	box.check = function(rowData, colData, map){
+	box.check = function(){
+		
 		rowData.length = height;
 		colData.length = width;
 		var userRowData = checkRowData(rowData, map[0])
@@ -402,15 +413,9 @@ Nonogram.modules.solver = function(box){
 		return countRemoved1 + countRemoved2;
 	}
 
-	function reduce(_a, _b){
+	function reduce(a, b){
 		//a = [[0,1,0,0,1,1,0,1,0,1],[0,1,0,0,1,1,0,1,0,1],[0,1,0,0,1,1,0,1,0,1],[0,1,0,0,1,1,0,1,0,1]]
 		//b = [[0,0,0,0],[1,1,1,1],[0,0,0,0],[0,0,0,0],[1,1,1,1],[1,1,1,1],[0,0,0,0],[1,1,1,1],[0,0,0,0],[1,1,1,1]]
-
-		console.log("time to reduce! a and b =");
-		console.log(JSON.stringify(_a));
-		console.log(JSON.stringify(_b));
-		var a = $.extend(true, [], _a);
-		var b = $.extend(true, [], _b);
 		
 		var countRemoved = 0;
 		for (var i = 0; i < a.length; i++) {
@@ -418,7 +423,7 @@ Nonogram.modules.solver = function(box){
 			var commonOff = [];
 
 			for (var j = 0; j < a[i].length; j++) {
-				console.log("Current A = " + a[i][j]);
+				// console.log("Current A = " + a[i][j]);
 
 				for (var k = 0; k < a[i][j].length; k++) {
 					if(commonOn[k] == undefined)
@@ -440,26 +445,23 @@ Nonogram.modules.solver = function(box){
 				}
 			}
 
-			console.log("common On = " + commonOn)
-			console.log("common Off = " + commonOff)
+			// console.log("common On = " + commonOn)
+			// console.log("common Off = " + commonOff)
 
-			
 			for (var j = 0; j < b.length; j++) {
-				//후보군이 commonOn / commonOff에 위배되는 원소를 들고 있을 경우 제외함
-				for (var k = 0; k < b[j].length; k++) {
-					for (var l = 0; l < b[j][k].length; l++) {
-						if((b[j][k][i] == "0" && commonOn[l] == "1") || (b[j][k][i] == "1" && commonOff[l] == "0")){
-							countRemoved++;
-							console.log(b[j].splice(k,1).toString());
-							k--;
-							break;
-						}	
+				for(var k=0; k<b[j].length; k++) {
+					if(b[j][k][i] == "0" && commonOn[j] == "1" || (b[j][k][i] == "1" && commonOff[j] == "0")){
+						countRemoved++;
+						b[j].splice(k,1);
+						// console.log(b[j].splice(k,1).toString());
+						k--;
+						break;
 					}
-					
 				}
 
-				if(b[j].length == 0)
+				if(b[j].length == 0){
 					return -1;
+				}
 			}
 		}
 		return countRemoved;
@@ -472,6 +474,30 @@ Nonogram.modules.solver = function(box){
 		}
 		// console.log(result);
 		return result;
+	}
+
+	box.solve = function(data1, data2){
+		var d1 = getCandidates(data1, data2.length);
+		var d2 = getCandidates(data2, data1.length);
+
+		var result;
+		do{
+			 result = reduceMutual(d1,d2);
+			 console.log(result);
+			 if(result == -1){
+			 	console.log("No Solution!");
+			 	return;
+			 }
+		}while(result > 0);
+
+		console.log(d1);
+		console.log(d2);
+
+		// for (var i = 0; i < d1.length; i++) {
+		// 	for (var j = 0; j < d1[i].length; j++) {
+		// 		console.log(d1[i][j].join(""));
+		// 	}
+		// }
 	}
 
 	box.solverTest = function(){
@@ -487,7 +513,30 @@ Nonogram.modules.solver = function(box){
 		var d1 = getCandidates(data1, data2.length);
 		var d2 = getCandidates(data2, data1.length);
 
-		var result = reduceMutual(d1, d2);
+		var result;
+		do{
+			 // var resObj = reduceMutual(d1, d2);
+			 // console.log(resObj);
+			 // result = resObj.count;
+			 // d1 = resObj.a;
+			 // d2 = resObj.b;
+
+			 result = reduceMutual(d1,d2);
+			 console.log(result);
+			 if(result == -1){
+			 	console.log("No Solution!");
+			 	return;
+			 }
+		}while(result > 0);
+
+		console.log(d1);
+		console.log(d2);
+
+		for (var i = 0; i < d1.length; i++) {
+			for (var j = 0; j < d1[i].length; j++) {
+				console.log(d1[i][j].join(""));
+			}
+		}
 
 		console.log(result);
 		

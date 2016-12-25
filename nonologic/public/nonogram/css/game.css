@@ -1,6 +1,9 @@
 .game {
   display: none;
 }
+.editor {
+  display: none;
+}
 .stage-panel {
   width: 25%;
   padding: 15px;

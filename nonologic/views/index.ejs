@@ -6,15 +6,15 @@
     <script src="/js/jquery-ui.min.js"></script>
 
     <link rel='stylesheet' href='/css/style.css' />
-    <link rel='stylesheet' href='/game/css/nonogram.css' />
-    <link rel='stylesheet' href='/game/css/game.css' />
+    <link rel='stylesheet' href='/nonogram/css/nonogram.css' />
+    <link rel='stylesheet' href='/nonogram/css/game.css' />
     <link rel='stylesheet' href='/bootstrap/css/bootstrap.min.css' />
     <script src="/js/angular.min.js"></script>
     <script src="/bootstrap/js/bootstrap.min.js"></script>
     <script src="/bootpag/jquery.bootpag.min.js"></script>
 
-    <script src="/game/js/nonogram.js"></script>
-    <script src="/game/js/index.js"></script>
+    <script src="/nonogram/js/nonogram.js"></script>
+    <script src="/nonogram/js/index.js"></script>
 
     <script type="text/javascript">
 
@@ -28,44 +28,10 @@
     				<h1>Nonogram</h1>	
     			</div>
     			<ul class="nav nav-pills">
-    				<li><a href="javascript:void(0);" id="button-game-start">Game Start</a></li>
+    				<li><a href="/game" id="button-game-start">Game Start</a></li>
+                    <li><a href="/editor" id="button-stage-editor">Create Stage</a></li>
     			</ul>
     		</div>
-    		<div class="game stage-select">
-    			<div class="row">
-					<div class="panel panel-default">
-						<div class="panel-heading">Stage Select</div>
-						<div class="panel-body stage-select-panel">
-
-						</div>
-                        <div class="panel-footer stage-pagination"></div>
-					</div>
-				</div>
-    		</div>
-    		<div class="game game-screen">
-                
-            </div>
-
-            <!-- Modal -->
-                <div id="game-screen-clear" class="modal fade" role="dialog">
-                    <div class="modal-dialog">
-
-                        <!-- Modal content-->
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                <h4 class="modal-title">Clear!</h4>
-                            </div>
-                            <div class="modal-body">
-                                <p>You Win!</p>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
     	</div>
     </div>
   </body>

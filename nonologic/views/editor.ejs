@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery-ui.min.js"></script>
+
+    <link rel='stylesheet' href='/css/style.css' />
+    <link rel='stylesheet' href='/nonogram/css/nonogram.css' />
+    <link rel='stylesheet' href='/nonogram/css/game.css' />
+    <link rel='stylesheet' href='/bootstrap/css/bootstrap.min.css' />
+    <script src="/js/angular.min.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/bootpag/jquery.bootpag.min.js"></script>
+
+    <script src="/nonogram/js/nonogram.js"></script>
+    <script src="/nonogram/js/mapper.js"></script>
+    <script src="/nonogram/js/solver.js"></script>
+    <script src="/nonogram/js/ui-manager.js"></script>
+    <script src="/nonogram/js/editor/core.js"></script>
+
+    <link rel="stylesheet" href="/css/bootstrap-slider.min.css" />
+    <script src="/js/bootstrap-slider.min.js"></script>
+
+    <script type="text/javascript">
+
+    </script>
+  </head>
+  <body>
+    <div class="container fill">
+    	<div class="game-container" ng-app="nonogram">
+            <div class="editor editor-initate">
+                <div class="row">
+                    <h3>Please confirm stage's grid size.</h3>
+                    <div class="row">
+                        <input type="text" class="slider" id="slider-grid-x" name="grid-x" data-provider="slider" data-slider-min="2" data-slider-max="20" data-slider-tooltip="always" data-slider-value="5">
+                    </div>
+                    <div class="row">
+                        <input type="text" class="slider" id="slider-grid-y" name="grid-y" data-provider="slider" data-slider-min="2" data-slider-max="20" data-slider-tooltip="always" data-slider-value="5">
+                    </div>
+                    
+                    <button id="editor-start-button">create stage!</button>
+                </div>
+            </div>
+            <div class="editor editor-main">
+                
+            </div>
+    	</div>
+    </div>
+  </body>
+</html>
