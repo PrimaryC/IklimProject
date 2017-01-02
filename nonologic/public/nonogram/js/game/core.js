@@ -1,24 +1,29 @@
 Nonogram.modules.gameUIManager = function(box){
 	var stageList = [];
-	box.checkPicture = function(gameObject){
-		$.post('/nonogram/answer', {"ID": gameObject.ID,"Map":JSON.stringify(gameObject.Map)}, function(data, textStatus, xhr) {
-			console.log(data);
-			if(data == "correct"){
-				endGame();
-			}
-		});
+	box.checkPicture = function(map){
+		// $.post('/nonogram/answer', {"ID": gameObject.ID,"Map":JSON.stringify(gameObject.Map)}, function(data, textStatus, xhr) {
+		// 	console.log(data);
+		// 	if(data == "correct"){
+		// 		endGame();
+		// 	}
+		// });
+		if(map == box.Answer){
+			endGame();
+		}
+
 	}
 
 	function endGame(){
 		$("#game-screen-clear").modal('show');
 		$("#game-screen-clear").on('hidden.bs.modal',function(){
 			$(".game-screen").fadeOut('fast', function(){
-				$(".game-screen").remove();
+				$(".game-screen").empty();
 				$(".stage-select").fadeIn('fast');
 			});
 		});
 		console.log("clear!");
 		box.gameStatus = false;
+		box.Answer = undefined;
 	}
 
 	box.initStageSelect = function(event) {
@@ -125,6 +130,8 @@ Nonogram.modules.gameUIManager = function(box){
 			y = data.Rule.Row.length;
 
 		box.gameStatus = true;
+
+		box.Answer = box.solve(data.Rule);
 
 		return gameTable;
 	}

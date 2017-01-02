@@ -15,17 +15,9 @@ Nonogram.modules.commonUIManager = function(box){
 		if(box.gameStatus){
 			setTimeout(function(){
 				var gameElement = $(".nonogram-table");
-				var gameObject = parseGameElementToGameObject(gameElement);
-				box.checkPicture(gameObject);	
+				box.checkPicture(box.getMapData(gameElement.find(".game-grid")));	
 			}, 500)
 		}
-	}
-
-	function parseGameElementToGameObject(gameElement){
-		var gameObject = {};
-		gameObject.ID = gameElement.attr("data-stage-id");
-		gameObject.Map = box.getMapData(gameElement.find(".game-grid"));
-		return gameObject;
 	}
 
 	box.createRowTableElement = function(row, mLength){
