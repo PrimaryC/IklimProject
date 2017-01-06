@@ -69,20 +69,21 @@ Nonogram.modules.solver = function(box){
 		result = [];
 		var d = $.extend(true, [], data);
 		
-		// console.log("D is = " + d);
+		console.log("D is = " + d);
+		console.log("data = " + data)
 		// console.log("DATA BEFORE PROCESS" + data);
-		for (var i = 0; i < data.length; i++) {
-			ruleDataToOnesArray(data[i]);
+		for (var i = 0; i < d.length; i++) {
+			ruleDataToOnesArray(d[i]);
 		}
 		// console.log("DATA AFTER PROCESS" + data);
 		
 		for (var j = 0; j < d.length; j++) {
 			var sum = 0;
-			for (var i = 0; i < d[j].length; i++) {
-				sum += d[j][i];
+			for (var i = 0; i < data[j].length; i++) {
+				sum += data[j][i];
 			}
 			// console.log("SUM IS = " + sum);
-			var genData = genSequence(data[j], len - sum + 1)
+			var genData = genSequence(d[j], len - sum + 1)
 			var lineVariable = [];
 			for (var i = 0; i < genData.length; i++) {
 				var g = genData[i].join("").split("")
@@ -200,5 +201,30 @@ Nonogram.modules.solver = function(box){
 		}
 
 		return "Valid"
+	}
+
+	box.getMapFromRuleMap = function(ruleMap){
+		var d1 = getCandidates(ruleMap.colData, ruleMap.rowData.length);
+		var d2 = getCandidates(ruleMap.rowData, ruleMap.colData.length);
+
+		var result;
+		do{
+			 result = reduceMutual(d1,d2);
+			 // console.log(result);
+			 if(result == -1){
+			 	console.log("No Solution!");
+			 	return "No Answer";
+			 }
+		}while(result > 0);
+
+		var map = [];
+		for (var i = 0; i < d2.length; i++) {
+			map.push(d2[i][0]);
+			for (var j = 0; j < map[i].length; j++) {
+				map[i][j] = map[i][j] * 1
+			}
+		}
+
+		return map;
 	}
 }

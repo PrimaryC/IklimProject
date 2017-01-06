@@ -14,7 +14,10 @@
     <script src="/bootpag/jquery.bootpag.min.js"></script>
 
     <script src="/nonogram/js/nonogram.js"></script>
-    <script src="/nonogram/js/index.js"></script>
+    <script src="/nonogram/js/mapper.js"></script>
+    <script src="/nonogram/js/solver.js"></script>
+    <script src="/nonogram/js/ui-manager.js"></script>
+    <script src="/nonogram/js/queue/core.js"></script>
 
     <script type="text/javascript">
 
@@ -23,15 +26,20 @@
   <body>
     <div class="container fill">
     	<div class="game-container" ng-app="nonogram">
-    		<div class="game title">
-    			<div class="jumbotron">
-    				<h1>Nonogram</h1>	
-    			</div>
-    			<ul class="nav nav-pills">
-    				<li><a href="/nonogram/stage" id="button-game-start">Game Start</a></li>
-                    <li><a href="/nonogram/editor" id="button-stage-editor">Create Stage</a></li>
-    			</ul>
+    		<div class="stage-queue">
+    			<div class="row">
+					<div class="panel panel-default">
+						<div class="panel-heading">Stages On Queue</div>
+						<div class="panel-body stage-queue-panel">
+
+						</div>
+                        <div class="panel-footer stage-pagination"></div>
+					</div>
+				</div>
     		</div>
+    		<div class="game game-screen">
+                
+            </div>
     	</div>
     </div>
   </body>

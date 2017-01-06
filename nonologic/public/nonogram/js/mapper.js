@@ -48,14 +48,14 @@ Nonogram.modules.Mapper = function(box){
 		ruleMap.colData = [];
 		ruleMap.rowData = [];
 		for (var i = 0; i < map.length; i++) {
-			ruleMap.colData.push(lineToRuleArray(map[i]));
+			ruleMap.rowData.push(lineToRuleArray(map[i]));
 		}
 		for (var i = 0; i < map[0].length; i++) {
-			var rowData = [];
+			var colData = [];
 			for (var j = 0; j < map.length; j++) {
-				rowData.push(map[j][i]);
+				colData.push(map[j][i]);
 			}
-			ruleMap.rowData.push(lineToRuleArray(rowData));
+			ruleMap.colData.push(lineToRuleArray(colData));
 		}
 		return ruleMap;
 	}
