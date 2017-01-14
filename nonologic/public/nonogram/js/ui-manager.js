@@ -1,10 +1,21 @@
 Nonogram.modules.commonUIManager = function(box){
+	function cellCursorInteraction(event){
+		var targetElem = $(event.target);
+		var x = targetElem.attr("data-grid-x"),
+			y = targetElem.attr("data-grid-y");
+			x++;
+			y++;
+
+		if(box.gameStatus){
+			$(".col-rule-table").children().children().find(":nth-child("+x+")").toggleClass("rule-table-mouse-over",0);
+			$(".row-rule-table").children().find(":nth-child("+y+")").children().toggleClass("rule-table-mouse-over",0);	
+		}
+	}
+
 	function cellClicked(event){
 		var targetElem = $(event.target);
 		var x = targetElem.attr("data-grid-x"),
 			y = targetElem.attr("data-grid-y");
-
-		console.log("what");
 
 		if(targetElem.hasClass("game-grid-cell")){
 			targetElem.switchClass("game-grid-cell","game-grid-cell-marked",200);
@@ -17,11 +28,13 @@ Nonogram.modules.commonUIManager = function(box){
 				var gameElement = $(".nonogram-table");
 				box.checkPicture(box.getMapData(gameElement.find(".game-grid")));	
 			}, 500)
+		} else {
+
 		}
 	}
 
 	box.createRowTableElement = function(row, mLength){
-		var element = $("<table/>");
+		var element = $("<table/>", {"class":"rule-table row-rule-table"});
 		var tableRow, ruleElement;
 		for (var i = 0; i < row.length; i++) {
 			tableRow = $("<tr/>");
@@ -45,7 +58,7 @@ Nonogram.modules.commonUIManager = function(box){
 	}
 
 	box.createColTableElement = function(col, mLength){
-		var element = $("<table/>");
+		var element = $("<table/>",{"class":"rule-table col-rule-table"});
 		var tableRow, ruleElement;
 		for(var i = 0; i < mLength; i++){
 			tableRow = $("<tr/>");
@@ -76,10 +89,14 @@ Nonogram.modules.commonUIManager = function(box){
 			for (var j = 0; j < row; j++) {
 				cellElement = $("<td/>",{"class":"game-cell game-grid-cell","data-grid-x":j,"data-grid-y":i});
 				cellElement.click(cellClicked);
+				cellElement.on("mouseenter", cellCursorInteraction);
+				cellElement.on("mouseleave", cellCursorInteraction);
 				rowElement.append(cellElement);
 			}
 			element.append(rowElement);
 		}
+		var widthSize, heightSize;
+		widthSize = heightSize = "50px";
 		return element;
 	}
 

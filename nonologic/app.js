@@ -23,6 +23,14 @@ app.use(cookieParser());
 app.use(require('stylus').middleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.get('/', function(req, res, next) {
+  res.render('index', { title: 'Express' });
+});
+
+app.get('/blankspace', function(req, res, next){
+  res.render('blank');
+});
+
 app.use('/nonogram', routes);
 app.use('/users', users);
 

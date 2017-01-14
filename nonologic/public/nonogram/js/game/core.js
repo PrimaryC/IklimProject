@@ -101,10 +101,13 @@ Nonogram.modules.gameUIManager = function(box){
 		var pageNum = $("li.active").attr("data-lp");
 		var listNum = pageNum==undefined ? id : id - pageNum*12;
 		var stageObject = stageList[id];
+		
 		$(".game.game-screen").empty();
+		
 		var gameElement = $("<div/>", {"class":"row"});
 		var headerElement = $("<div/>", {"class":"row"});
 		var titleElement = $("<div/>",{"class":"col-sm-9"}).html("<h3>" + stageObject.Name + "</h3>");
+
 		headerElement.append(titleElement);
 		headerElement.append(createGameNav());
 

@@ -86,9 +86,17 @@ Nonogram.modules.solver = function(box){
 			var genData = genSequence(d[j], len - sum + 1)
 			var lineVariable = [];
 			for (var i = 0; i < genData.length; i++) {
-				var g = genData[i].join("").split("")
+				var g;
+				if(typeof genData[i] == "object") {
+					g = genData[i].join("").split("")	
+				} else {
+					g = genData;
+				}
 				g.splice(0,1);
 				lineVariable.push(g);
+				if(typeof genData[i] != "object"){
+					break;
+				}
 			}
 			
 			result.push(lineVariable);
@@ -180,6 +188,12 @@ Nonogram.modules.solver = function(box){
 		var d2 = getCandidates(ruleMap.rowData, ruleMap.colData.length);
 
 		var result;
+
+		var multiAnswer = {
+			"flag":false,
+			"Col":[],
+			"Row":[]
+		};
 		do{
 			 result = reduceMutual(d1,d2);
 			 // console.log(result);
@@ -191,16 +205,24 @@ Nonogram.modules.solver = function(box){
 
 		for (var i = 0; i < d1.length; i++) {
 			if(d1[i].length != 1){
-				return "Multi Answer/Col/"+i
-			}
-		}
-		for (var i = 0; i < d2.length; i++) {
-			if(d2[i].length != 1){
-				return "Multi Answer/Row/"+i
+				multiAnswer.flag = true;
+				multiAnswer.Col.push(i);
 			}
 		}
 
-		return "Valid"
+		var rowMultiAnswer = [];
+		for (var i = 0; i < d2.length; i++) {
+			if(d2[i].length != 1){
+				multiAnswer.flag = true;
+				multiAnswer.Row.push(i)
+			}
+		}
+		if(!multiAnswer.flag){
+			return "Valid"	
+		} else {
+			return multiAnswer
+		}
+		
 	}
 
 	box.getMapFromRuleMap = function(ruleMap){

@@ -8,6 +8,7 @@
     <link rel='stylesheet' href='/css/style.css' />
     <link rel='stylesheet' href='/nonogram/css/nonogram.css' />
     <link rel='stylesheet' href='/nonogram/css/game.css' />
+    <link rel='stylesheet' href='/nonogram/css/editor.css' />
     <link rel='stylesheet' href='/bootstrap/css/bootstrap.min.css' />
     <script src="/js/angular.min.js"></script>
     <script src="/bootstrap/js/bootstrap.min.js"></script>
@@ -33,10 +34,10 @@
                 <div class="row">
                     <h3>Please confirm stage's grid size.</h3>
                     <div class="row">
-                        <input type="text" class="slider" id="slider-grid-x" name="grid-x" data-provider="slider" data-slider-min="2" data-slider-max="20" data-slider-tooltip="always" data-slider-value="5">
+                        <input type="text" class="slider" id="slider-grid-x" name="grid-x" data-provider="slider" data-slider-min="2" data-slider-max="100" data-slider-tooltip="always" data-slider-value="5">
                     </div>
                     <div class="row">
-                        <input type="text" class="slider" id="slider-grid-y" name="grid-y" data-provider="slider" data-slider-min="2" data-slider-max="20" data-slider-tooltip="always" data-slider-value="5">
+                        <input type="text" class="slider" id="slider-grid-y" name="grid-y" data-provider="slider" data-slider-min="2" data-slider-max="100" data-slider-tooltip="always" data-slider-value="5">
                     </div>
                     
                     <button id="editor-start-button">create stage!</button>
@@ -46,6 +47,27 @@
                 
             </div>
     	</div>
+        <!-- Modal -->
+        <div id="editor-submitted" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Stage Submitted</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>스테이지가 정상적으로 제출되었습니다. 관리자의 검수 후 스테이지 목록에 추가됩니다.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
     </div>
+
   </body>
 </html>

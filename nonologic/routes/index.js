@@ -10,9 +10,6 @@ var router = express.Router();
 const util = require('util');
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
 
 router.get('/stage', function(req, res, next){
 	res.render("game-screen", {title:"Welcome to Nonologic!"});
@@ -121,10 +118,15 @@ router.get("/queue/data", function(req, res, next){
 		var stageList = [];
 		console.log(value);
 		for (var i = 0; i < value.length; i++) {
-			name = value[i][0].replace(/^\"+/i, '');
-			rule = JSON.parse(value[i][1]);
-			id = value[i][2].replace(/^\"+/i, '');
-			stageList.push({"Name" : name, "Rule" : rule, "ID":id});
+			if(value[i][0] == null){
+
+			} else {
+				name = value[i][0].replace(/^\"+/i, '');
+				rule = JSON.parse(value[i][1]);
+				id = value[i][2].replace(/^\"+/i, '');
+				stageList.push({"Name" : name, "Rule" : rule, "ID":id});	
+			}
+			
 		}
 		res.send(stageList);
 	});
@@ -144,16 +146,19 @@ router.post("/queue/confirm",function(req,res,next){
 		db.hmset("nonogram:"+value, "ID", value);
 		db.incr("nonogram:count");
 
-		popQueue(req.body.id, "queue");
-		
-		res.send("ok");	
+		popQueue(req.body.id, "queue").then(function(result){
+			console.log("Run!");
+			res.send("ok");
+		});
 	})
 	
 	
 });
 
 router.post("/queue/remove",function(req,res,next){
-	popQueue(req.body.id, "queue");
+	popQueue(req.body.id, "queue").then(function(result){
+		res.send("ok");
+	});
 });
 
 function asyncLoop(iterations, func, callback) {
@@ -213,13 +218,16 @@ function popQueue(id, type){
 				console.log("X and Y = " + query + x + "//" + query + y)
 				db.exists(query + x).then(function(value){
 					if(value == 1){
-						db.rename(query+x,query+y);		
+						db.rename(query+x,query+y);
+						db.hmset(query+y, "ID", y);
 					}
+					loop.next();
 				})
 			}, function(){
 				console.log("DECR:" + countQuery);
 				console.log(countQuery);
-				db.decr(countQuery);	
+				db.decr(countQuery);
+				resolve("ok");
 			})
 			// for (var i = id; i < queueCount; i++) {
 				

@@ -34,7 +34,14 @@ function switchToEditMode(event){
 	})
 }
 
+function resetMarkedCell(){
+	$(".game-cell").removeClass("cell-marked-row");
+	$(".game-cell").removeClass("cell-marked-col");
+}
+
 function submit(box){
+	resetMarkedCell();
+
 	var map = box.getMapData($(".game-grid"));
 	var ruleMap = box.mapToRuleMap(map);
 	var result = box.solve(ruleMap);
@@ -43,40 +50,59 @@ function submit(box){
 	if(name == "" || name == undefined || name == null) {
 		alert("스테이지 명을 입력해주세요!");
 	} else {
-		if(result.includes("Valid")){
-			console.log("Valid answer!");
-			var stageData = {
-				"Name":name,
-				"ColRule":JSON.stringify(ruleMap.colData),
-				"RowRule":JSON.stringify(ruleMap.rowData)
-			};
-		
-			$.ajax({
-				url: '/nonogram/stage/upload',
-				type: 'POST',
-				data: stageData
-			})
-			.done(function() {
-				console.log("success");
-				endEditor();
-			})
-			.fail(function() {
-				console.log("error");
-			})
-			.always(function(){
-				console.log("completed");
-			});
+		if(typeof result == "object"){
+			console.log("Multi Answer!");
+			console.log(result);
+			markMultiAnswerPosition(result);
+		} else {
+			if(result.includes("Valid")){
+				console.log("Valid answer!");
+				var stageData = {
+					"Name":name,
+					"ColRule":JSON.stringify(ruleMap.colData),
+					"RowRule":JSON.stringify(ruleMap.rowData)
+				};
 			
-		} else if(result.includes("No Answer")){
-			console.log("노답새기야!");
-		} else if(result.includes("Multi Answer")){
-			console.log("답 많대! : " + result);
+				$.ajax({
+					url: '/nonogram/stage/upload',
+					type: 'POST',
+					data: stageData
+				})
+				.done(function() {
+					console.log("success");
+					endEditor();
+				})
+				.fail(function() {
+					console.log("error");
+				})
+				.always(function(){
+					console.log("completed");
+				});
+				
+			} else if(result.includes("No Answer")){
+				console.log("노답새기야!");
+			}	
 		}
+		
+	}
+}
+
+function markMultiAnswerPosition(data){
+	for (var i = 0; i < data.Col.length; i++) {
+		var n = data.Col[i] + 1
+		$(".game-grid").children().children().find(":nth-child("+n+")").addClass("cell-marked-col");
+	}
+	for (var i = 0; i < data.Row.length; i++) {
+		var n = data.Row[i] + 1
+		$(".game-grid").children().find(":nth-child("+n+")").children().addClass("cell-marked-row");
 	}
 }
 
 function endEditor(){
-	
+	$("#editor-submitted").modal('show');
+	$("#editor-submitted").on('hidden.bs.modal',function(){
+		window.location.href = "/";
+	});
 }
 
 $(document).ready(function() {
