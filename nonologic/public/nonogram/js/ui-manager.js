@@ -14,19 +14,20 @@ Nonogram.modules.commonUIManager = function(box){
 
 	function cellClicked(event){
 		var targetElem = $(event.target);
-		var x = targetElem.attr("data-grid-x"),
-			y = targetElem.attr("data-grid-y");
+			var x = targetElem.attr("data-grid-x"),
+				y = targetElem.attr("data-grid-y");
 
-		if(targetElem.hasClass("game-grid-cell")){
-			targetElem.switchClass("game-grid-cell","game-grid-cell-marked",200);
-		} else {
-			targetElem.switchClass("game-grid-cell-marked","game-grid-cell",200);
-		}
+			if(targetElem.hasClass("game-grid-cell")){
+				targetElem.switchClass("game-grid-cell","game-grid-cell-marked",100);
+			} else {
+				targetElem.switchClass("game-grid-cell-marked","game-grid-cell",100);
+			}
 
 		if(box.gameStatus){
+			
+
 			setTimeout(function(){
-				var gameElement = $(".nonogram-table");
-				box.checkPicture(box.getMapData(gameElement.find(".game-grid")));	
+				box.checkPicture(box.getMapData($.find(".game-grid")));	
 			}, 500)
 		} else {
 
@@ -100,24 +101,37 @@ Nonogram.modules.commonUIManager = function(box){
 		return element;
 	}
 
-	box.getMapData = function(mapGridElement){
+	box.getMapData = function(_mapGridElement){
 		var map = [];
-		var col, row;
-		row = mapGridElement.children("tbody").children().length;
-		col = mapGridElement.children("tbody").children("tr:nth-child(1)").children().length
-		for (var i = 1; i <= row; i++) {
+		// var col, row;
+		var mapGridElement = $(_mapGridElement);
+		// row = mapGridElement.children("tbody").children().length;
+		// col = mapGridElement.children("tbody").children("tr:nth-child(1)").children().length
+		// for (var i = 1; i <= row; i++) {
+		// 	var lineArray = [];
+		// 	var currentLineElement = mapGridElement.children("tbody").children("tr:nth-child("+i+")");
+		// 	for (var j = 1; j <= col; j++) {
+		// 		var currentCellElement = currentLineElement.children("td:nth-child("+j+")");
+		// 		if(currentCellElement.hasClass("game-grid-cell-marked")){
+		// 			lineArray.push(1);
+		// 		} else {
+		// 			lineArray.push(0);
+		// 		}
+		// 	}
+		// 	map.push(lineArray);
+		// }
+		mapGridElement.find("tr").each(function(){
 			var lineArray = [];
-			var currentLineElement = mapGridElement.children("tbody").children("tr:nth-child("+i+")");
-			for (var j = 1; j <= col; j++) {
-				var currentCellElement = currentLineElement.children("td:nth-child("+j+")");
-				if(currentCellElement.hasClass("game-grid-cell-marked")){
+			var tableData = $(this).find('td');
+			tableData.each(function(){
+				if($(this).hasClass("game-grid-cell-marked")){
 					lineArray.push(1);
 				} else {
 					lineArray.push(0);
 				}
-			}
+			})
 			map.push(lineArray);
-		}
+		})
 		return map;
 	}
 }

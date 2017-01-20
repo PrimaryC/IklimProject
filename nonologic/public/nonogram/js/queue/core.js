@@ -1,3 +1,5 @@
+const CELL_SIZE = 20;
+
 Nonogram.modules.queueUIManager = function(box){
 	var stageList = [];
 
@@ -172,18 +174,62 @@ Nonogram.modules.queueUIManager = function(box){
 		});
 	}
 
-	function createGameTableElement(id, data){
-		function getMaxLength(array){
-			var maxLength = 0;
-			for(i=0;i<array.length;i++){
-	      		if(maxLength<array[i].length){
-	      			maxLength = array[i].length;
-	      		}
-	      	}
-	      	return maxLength;
-		}
+	function getMaxLength(array){
+		var maxLength = 0;
+		for(i=0;i<array.length;i++){
+      		if(maxLength<array[i].length){
+      			maxLength = array[i].length;
+      		}
+      	}
+      	return maxLength;
+	}
 
-		var gameTable = $("<table/>",{"data-stage-id":id, "class":"nonogram-table"});
+	function setGameTableStyle(element, colMax, rowMax){
+		var gameWrapper, colRuleWrapper, rowRuleWrapper;
+		var leftContainer, rightContainer;
+		var width = 800;
+		var height = 600;
+
+		gameWrapper = element.find(".game-wrapper-right-bot");
+		colRuleWrapper = element.find(".game-wrapper-right-top");
+		rowRuleWrapper = element.find(".game-wrapper-left");
+		tablePlaceholder = element.find(".game-container-left-top");
+
+		leftContainer = element.find(".game-container-left");
+		rightContainer = element.find(".game-container-right");
+
+		var rowSize = rowMax*CELL_SIZE;
+		var colSize = colMax*CELL_SIZE;
+
+		tablePlaceholder.height(colSize).width(rowSize);
+		colRuleWrapper.height(colSize).width(width);
+		rightContainer.css("left",rowSize).css("padding-right","17px").css("padding-bottom","17px").width(width-17).height(height-17+CELL_SIZE);
+		rowRuleWrapper.width(rowSize).height(height);
+		leftContainer.css("top",colSize);
+		gameWrapper.css("left",colSize).css("top",rowSize)
+			.width(width).height(height);
+
+	}
+
+	function createGameTableElement(id, data){
+
+		// var gameTable = $("<table/>",{"data-stage-id":id, "class":"nonogram-table"});
+		var container = $("<div/>",{"class":"game-table-container"});
+
+		var leftTopContainer = $("<div/>",{"class":"game-container-left-top"}).append(
+				$("<table/>").append(
+					$("<tr/>").append($("<td/>"))
+				)
+			)
+
+		var leftContainer = $("<div/>",{"class":"game-container-left"});
+		var leftWrapper = $("<div/>",{"class":"game-wrapper-left"});
+		
+		var rightContainer = $("<div/>",{"class":"game-container-right"});
+		var rightTopWrapper = $("<div/>",{"class":"game-wrapper-right-top"});
+		var rightBotWrapper = $("<div/>",{"class":"game-wrapper-right-bot"});
+		var rightBotScrollWrapper = $("<div/>",{"class":"game-wrapper-right-bot-scrollwrapper"});
+
 		var colMaxLength = 0;
 		colMaxLength = getMaxLength(data.Rule.colData);
 		var colRuleTable = box.createColTableElement(data.Rule.colData, colMaxLength);
@@ -194,15 +240,75 @@ Nonogram.modules.queueUIManager = function(box){
 
 		var gameGrid = box.createGameGrid(data.Rule.colData.length, data.Rule.rowData.length);
 
-		gameTable	.append($("<tr/>")
-						.append($("<td/>"))
-						.append($("<td/>").html(colRuleTable)))
-					.append($("<tr/>")
-						.append($("<td/>").html(rowRuleTable))
-						.append($("<td/>").html(gameGrid)));
+		container.append(leftTopContainer)
 
-		var x = data.Rule.colData.length,
-			y = data.Rule.rowData.length;
+		leftWrapper.append(rowRuleTable);
+		leftContainer.append(leftWrapper);
+
+		container.append(leftContainer);
+
+		rightTopWrapper.append(colRuleTable);
+		rightBotWrapper.append(gameGrid);
+		rightContainer.append(rightTopWrapper).append(rightBotWrapper);
+
+		container.append(rightContainer);
+
+		rightBotWrapper.scroll(function(){
+			var container = $(this).closest(".game-table-container");
+			var leftWrapper = container.find(".game-wrapper-left");
+			var topWrapper = container.find(".game-wrapper-right-top");
+
+			leftWrapper.css("top",($(this).scrollTop()*-1));
+			topWrapper.css("left",($(this).scrollLeft()*-1));
+		});
+
+		setGameTableStyle(container, colMaxLength, rowMaxLength);
+
+		rightBotWrapper.on("mousemove",function(event){
+			var x,y;
+			x = event.pageX - $(event.currentTarget).offset().left;
+			y = event.pageY - $(event.currentTarget).offset().top;
+			console.log("X + Y /" + x + " / " + y)
+
+			var leftDiff, topDiff;
+			var rightLimit, bottomLimit;
+			rightLimit = $(this).width() - 117;
+			bottomLimit = $(this).height() - 117;
+
+			if(x < 100){
+				leftDiff = "-=40";	
+			} else if(x>100 && x<200){
+				leftDiff = "-=20";
+			}
+			if(x > rightLimit){
+				leftDiff = "+=40";
+			} else if(x<rightLimit && x>rightLimit-100){
+				leftDiff = "+=20";
+			}
+			if(y < 100) topDiff = "-=40";
+			if(y > bottomLimit) topDiff = "+=40";
+
+			if(typeof topDiff == "string" || typeof leftDiff == "string") {
+				$(this).animate({
+					scrollLeft: (typeof leftDiff == "string"?leftDiff:"+=0"),
+					scrollTop: (typeof topDiff == "string"?topDiff:"+=0")},
+					0, function() {
+						//callback here!
+				});
+			}
+		})
+
+		// gameTable	.append($("<tr/>")
+		// 				.append($("<td/>"))
+		// 				.append($("<td/>").html(colRuleTable)))
+		// 			.append($("<tr/>")
+		// 				.append($("<td/>").html(rowRuleTable))
+		// 				.append($("<td/>").html(gameGrid)));
+
+		// var x = data.Rule.colData.length,
+		// 	y = data.Rule.rowData.length;
+
+		box.gameStatus = true;
 
 		box.Answer = box.getMapFromRuleMap(data.Rule);
 
@@ -222,7 +328,10 @@ Nonogram.modules.queueUIManager = function(box){
 			}
 		}
 
-		return gameTable;
+
+		// return gameTable;
+		return container;
+
 	}
 }
 

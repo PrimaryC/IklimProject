@@ -1,3 +1,7 @@
+body
+	background-color LightGray
+.container
+	background-color white
 .game
 	display none
 .editor
@@ -9,3 +13,67 @@
 	height 150px
 .stage-select-panel
 	height 760px
+
+.game-table-container
+	position relative
+	width 805px
+	height 605px
+	z-index 12
+	margin 0 auto
+	margin-top 30px
+	border 1px solid black
+.game-container-left-top
+	width 100px
+	height 100px
+	position absolute
+	overflow hidden
+	left 0px
+.game-container-left
+	position absolute
+	left 0px
+	height 583px
+	overflow hidden
+.game-container-right
+	top 0px
+	position absolute
+	overflow hidden
+.game-wrapper-left
+	position relative
+	left 0px
+	top 0px
+	z-index 10
+.game-wrapper-right-top
+	position relative
+	left 0px
+	top 0px
+	z-index 10
+.game-wrapper-right-bot
+	overflow auto
+	
+.game-nav
+	height 56px
+.game-nav > .btn-group
+	top 15px
+
+.row-rule-table
+	border-top 3px solid black
+	border-bottom 3px solid black
+	border-right 3px solid black
+.row-rule-table > tbody > tr > td
+	background-color aliceblue
+	border-top 1px solid black
+	border-bottom 1px solid black
+.col-rule-table
+	border-left 3px solid black
+	border-right 3px solid black
+	border-bottom 3px solid black
+.col-rule-table > tbody > tr > td
+	background-color aliceblue
+	border-left 1px solid black
+	border-right 1px solid black
+	
+.row-rule-table > tbody > tr:nth-child(5n+0) > td
+	border-bottom-width 3px
+
+// .rule-table
+// 	font-size 10px
