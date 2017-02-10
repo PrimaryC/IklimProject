@@ -33,3 +33,14 @@
 .rule-table-mouse-over {
   color: #f00;
 }
+.panel-default {
+  border-radius: 0px;
+}
+.panel-heading {
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+}
+.panel-footer {
+  border-bottom-right-radius: 0px;
+  border-bottom-left-radius: 0px;
+}
