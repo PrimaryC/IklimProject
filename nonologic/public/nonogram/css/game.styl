@@ -1,7 +1,11 @@
+background = #e4d9c5
+container-color = #ecc369
+rule-color = #eee9bb
+
 body
-	background-color LightGray
+	background-color container-color
 .container
-	background-color white
+	background-color container-color
 .game
 	display none
 .editor
@@ -16,12 +20,10 @@ body
 
 .game-table-container
 	position relative
-	width 805px
-	height 605px
 	z-index 12
 	margin 0 auto
 	margin-top 30px
-	border 1px solid black
+	border 1px solid container-color
 .game-container-left-top
 	width 100px
 	height 100px
@@ -31,7 +33,6 @@ body
 .game-container-left
 	position absolute
 	left 0px
-	height 583px
 	overflow hidden
 .game-container-right
 	top 0px
@@ -56,21 +57,21 @@ body
 	top 15px
 
 .row-rule-table
-	border-top 3px solid black
-	border-bottom 3px solid black
-	border-right 3px solid black
+	border-top 3px solid container-color
+	border-bottom 3px solid container-color
+	border-right 3px solid container-color
 .row-rule-table > tbody > tr > td
-	background-color aliceblue
-	border-top 1px solid black
-	border-bottom 1px solid black
+	background-color rule-color
+	border-top 1px solid container-color
+	border-bottom 1px solid container-color
 .col-rule-table
-	border-left 3px solid black
-	border-right 3px solid black
-	border-bottom 3px solid black
+	border-left 3px solid container-color
+	border-right 3px solid container-color
+	border-bottom 3px solid container-color
 .col-rule-table > tbody > tr > td
-	background-color aliceblue
-	border-left 1px solid black
-	border-right 1px solid black
+	background-color rule-color
+	border-left 1px solid container-color
+	border-right 1px solid container-color
 	
 .row-rule-table > tbody > tr:nth-child(5n+0) > td
 	border-bottom-width 3px

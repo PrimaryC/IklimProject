@@ -142,6 +142,9 @@ router.get("/queue/counter",function(req,res,next){
 
 router.post("/queue/confirm",function(req,res,next){
 	db.get("nonogram:count").then(function(value){
+		console.log(value);
+		console.log(req.body.id);
+
 		db.rename("nonogram:queue:"+req.body.id,"nonogram:"+value);	
 		db.hmset("nonogram:"+value, "ID", value);
 		db.incr("nonogram:count");

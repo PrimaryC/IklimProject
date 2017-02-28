@@ -1,8 +1,8 @@
 body {
-  background-color: LightGray;
+  background-color: #ecc369;
 }
 .container {
-  background-color: #fff;
+  background-color: #ecc369;
 }
 .game {
   display: none;
@@ -22,12 +22,10 @@ body {
 }
 .game-table-container {
   position: relative;
-  width: 805px;
-  height: 605px;
   z-index: 12;
   margin: 0 auto;
   margin-top: 30px;
-  border: 1px solid #000;
+  border: 1px solid #ecc369;
 }
 .game-container-left-top {
   width: 100px;
@@ -39,7 +37,6 @@ body {
 .game-container-left {
   position: absolute;
   left: 0px;
-  height: 583px;
   overflow: hidden;
 }
 .game-container-right {
@@ -69,24 +66,24 @@ body {
   top: 15px;
 }
 .row-rule-table {
-  border-top: 3px solid #000;
-  border-bottom: 3px solid #000;
-  border-right: 3px solid #000;
+  border-top: 3px solid #ecc369;
+  border-bottom: 3px solid #ecc369;
+  border-right: 3px solid #ecc369;
 }
 .row-rule-table > tbody > tr > td {
-  background-color: #f0f8ff;
-  border-top: 1px solid #000;
-  border-bottom: 1px solid #000;
+  background-color: #eee9bb;
+  border-top: 1px solid #ecc369;
+  border-bottom: 1px solid #ecc369;
 }
 .col-rule-table {
-  border-left: 3px solid #000;
-  border-right: 3px solid #000;
-  border-bottom: 3px solid #000;
+  border-left: 3px solid #ecc369;
+  border-right: 3px solid #ecc369;
+  border-bottom: 3px solid #ecc369;
 }
 .col-rule-table > tbody > tr > td {
-  background-color: #f0f8ff;
-  border-left: 1px solid #000;
-  border-right: 1px solid #000;
+  background-color: #eee9bb;
+  border-left: 1px solid #ecc369;
+  border-right: 1px solid #ecc369;
 }
 .row-rule-table > tbody > tr:nth-child(5n+0) > td {
   border-bottom-width: 3px;

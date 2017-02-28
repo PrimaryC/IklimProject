@@ -15,14 +15,19 @@
   width: 20px;
   height: 20px;
   text-align: center;
+  border: 1px solid #ecc369;
 }
 .game-grid-cell {
-  border: 1px solid #000;
   background-color: #fff;
 }
 .game-grid-cell-marked {
-  border: 1px solid #fff;
   background-color: #000;
+}
+.game-cell:first-child {
+  border-left-width: 3px;
+}
+.game-grid > tbody > tr:first-child > td {
+  border-top-width: 3px;
 }
 .game-cell:nth-child(5n+0) {
   border-right-width: 3px;
@@ -36,11 +41,22 @@
 .panel-default {
   border-radius: 0px;
 }
-.panel-heading {
+.panel-body {
+  background-color: #e4d9c5;
+}
+.stage-panel > .panel > .panel-body {
+  background-color: #eee9bb;
+}
+.panel-default > .panel-heading {
   border-top-left-radius: 0px;
   border-top-right-radius: 0px;
+  background-color: #eee9bb;
 }
 .panel-footer {
   border-bottom-right-radius: 0px;
   border-bottom-left-radius: 0px;
+  background-color: #eee9bb;
+}
+.stage-panel > .panel > .panel-footer {
+  background-color: #ecc369;
 }

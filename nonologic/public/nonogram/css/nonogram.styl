@@ -1,3 +1,7 @@
+background = #e4d9c5
+container-color = #ecc369
+rule-color = #eee9bb
+
 .fill 
     top 0
     left 0
@@ -14,17 +18,16 @@
 	width 20px
 	height 20px
 	text-align center
+	border 1px solid #ecc369
 .game-grid-cell
-	border 1px solid black
 	background-color white
 .game-grid-cell-marked
-	border 1px solid white
 	background-color black
 
-// .game-cell:first-child
-// 	border-left-width 3px
-// .game-grid > tbody > tr:first-child > td
-// 	border-top-width 3px
+.game-cell:first-child
+	border-left-width 3px
+.game-grid > tbody > tr:first-child > td
+	border-top-width 3px
 	
 .game-cell:nth-child(5n+0)
 	border-right-width 3px
@@ -35,9 +38,17 @@
 
 .panel-default
 	border-radius 0px
-.panel-heading
+.panel-body
+	background-color background
+.stage-panel > .panel > .panel-body
+	background-color rule-color
+.panel-default > .panel-heading
 	border-top-left-radius 0px
 	border-top-right-radius 0px
+	background-color rule-color
 .panel-footer
 	border-bottom-right-radius 0px
 	border-bottom-left-radius 0px
+	background-color rule-color
+.stage-panel > .panel > .panel-footer
+	background-color container-color

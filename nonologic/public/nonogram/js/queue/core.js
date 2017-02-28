@@ -214,7 +214,7 @@ Nonogram.modules.queueUIManager = function(box){
 	function createGameTableElement(id, data){
 
 		// var gameTable = $("<table/>",{"data-stage-id":id, "class":"nonogram-table"});
-		var container = $("<div/>",{"class":"game-table-container"});
+		var container = $("<div/>",{"class":"game-table-container nonogram-table", "data-stage-id":id});
 
 		var leftTopContainer = $("<div/>",{"class":"game-container-left-top"}).append(
 				$("<table/>").append(

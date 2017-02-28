@@ -28,7 +28,7 @@ Nonogram.modules.commonUIManager = function(box){
 
 			setTimeout(function(){
 				box.checkPicture(box.getMapData($.find(".game-grid")));	
-			}, 500)
+			}, 110)
 		} else {
 
 		}
@@ -133,5 +133,12 @@ Nonogram.modules.commonUIManager = function(box){
 			map.push(lineArray);
 		})
 		return map;
+	}
+
+	box.getRuleMapSize = function(){
+		var y = $(".col-rule-table").children().children().length;
+		var x = $(".row-rule-table").children().children("tr:nth-child(1)").children().length;
+
+		return {"x" : x, "y" : y};
 	}
 }

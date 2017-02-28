@@ -3,5 +3,9 @@ body {
   padding: 15px;
 }
 a {
-  color: #00b7ff;
+  color: #f33;
+}
+body,
+.jumbotron {
+  background-color: #eee9bb;
 }

@@ -12,11 +12,13 @@ Nonogram.modules.gameUIManager = function(box){
 		if(map.join("") == box.Answer.join("")){
 			endGame(true);
 		}
-
 	}
 
 	function endGame(winFlag){
 		if(winFlag){
+			var id = box.stageID;
+			localStorage.setItem(id, true);
+			box.stageID = undefined;
 			$("#game-screen-clear").modal('show');
 			$("#game-screen-clear").on('hidden.bs.modal',switchGameScreenToStageSelectScreen);
 			console.log("clear!");
@@ -25,11 +27,11 @@ Nonogram.modules.gameUIManager = function(box){
 		}
 		
 		box.gameStatus = false;
-		box.Answer = undefined;
 	}
 
 	function switchGameScreenToStageSelectScreen(){
 		$(".game-screen").fadeOut('fast', function(){
+			refreshStagePanel()
 			$(".game-screen").empty();
 			$(".stage-select").fadeIn('fast');
 		});
@@ -55,6 +57,7 @@ Nonogram.modules.gameUIManager = function(box){
 		var stageElements = [];
 		var stageElement;
 		var stageName;
+		var stageID;
 		var stageSize = {};
 		for (var i = 0; i < data.length; i++) {
 			stageName = data[i].Name;
@@ -65,12 +68,80 @@ Nonogram.modules.gameUIManager = function(box){
 				.append($("<div/>",{"class":"panel panel-default", "data-stage-id":stageID})
 					.append($("<div/>",{"class":"panel-body"}).text(stageSize.X +" X "+ stageSize.Y))
 					.append($("<div/>",{"class":"panel-footer"}).text(stageName))
-				);
+				)
 			stageElements.push(stageElement);
 			// console.log(stageElement)
 		}
 
 		return stageElements;
+	}
+
+	function refreshStagePanel(){
+		$("div.stage-panel").each(function(index, el) {
+			var currentID = $(el).find(".panel.panel-default").attr("data-stage-id");
+			var isCleared = localStorage.getItem(currentID)=="true"?true:false
+			if(isCleared){
+				var bodyElement = $(el).find(".panel-body");
+				bodyElement
+					.empty()
+					.append(createStagePreview(currentID));
+			}
+		});
+	}
+
+	function createStagePreview(currentID){
+		const CANVAS_HEIGHT = 120;
+		const CANVAS_WIDTH = 220;
+
+		const CANVAS_RATIO = CANVAS_WIDTH/CANVAS_HEIGHT;
+
+		var stageObject = getStageObject(currentID);
+		var answer = box.getMapFromRuleMap(stageObject.Rule);
+		
+		var canvas = $("<canvas/>",{"class":"stage-canvas"});
+		
+		var g = canvas[0].getContext("2d");
+
+		var width = answer[0].length;
+		var height = answer.length;
+
+		var ratio = width/height;
+		var scale = 1;
+
+		if(CANVAS_RATIO > ratio){
+			scale = CANVAS_HEIGHT / height;
+			
+		} else {
+			scale = CANVAS_WIDTH/width ;
+		}
+
+		setCanvasSize(canvas[0], CANVAS_WIDTH, CANVAS_HEIGHT);
+		g.scale(scale, scale);
+		$.each(answer, function(_index, _val) {
+			 $.each(_val, function(index, val) {
+			 	 if(val == 1){
+			 	 	g.fillRect(index, _index, 1, 1);
+			 	 }
+			 });
+		});
+
+		return canvas;
+	}
+
+	function setCanvasSize(canvas, width, height){
+		canvas.width = width;
+		canvas.height = height;
+	}
+
+	function getStageObject(ID){
+		var gameObject;
+		$.each(stageList, function(index, val) {
+			 if(stageList[index].ID == ID){
+			 	gameObject = val
+			 }
+			 return (gameObject == undefined)
+		});
+		return gameObject;
 	}
 
 	function switchToStageSelect(data){
@@ -90,8 +161,8 @@ Nonogram.modules.gameUIManager = function(box){
 	function switchToGameMode(elem){
 		console.log("Switch to Game Mode!");
 		$(".stage-select").fadeOut('fast',function(){
-			var id = elem.attr("data-stage-id");
-			var gameElement = box.createGamePanel(id);
+			box.stageID = elem.attr("data-stage-id");
+			var gameElement = box.createGamePanel(box.stageID);
 			x = gameElement;
 			$(".game.game-screen").empty().append(gameElement).fadeIn("fast");
 
@@ -158,11 +229,11 @@ Nonogram.modules.gameUIManager = function(box){
       	return maxLength;
 	}
 
-	function setGameTableStyle(element, colMax, rowMax){
+	box.setGameTableStyle = function(element, colMax, rowMax, width, height){
 		var gameWrapper, colRuleWrapper, rowRuleWrapper;
 		var leftContainer, rightContainer;
-		var width = 800;
-		var height = 600;
+
+		element.width(width+5).height(height+5)
 
 		gameWrapper = element.find(".game-wrapper-right-bot");
 		colRuleWrapper = element.find(".game-wrapper-right-top");
@@ -178,7 +249,7 @@ Nonogram.modules.gameUIManager = function(box){
 		tablePlaceholder.height(colSize).width(rowSize);
 		colRuleWrapper.height(colSize).width(width);
 		rightContainer.css("left",colSize).css("padding-right","17px").css("padding-bottom","17px").width(width-17).height(height-17+CELL_SIZE);
-		rowRuleWrapper.width(rowSize).height(height);
+		rowRuleWrapper.width(rowSize).height(height-17);
 		leftContainer.css("top",rowSize);
 		gameWrapper.css("left",colSize).css("top",rowSize)
 			.width(width).height(height);
@@ -235,7 +306,8 @@ Nonogram.modules.gameUIManager = function(box){
 			topWrapper.css("left",($(this).scrollLeft()*-1));
 		});
 
-		setGameTableStyle(container, colMaxLength, rowMaxLength);
+		//box.setGameTableStyle(container, colMaxLength, rowMaxLength, 1000, 800);		
+		resizeGameGrid(container, colMaxLength, rowMaxLength);
 
 		rightBotWrapper.on("mousemove",moveScreenByMouseCursor)
 
@@ -292,8 +364,10 @@ Nonogram.modules.gameUIManager = function(box){
 	}
 }
 
+var nonogram;
+
 $(document).ready(function() {
-	var box = Nonogram(function(box){
+	nonogram = Nonogram(function(box){
 		box.initStageSelect();
 	});
 });
