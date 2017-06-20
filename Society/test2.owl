@@ -1,0 +1,477 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://www.projectIklim.com/Society#"
+     xml:base="http://www.projectIklim.com/Society"
+     xmlns:society="http://www.projectIklim.com/Society#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+    <owl:Ontology rdf:about="http://www.projectIklim.com/Society"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.projectIklim.com/Society#belong_to -->
+
+    <owl:ObjectProperty rdf:about="http://www.projectIklim.com/Society#belong_to">
+        <owl:inverseOf rdf:resource="http://www.projectIklim.com/Society#contains"/>
+        <rdfs:domain rdf:resource="http://www.projectIklim.com/Society#Item"/>
+        <rdfs:range rdf:resource="http://www.projectIklim.com/Society#Inventory"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.projectIklim.com/Society#condition -->
+
+    <owl:ObjectProperty rdf:about="http://www.projectIklim.com/Society#condition">
+        <rdfs:subPropertyOf rdf:resource="http://www.projectIklim.com/Society#materialProperty"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.projectIklim.com/Society#consume -->
+
+    <owl:ObjectProperty rdf:about="http://www.projectIklim.com/Society#consume">
+        <rdfs:subPropertyOf rdf:resource="http://www.projectIklim.com/Society#materialProperty"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.projectIklim.com/Society#contains -->
+
+    <owl:ObjectProperty rdf:about="http://www.projectIklim.com/Society#contains">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:domain rdf:resource="http://www.projectIklim.com/Society#Inventory"/>
+        <rdfs:range rdf:resource="http://www.projectIklim.com/Society#Item"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.projectIklim.com/Society#effects -->
+
+    <owl:ObjectProperty rdf:about="http://www.projectIklim.com/Society#effects">
+        <rdfs:subPropertyOf rdf:resource="http://www.projectIklim.com/Society#materialProperty"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.projectIklim.com/Society#hasInventory -->
+
+    <owl:ObjectProperty rdf:about="http://www.projectIklim.com/Society#hasInventory">
+        <rdfs:domain rdf:resource="http://www.projectIklim.com/Society#GameObject"/>
+        <rdfs:range rdf:resource="http://www.projectIklim.com/Society#Inventory"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.projectIklim.com/Society#hasSkill -->
+
+    <owl:ObjectProperty rdf:about="http://www.projectIklim.com/Society#hasSkill">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:domain rdf:resource="http://www.projectIklim.com/Society#Agent"/>
+        <rdfs:range rdf:resource="http://www.projectIklim.com/Society#Skill"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.projectIklim.com/Society#hold -->
+
+    <owl:ObjectProperty rdf:about="http://www.projectIklim.com/Society#hold">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <owl:inverseOf rdf:resource="http://www.projectIklim.com/Society#isIn"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.projectIklim.com/Society#isIn -->
+
+    <owl:ObjectProperty rdf:about="http://www.projectIklim.com/Society#isIn">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:domain rdf:resource="http://www.projectIklim.com/Society#Agent"/>
+        <rdfs:range rdf:resource="http://www.projectIklim.com/Society#Structure"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.projectIklim.com/Society#isUsed -->
+
+    <owl:ObjectProperty rdf:about="http://www.projectIklim.com/Society#isUsed">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <owl:inverseOf rdf:resource="http://www.projectIklim.com/Society#require"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.projectIklim.com/Society#makes -->
+
+    <owl:ObjectProperty rdf:about="http://www.projectIklim.com/Society#makes">
+        <rdfs:subPropertyOf rdf:resource="http://www.projectIklim.com/Society#materialProperty"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.projectIklim.com/Society#materialProperty -->
+
+    <owl:ObjectProperty rdf:about="http://www.projectIklim.com/Society#materialProperty">
+        <rdfs:domain rdf:resource="http://www.projectIklim.com/Society#Process"/>
+        <rdfs:range rdf:resource="http://www.projectIklim.com/Society#ProcessMaterial"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.projectIklim.com/Society#materialType -->
+
+    <owl:ObjectProperty rdf:about="http://www.projectIklim.com/Society#materialType">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:domain rdf:resource="http://www.projectIklim.com/Society#ProcessMaterial"/>
+        <rdfs:range rdf:resource="http://www.projectIklim.com/Society#GameObject"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.projectIklim.com/Society#require -->
+
+    <owl:ObjectProperty rdf:about="http://www.projectIklim.com/Society#require">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:domain rdf:resource="http://www.projectIklim.com/Society#Process"/>
+        <rdfs:range rdf:resource="http://www.projectIklim.com/Society#Skill"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.projectIklim.com/Society/Properties#produce -->
+
+    <owl:ObjectProperty rdf:about="http://www.projectIklim.com/Society/Properties#produce">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <owl:inverseOf rdf:resource="http://www.projectIklim.com/Society/Properties#produced_in"/>
+        <rdfs:domain rdf:resource="http://www.projectIklim.com/Society#Facility"/>
+        <rdfs:range rdf:resource="http://www.projectIklim.com/Society#Product"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.projectIklim.com/Society/Properties#produced_in -->
+
+    <owl:ObjectProperty rdf:about="http://www.projectIklim.com/Society/Properties#produced_in">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.projectIklim.com/Society#processDuration -->
+
+    <owl:DatatypeProperty rdf:about="http://www.projectIklim.com/Society#processDuration">
+        <rdfs:domain rdf:resource="http://www.projectIklim.com/Society#Process"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#nonNegativeInteger"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.projectIklim.com/Society#quantity -->
+
+    <owl:DatatypeProperty rdf:about="http://www.projectIklim.com/Society#quantity">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+        <rdfs:domain rdf:resource="http://www.projectIklim.com/Society#ProcessMaterial"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#nonNegativeInteger"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.projectIklim.com/Society/Properties#dispaly_Description -->
+
+    <owl:DatatypeProperty rdf:about="http://www.projectIklim.com/Society/Properties#dispaly_Description">
+        <rdfs:domain rdf:resource="http://www.projectIklim.com/Society#GameObject"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- gc:http://www.projectIklim.com/Society/Classes#GameRules -->
+
+    <owl:Class rdf:about="gc:http://www.projectIklim.com/Society/Classes#GameRules"/>
+    
+
+
+    <!-- http://www.projectIklim.com/Society#AbstractThing -->
+
+    <owl:Class rdf:about="http://www.projectIklim.com/Society#AbstractThing">
+        <rdfs:subClassOf rdf:resource="http://www.projectIklim.com/Society#GameObject"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.projectIklim.com/Society#Agent -->
+
+    <owl:Class rdf:about="http://www.projectIklim.com/Society#Agent">
+        <rdfs:subClassOf rdf:resource="http://www.projectIklim.com/Society#GameObject"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.projectIklim.com/Society#Facility -->
+
+    <owl:Class rdf:about="http://www.projectIklim.com/Society#Facility">
+        <rdfs:subClassOf rdf:resource="http://www.projectIklim.com/Society#Structure"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.projectIklim.com/Society#Farm -->
+
+    <owl:Class rdf:about="http://www.projectIklim.com/Society#Farm">
+        <rdfs:subClassOf rdf:resource="http://www.projectIklim.com/Society#Facility"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.projectIklim.com/Society/Properties#produce"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onClass rdf:resource="http://www.projectIklim.com/Society#Wheat"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.projectIklim.com/Society#GameObject -->
+
+    <owl:Class rdf:about="http://www.projectIklim.com/Society#GameObject"/>
+    
+
+
+    <!-- http://www.projectIklim.com/Society#Inventory -->
+
+    <owl:Class rdf:about="http://www.projectIklim.com/Society#Inventory">
+        <rdfs:subClassOf rdf:resource="gc:http://www.projectIklim.com/Society/Classes#GameRules"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.projectIklim.com/Society#Item -->
+
+    <owl:Class rdf:about="http://www.projectIklim.com/Society#Item">
+        <rdfs:subClassOf rdf:resource="http://www.projectIklim.com/Society#MaterialThing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.projectIklim.com/Society#MaterialThing -->
+
+    <owl:Class rdf:about="http://www.projectIklim.com/Society#MaterialThing">
+        <rdfs:subClassOf rdf:resource="http://www.projectIklim.com/Society#GameObject"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.projectIklim.com/Society#Process -->
+
+    <owl:Class rdf:about="http://www.projectIklim.com/Society#Process">
+        <rdfs:subClassOf rdf:resource="gc:http://www.projectIklim.com/Society/Classes#GameRules"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.projectIklim.com/Society#makes"/>
+                <owl:minQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:minQualifiedCardinality>
+                <owl:onClass rdf:resource="http://www.projectIklim.com/Society#Product"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.projectIklim.com/Society#ProcessMaterial -->
+
+    <owl:Class rdf:about="http://www.projectIklim.com/Society#ProcessMaterial">
+        <rdfs:subClassOf rdf:resource="gc:http://www.projectIklim.com/Society/Classes#GameRules"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.projectIklim.com/Society#materialType"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onClass rdf:resource="http://www.projectIklim.com/Society#Product"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.projectIklim.com/Society#quantity"/>
+                <owl:someValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#nonNegativeInteger"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.projectIklim.com/Society#Product -->
+
+    <owl:Class rdf:about="http://www.projectIklim.com/Society#Product">
+        <rdfs:subClassOf rdf:resource="http://www.projectIklim.com/Society#Item"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.projectIklim.com/Society#Skill -->
+
+    <owl:Class rdf:about="http://www.projectIklim.com/Society#Skill">
+        <rdfs:subClassOf rdf:resource="http://www.projectIklim.com/Society#AbstractThing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.projectIklim.com/Society#Structure -->
+
+    <owl:Class rdf:about="http://www.projectIklim.com/Society#Structure">
+        <rdfs:subClassOf rdf:resource="http://www.projectIklim.com/Society#MaterialThing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.projectIklim.com/Society#Water -->
+
+    <owl:Class rdf:about="http://www.projectIklim.com/Society#Water">
+        <rdfs:subClassOf rdf:resource="http://www.projectIklim.com/Society#Product"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.projectIklim.com/Society#Wheat -->
+
+    <owl:Class rdf:about="http://www.projectIklim.com/Society#Wheat">
+        <rdfs:subClassOf rdf:resource="http://www.projectIklim.com/Society#Product"/>
+    </owl:Class>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.projectIklim.com/Society#BaseFarm -->
+
+    <owl:NamedIndividual rdf:about="http://www.projectIklim.com/Society#BaseFarm">
+        <rdf:type rdf:resource="http://www.projectIklim.com/Society#Farm"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.projectIklim.com/Society#BaseFarmProcess -->
+
+    <owl:NamedIndividual rdf:about="http://www.projectIklim.com/Society#BaseFarmProcess">
+        <rdf:type rdf:resource="http://www.projectIklim.com/Society#Process"/>
+        <consume rdf:resource="http://www.projectIklim.com/Society#BaseFarmScytheConsumption"/>
+        <consume rdf:resource="http://www.projectIklim.com/Society#BaseFarmWaterConsumpsion"/>
+        <makes rdf:resource="http://www.projectIklim.com/Society#BaseWheatProduction"/>
+        <require rdf:resource="http://www.projectIklim.com/Society#BaseFarmingSkill"/>
+        <processDuration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</processDuration>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.projectIklim.com/Society#BaseFarmScytheConsumption -->
+
+    <owl:NamedIndividual rdf:about="http://www.projectIklim.com/Society#BaseFarmScytheConsumption">
+        <rdf:type rdf:resource="http://www.projectIklim.com/Society#ProcessMaterial"/>
+        <materialType rdf:resource="http://www.projectIklim.com/Society#Scythe"/>
+        <quantity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</quantity>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.projectIklim.com/Society#BaseFarmWaterConsumpsion -->
+
+    <owl:NamedIndividual rdf:about="http://www.projectIklim.com/Society#BaseFarmWaterConsumpsion">
+        <rdf:type rdf:resource="http://www.projectIklim.com/Society#ProcessMaterial"/>
+        <materialType rdf:resource="http://www.projectIklim.com/Society#Water"/>
+        <quantity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</quantity>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.projectIklim.com/Society#BaseFarmerAgent -->
+
+    <owl:NamedIndividual rdf:about="http://www.projectIklim.com/Society#BaseFarmerAgent">
+        <rdf:type rdf:resource="http://www.projectIklim.com/Society#Agent"/>
+        <hasSkill rdf:resource="http://www.projectIklim.com/Society#BaseFarmingSkill"/>
+        <isIn rdf:resource="http://www.projectIklim.com/Society#BaseFarm"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.projectIklim.com/Society#BaseFarmingSkill -->
+
+    <owl:NamedIndividual rdf:about="http://www.projectIklim.com/Society#BaseFarmingSkill">
+        <rdf:type rdf:resource="http://www.projectIklim.com/Society#Skill"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.projectIklim.com/Society#BaseWheatProduction -->
+
+    <owl:NamedIndividual rdf:about="http://www.projectIklim.com/Society#BaseWheatProduction">
+        <rdf:type rdf:resource="http://www.projectIklim.com/Society#ProcessMaterial"/>
+        <materialType rdf:resource="http://www.projectIklim.com/Society#Wheat"/>
+        <quantity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</quantity>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.projectIklim.com/Society#Scythe -->
+
+    <owl:NamedIndividual rdf:about="http://www.projectIklim.com/Society#Scythe"/>
+    
+
+
+    <!-- http://www.projectIklim.com/Society#Water -->
+
+    <owl:NamedIndividual rdf:about="http://www.projectIklim.com/Society#Water">
+        <rdf:type rdf:resource="http://www.projectIklim.com/Society#Water"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.projectIklim.com/Society#Wheat -->
+
+    <owl:NamedIndividual rdf:about="http://www.projectIklim.com/Society#Wheat">
+        <rdf:type rdf:resource="http://www.projectIklim.com/Society#Wheat"/>
+    </owl:NamedIndividual>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.2.6.20160910-2108) https://github.com/owlcs/owlapi -->
+
