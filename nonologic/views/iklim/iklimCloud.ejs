@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>IKLIM CLOUD</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+	<link rel="stylesheet" type="text/css" href="/cleditor/jquery.cleditor.css">
+	<script src="/javascripts/jquery.min.js"></script>
+	<script src="/javascripts/jquery-ui.min.js"></script>
+	<script src="/vis/vis.js"></script>
+	<link rel="stylesheet" type="text/css" href="/vis/vis.min.css"/>
+	<link rel="stylesheet" type="text/css" href="/iklim/css/iklimCloud.css"/>
+	<script src="/cleditor/jquery.cleditor.js"></script>
+	<style type="text/css">
+    	
+  	</style>
+  	
+  	<link rel="stylesheet" type="text/css" href="/bootstrap/css/bootstrap.min.css">
+	<script src="/bootstrap/js/bootstrap.min.js"></script>
+  	
+  	<script src="/iklim/js/iklimCloud.js"></script>
+	<script type="text/javascript">
+		// init();	
+	</script>
+</head>
+<body>
+<% include ../navbar.ejs %>
+<header><h1>게시글 목록</h1><p></p><span></span></header>
+<div id="container" class="full-size"></div>
+<div id="editor">
+	<form id="form" action="/nurie/articleupload" method="post">
+		<textarea id="input" name="input"></textarea>
+		<!-- 태그 : <input type="text" name="tag" id="tags"><br> -->
+		새로운 태그 입력 : <div id="tags" contenteditable="true"></div><br>
+		<input type="Submit">
+	</form>
+	<div class="button">에디터 열기</div>
+</div>
+<div id="taglist">태그리스트 테스트</div>
+</body>
+</html>

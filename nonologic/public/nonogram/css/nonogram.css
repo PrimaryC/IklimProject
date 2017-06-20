@@ -1,10 +1,15 @@
+body {
+  overflow: hidden;
+}
 .fill {
-  top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
   position: absolute;
   height: auto;
+}
+h1.title {
+  text-align: center;
+  margin-top: 0pxe;
 }
 .game-grid {
   border: 3px solid #000;
@@ -15,13 +20,20 @@
   width: 20px;
   height: 20px;
   text-align: center;
-  border: 1px solid #ecc369;
+  border: 1px solid #000;
+  color: #9debfc;
 }
 .game-grid-cell {
   background-color: #fff;
 }
+.game-grid-cell-guess {
+  background-color: #fff;
+}
 .game-grid-cell-marked {
   background-color: #000;
+}
+.game-grid-cell-multiblock {
+  border-color: #00f;
 }
 .game-cell:first-child {
   border-left-width: 3px;
@@ -38,25 +50,42 @@
 .rule-table-mouse-over {
   color: #f00;
 }
+.panel {
+  border-width: 15px;
+  border-color: #03497e;
+  background-color: #03497e;
+}
+.stage-panel > .panel {
+  border-width: 6px;
+}
 .panel-default {
-  border-radius: 0px;
+  border-radius: 15px;
 }
 .panel-body {
-  background-color: #e4d9c5;
+  background-color: #9debfc;
+  border-radius: 15px;
+}
+.panel > .panel-heading {
+  border-width: 0px;
+  color: #9debfc;
 }
 .stage-panel > .panel > .panel-body {
-  background-color: #eee9bb;
+  background-color: #fff6e2;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
 }
 .panel-default > .panel-heading {
   border-top-left-radius: 0px;
   border-top-right-radius: 0px;
-  background-color: #eee9bb;
+  background-color: #03497e;
 }
 .panel-footer {
-  border-bottom-right-radius: 0px;
-  border-bottom-left-radius: 0px;
-  background-color: #eee9bb;
+  border-width: 0px;
+  border-radius: 10px;
+  background-color: #03497e;
 }
 .stage-panel > .panel > .panel-footer {
-  background-color: #ecc369;
+  background-color: #feb228;
+  border-top-right-radius: 0px;
+  border-top-left-radius: 0px;
 }

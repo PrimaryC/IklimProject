@@ -12,27 +12,27 @@ Nonogram.modules.commonUIManager = function(box){
 		}
 	}
 
-	function cellClicked(event){
-		var targetElem = $(event.target);
-			var x = targetElem.attr("data-grid-x"),
-				y = targetElem.attr("data-grid-y");
+	// function cellClicked(event){
+	// 	console.log("prevented default!");
+	// 	var targetElem = $(event.target);
+	// 		var x = targetElem.attr("data-grid-x"),
+	// 			y = targetElem.attr("data-grid-y");
 
-			if(targetElem.hasClass("game-grid-cell")){
-				targetElem.switchClass("game-grid-cell","game-grid-cell-marked",100);
-			} else {
-				targetElem.switchClass("game-grid-cell-marked","game-grid-cell",100);
-			}
+	// 		if(targetElem.hasClass("game-grid-cell")){
+	// 			targetElem.switchClass("game-grid-cell","game-grid-cell-marked",100);
+	// 		} else {
+	// 			targetElem.switchClass("game-grid-cell-marked","game-grid-cell",100);
+	// 		}
 
-		if(box.gameStatus){
-			
+	// 	if(box.gameStatus){
+	// 		setTimeout(function(){
+	// 			box.checkPicture(box.getMapData($.find(".game-grid")));	
+	// 		}, 110)
+	// 	} else {
 
-			setTimeout(function(){
-				box.checkPicture(box.getMapData($.find(".game-grid")));	
-			}, 110)
-		} else {
+	// 	}
+	// }
 
-		}
-	}
 
 	box.createRowTableElement = function(row, mLength){
 		var element = $("<table/>", {"class":"rule-table row-rule-table"});
@@ -89,12 +89,22 @@ Nonogram.modules.commonUIManager = function(box){
 			rowElement = $("<tr/>");
 			for (var j = 0; j < row; j++) {
 				cellElement = $("<td/>",{"class":"game-cell game-grid-cell","data-grid-x":j,"data-grid-y":i});
-				cellElement.click(cellClicked);
+				// cellElement.click(cellClicked);
+				// cellElement.contextmenu(function(event){
+				// 	event.preventDefault();
+				// 	console.log("prevent default");
+				// })
 				cellElement.on("mouseenter", cellCursorInteraction);
+				// cellElement.on("mousedown",cellMouseDown);
+				// cellElement.on("mousemove",cellMouseMove);
+				// cellElement.on("mouseup",cellMouseRelease);
 				cellElement.on("mouseleave", cellCursorInteraction);
 				rowElement.append(cellElement);
 			}
 			element.append(rowElement);
+			element.contextmenu(function(e){
+				e.preventDefault();
+			})
 		}
 		var widthSize, heightSize;
 		widthSize = heightSize = "50px";
@@ -124,7 +134,7 @@ Nonogram.modules.commonUIManager = function(box){
 			var lineArray = [];
 			var tableData = $(this).find('td');
 			tableData.each(function(){
-				if($(this).hasClass("game-grid-cell-marked")){
+				if($(this).hasClass("color-black")){
 					lineArray.push(1);
 				} else {
 					lineArray.push(0);
@@ -140,5 +150,18 @@ Nonogram.modules.commonUIManager = function(box){
 		var x = $(".row-rule-table").children().children("tr:nth-child(1)").children().length;
 
 		return {"x" : x, "y" : y};
+	}
+
+	box.fillGridElement = function(mapGridElement, gridData){
+		$(mapGridElement).find("tr").each(function(i, _value){
+			var tableData = $(this).find('td');
+			tableData.each(function(j, value){
+				if(gridData[i][j]==1){
+					$(value).addClass("color-black")
+				} else {
+					
+				}
+			})
+		})
 	}
 }

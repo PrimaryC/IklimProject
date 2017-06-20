@@ -1,0 +1,27 @@
+<div id="account-sign-up" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4>Sign up</h4>
+			</div>
+			<div class="modal-body">
+				<form action="/auth/signup" method="post">
+					<div class="form-group">
+						<label for="account-sign-up-id">ID : </label>
+						<input type="text" class="form-control" id="account-sign-up-id" name="id">
+					</div>
+					<div class="form-group">
+						<label for="account-sign-up-password">Password : </label>
+						<input type="password" class="form-control" id="account-sign-up-password" name="password">
+					</div>
+					<div class="form-group">
+						<label for="account-sign-up-email">Email Address : </label>
+						<input type="email" class="form-control" id="account-sign-up-email" name="email">
+					</div>
+					<button type="submit" class="btn btn-default">Submit</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,8 +1,8 @@
 body {
-  background-color: #ecc369;
+  background-color: #9debfc;
 }
 .container {
-  background-color: #ecc369;
+  background-color: #9debfc;
 }
 .game {
   display: none;
@@ -12,20 +12,17 @@ body {
 }
 .stage-panel {
   width: 25%;
-  padding: 15px;
+  padding: 5px 10px;
 }
 .stage-panel > .panel > .panel-body {
   height: 150px;
-}
-.stage-select-panel {
-  height: 760px;
 }
 .game-table-container {
   position: relative;
   z-index: 12;
   margin: 0 auto;
   margin-top: 30px;
-  border: 1px solid #ecc369;
+  border: 1px solid #9debfc;
 }
 .game-container-left-top {
   width: 100px;
@@ -66,25 +63,37 @@ body {
   top: 15px;
 }
 .row-rule-table {
-  border-top: 3px solid #ecc369;
-  border-bottom: 3px solid #ecc369;
-  border-right: 3px solid #ecc369;
+  border-top: 3px solid #000;
+  border-bottom: 3px solid #000;
+  border-right: 3px solid #000;
 }
 .row-rule-table > tbody > tr > td {
-  background-color: #eee9bb;
-  border-top: 1px solid #ecc369;
-  border-bottom: 1px solid #ecc369;
+  background-color: #03497e;
+  border-top: 1px solid #000;
+  border-bottom: 1px solid #000;
 }
 .col-rule-table {
-  border-left: 3px solid #ecc369;
-  border-right: 3px solid #ecc369;
-  border-bottom: 3px solid #ecc369;
+  border-left: 3px solid #000;
+  border-right: 3px solid #000;
+  border-bottom: 3px solid #000;
 }
 .col-rule-table > tbody > tr > td {
-  background-color: #eee9bb;
-  border-left: 1px solid #ecc369;
-  border-right: 1px solid #ecc369;
+  background-color: #03497e;
+  border-left: 1px solid #000;
+  border-right: 1px solid #000;
 }
 .row-rule-table > tbody > tr:nth-child(5n+0) > td {
   border-bottom-width: 3px;
+}
+.game-grid {
+  user-select: none;
+}
+.game-grid-cell-guess {
+  transform: scale(0.7);
+}
+.game-cell.color-black {
+  background-color: #000;
+}
+.panel-heading > button {
+  color: #000;
 }

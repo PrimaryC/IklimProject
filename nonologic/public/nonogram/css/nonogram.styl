@@ -1,15 +1,19 @@
-background = #e4d9c5
-container-color = #ecc369
-rule-color = #eee9bb
+background = #9debfc
+container-color = #feb228
+rule-color = #03497e
 
-.fill 
-    top 0
-    left 0
-    right 0
-    bottom 0
-    position absolute
-    // width auto
-    height auto
+body
+	overflow hidden
+
+.fill
+	left 0
+	right 0
+	position absolute
+	height auto
+h1.title
+	text-align center
+	margin-top 0pxe
+	
 .game-grid
 	border 3px solid black
 .game-cell
@@ -18,11 +22,16 @@ rule-color = #eee9bb
 	width 20px
 	height 20px
 	text-align center
-	border 1px solid #ecc369
+	border 1px solid black
+	color background
 .game-grid-cell
+	background-color white
+.game-grid-cell-guess
 	background-color white
 .game-grid-cell-marked
 	background-color black
+.game-grid-cell-multiblock
+	border-color blue
 
 .game-cell:first-child
 	border-left-width 3px
@@ -36,19 +45,33 @@ rule-color = #eee9bb
 .rule-table-mouse-over
 	color red
 
+.panel
+	border-width 15px
+	border-color rule-color
+	background-color rule-color
+.stage-panel > .panel
+	border-width 6px
 .panel-default
-	border-radius 0px
+	border-radius 15px
 .panel-body
 	background-color background
+	border-radius 15px
+.panel > .panel-heading
+	border-width 0px
+	color background
 .stage-panel > .panel > .panel-body
-	background-color rule-color
+	background-color #fff6e2
+	border-bottom-left-radius 0px
+	border-bottom-right-radius 0px
 .panel-default > .panel-heading
 	border-top-left-radius 0px
 	border-top-right-radius 0px
 	background-color rule-color
 .panel-footer
-	border-bottom-right-radius 0px
-	border-bottom-left-radius 0px
+	border-width 0px
+	border-radius 10px
 	background-color rule-color
 .stage-panel > .panel > .panel-footer
 	background-color container-color
+	border-top-right-radius 0px
+	border-top-left-radius 0px

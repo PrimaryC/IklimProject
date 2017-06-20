@@ -6,14 +6,21 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
-    "bluebird": "^3.4.6",
+    "bcrypt-nodejs": "0.0.3",
+    "bluebird": "^3.5.0",
     "body-parser": "~1.15.1",
+    "connect-redis": "^3.2.0",
     "cookie-parser": "~1.4.3",
     "debug": "~2.2.0",
     "ejs": "~2.4.1",
     "express": "~4.13.4",
+    "express-session": "^1.15.2",
     "ioredis": "^2.4.0",
+    "mongoose": "^4.9.7",
     "morgan": "~1.7.0",
+    "passport": "^0.3.2",
+    "passport-google-oauth20": "^1.0.0",
+    "passport-local": "^1.0.0",
     "serve-favicon": "~2.3.0",
     "stylus": "0.54.5"
   }

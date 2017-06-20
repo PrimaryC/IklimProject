@@ -1,0 +1,11 @@
+#container {
+  max-width: 800px;
+  margin: auto;
+}
+footer {
+  background-color: #eee;
+}
+mark {
+  font-size: 8px;
+  border: 1px solid #f00;
+}

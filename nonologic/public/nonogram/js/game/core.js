@@ -2,6 +2,90 @@ const CELL_SIZE = 20;
 
 Nonogram.modules.gameUIManager = function(box){
 	var stageList = [];
+
+	function cellMouseDown(event){
+		if($(event.target).hasClass("game-grid-cell-marked")){
+			box.multiblockMakred = true;
+		} else {
+			box.multiblockMakred = false;
+		}
+		box.mouseDown = true;
+	}
+
+	function cellMouseMove(event){
+		if(box.mouseDown == true){
+			$(event.target).addClass("game-grid-cell-multiblock")
+		}
+	}
+
+	function cellMouseRelease(event){
+		box.mouseDown = false;
+
+		multiBlockSelectProcess($(event.target).parent().parent());
+	}
+
+	function clearCellMark(element){
+		element.removeClass("game-grid-cell");
+		element.removeClass("game-grid-cell-guess");
+		element.removeClass(function(index,className){
+			var classString = className.match(/(^|\s)color-\S+/g || []);
+			if(classString == null){
+				return;
+			} else {
+				return classString.join(' ');
+			}
+		})
+	}
+
+	function multiBlockSelectProcess(elem){
+		var cellList = elem.find("td.game-grid-cell-multiblock");
+		cellList.each(function(index, el) {
+			el = $(el);
+			clearCellMark(el);
+			switch (box.paint.mode) {
+				case "guess":
+					if(!el.attr("class").includes("color"))
+						el.addClass("game-grid-cell-guess");		
+					break;
+				case "paint":
+					el.addClass("game-grid-cell");
+					break;
+			}
+			if(box.paint.color != "white"){
+				el.addClass("color-" + box.paint.color);	
+			}
+			
+			el.removeClass("game-grid-cell-multiblock")
+		});
+	}
+
+	function cellClicked(event){
+		console.log("prevented default!");
+		var el = $(event.target);
+			
+		clearCellMark(el);
+		switch (box.paint.mode) {
+			case "guess":
+				el.addClass("game-grid-cell-guess");			
+				break;
+			case "paint":
+				el.addClass("game-grid-cell");
+				break;
+		}
+		if(box.paint.color != "white"){
+			el.addClass("color-" + box.paint.color);	
+		}
+
+		if(box.gameStatus){
+			setTimeout(function(){
+				box.checkPicture(box.getMapData($.find(".game-grid")));	
+			}, 110)
+		} else {
+
+		}
+	}
+
+
 	box.checkPicture = function(map){
 		// $.post('/nonogram/answer', {"ID": gameObject.ID,"Map":JSON.stringify(gameObject.Map)}, function(data, textStatus, xhr) {
 		// 	console.log(data);
@@ -32,6 +116,7 @@ Nonogram.modules.gameUIManager = function(box){
 	function switchGameScreenToStageSelectScreen(){
 		$(".game-screen").fadeOut('fast', function(){
 			refreshStagePanel()
+			toggleGlobalKeyListener(false);
 			$(".game-screen").empty();
 			$(".stage-select").fadeIn('fast');
 		});
@@ -152,10 +237,41 @@ Nonogram.modules.gameUIManager = function(box){
 			// console.log(stageElements);
 			$(".stage-select-panel").empty().append(stageElements);
 
+			refreshStagePanel()
+
 			$(".stage-panel > .panel-default").click(function(){
 				switchToGameMode($(this));
 			});
 		})
+	}
+
+	function toggleGlobalKeyListener(flag){
+		if(flag){
+			$(document).on("keypress",function(event){
+				console.log("Key Pressed!");
+				keyEventListener(event);
+			})
+		} else {
+			$(document).off("keypress")
+		}
+	}
+
+	function keyEventListener(event){
+		switch (event.keyCode) {
+			case 96:
+				$(".guess-switch").button('toggle');
+				switchGuessMode();
+				break;
+			case 49:
+				changePaintMode("white");
+				break;
+			case 50:
+				changePaintMode("black");
+				break;
+			default:
+				// statements_def
+				break;
+		}
 	}
 
 	function switchToGameMode(elem){
@@ -164,7 +280,16 @@ Nonogram.modules.gameUIManager = function(box){
 			box.stageID = elem.attr("data-stage-id");
 			var gameElement = box.createGamePanel(box.stageID);
 			x = gameElement;
+			toggleGlobalKeyListener(true);
+
+			box.paint = {
+				"color" : "black",
+				"mode"	: "paint"
+			}
+
 			$(".game.game-screen").empty().append(gameElement).fadeIn("fast");
+
+			$("#color-black").parent().button("toggle");
 
 		})
 	}
@@ -180,9 +305,12 @@ Nonogram.modules.gameUIManager = function(box){
 		var gameElement = $("<div/>");
 		var headerElement = $("<div/>",{"class":"row"});
 		var titleElement = $("<div/>",{"class":"col-sm-9"}).html("<h3>" + stageObject.Name + "</h3>");
+		
 
 		headerElement.append(titleElement);
 		headerElement.append(createGameNav());
+
+		gameElement.append(box.createMarkingToolNav());
 
 		gameElement.append(headerElement);
 
@@ -215,8 +343,65 @@ Nonogram.modules.gameUIManager = function(box){
 		return navElement;
 	}
 
+	box.createMarkingToolNav = function(){
+		var navElement = $("<nav/>",{"class":"col-sm-3 paint-tool-nav"});
+		var buttonGroups = $("<div/>",{"class":"btn-group pull-left","data-toggle":"buttons"});
+
+		var guessModeSwitchButton = $("<button/>",{"class":"btn btn-default guess-switch", "data-toggle":"button","aria-pressed":"false"});
+		var whiteLabel = $("<label/>",{"class":"btn btn-default"})
+		var whiteButton = $("<input>",{"class":"color-white","type":"radio","name":"colors","id":"color-white"}).attr("autocomplete","off");
+		var blackLabel = $("<label/>",{"class":"btn btn-default"})
+		var blackButton = $("<input>",{"class":"color-black","type":"radio","name":"colors","id":"color-black"}).attr("autocomplete","off");
+
+		guessModeSwitchButton.append($("<span/>").text("(`)?"));
+		whiteLabel.append(whiteButton).append("(1)□");
+		blackLabel.append(blackButton).append("(2)■");
+
+		guessModeSwitchButton.click(function(event){
+			switchGuessMode();
+		})
+
+		whiteButton.click(function(event){
+			changePaintMode("white");
+		})
+		blackButton.click(function(event){
+			changePaintMode("black");
+		})
+
+		buttonGroups.append(guessModeSwitchButton);
+		buttonGroups.append(whiteLabel);
+		buttonGroups.append(blackLabel);
+		
+		navElement.append(buttonGroups);
+
+		return navElement;
+	}
+
+	function switchGuessMode(){
+		if(box.paint.mode == "paint"){
+			box.paint.mode = "guess";
+		} else {
+			box.paint.mode = "paint";
+		}
+		console.log(box.paint.mode);
+	}
+
+	function changePaintMode(color){
+		box.paint.color = color;
+		$("#color-" + color).parent().button('toggle');
+		console.log("#color-"+color+".button toggle");
+	}
+
 	function resetGrid(){
 		$(".game-grid").find("td").switchClass("game-grid-cell-marked","game-grid-cell");
+		$(".game-grid").find("td").removeClass(function(index,className){
+			var classString = className.match(/(^|\s)color-\S+/g || []);
+			if(classString == null){
+				return;
+			} else {
+				return classString.join(' ');
+			}
+		})
 	}
 
 	function getMaxLength(array){
@@ -248,10 +433,10 @@ Nonogram.modules.gameUIManager = function(box){
 
 		tablePlaceholder.height(colSize).width(rowSize);
 		colRuleWrapper.height(colSize).width(width);
-		rightContainer.css("left",colSize).css("padding-right","17px").css("padding-bottom","17px").width(width-17).height(height-17+CELL_SIZE);
+		rightContainer.css("left",rowSize).css("padding-right","17px").css("padding-bottom","17px").width(width-17).height(height-17+CELL_SIZE);
 		rowRuleWrapper.width(rowSize).height(height-17);
-		leftContainer.css("top",rowSize);
-		gameWrapper.css("left",colSize).css("top",rowSize)
+		leftContainer.css("top",colSize);
+		gameWrapper.css("left",rowSize).css("top",colSize)
 			.width(width).height(height);
 
 	}
@@ -261,10 +446,10 @@ Nonogram.modules.gameUIManager = function(box){
 		var container = $("<div/>",{"class":"game-table-container"});
 
 		var leftTopContainer = $("<div/>",{"class":"game-container-left-top"}).append(
-				$("<table/>").append(
-					$("<tr/>").append($("<td/>"))
-				)
+			$("<table/>").append(
+				$("<tr/>").append($("<td/>"))
 			)
+		)
 
 		var leftContainer = $("<div/>",{"class":"game-container-left"});
 		var leftWrapper = $("<div/>",{"class":"game-wrapper-left"});
@@ -283,6 +468,12 @@ Nonogram.modules.gameUIManager = function(box){
 		var rowRuleTable = box.createRowTableElement(data.Rule.rowData, rowMaxLength);
 
 		var gameGrid = box.createGameGrid(data.Rule.colData.length, data.Rule.rowData.length);
+
+		$(gameGrid.find("td")).on("click",cellClicked);
+		$(gameGrid.find("td")).on("mousedown",cellMouseDown);
+		$(gameGrid.find("td")).on("mousemove",cellMouseMove);
+		// $(gameGrid.find("td")).on("mouseup",cellMouseRelease);
+		$(document).on("mouseup",cellMouseRelease);
 
 		container.append(leftTopContainer)
 
@@ -333,7 +524,7 @@ Nonogram.modules.gameUIManager = function(box){
 		var x,y;
 		x = event.pageX - $(event.currentTarget).offset().left;
 		y = event.pageY - $(event.currentTarget).offset().top;
-		console.log("X + Y /" + x + " / " + y)
+		// console.log("X + Y /" + x + " / " + y)
 
 		var leftDiff, topDiff;
 		var rightLimit, bottomLimit;
@@ -362,6 +553,9 @@ Nonogram.modules.gameUIManager = function(box){
 			});
 		}
 	}
+
+
+
 }
 
 var nonogram;

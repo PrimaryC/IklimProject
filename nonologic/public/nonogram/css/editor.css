@@ -4,3 +4,29 @@
 .cell-marked-col {
   border-left: 2px solid #f00;
 }
+.paint-tool-nav {
+  margin-bottom: 10px;
+}
+.canvas-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+canvas {
+  background: #fff;
+}
+#editor-slider-X {
+  layout: absolute;
+}
+#editor-slider-Y {
+  display: inline-block;
+}
+#crop-preview {
+  position: absolute;
+  display: none;
+  border: 1px solid #f00;
+}
+.editor-canvas-before-footer {
+  display: none;
+  color: #9debfc;
+}

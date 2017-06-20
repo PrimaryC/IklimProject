@@ -14,22 +14,167 @@
     <script src="/bootstrap/js/bootstrap.min.js"></script>
     <script src="/bootpag/jquery.bootpag.min.js"></script>
 
-    <!-- <script src="/nonogram/js/nonogram.js"></script>
-    <script src="/nonogram/js/mapper.js"></script>
-    <script src="/nonogram/js/solver.js"></script>
-    <script src="/nonogram/js/ui-manager.js"></script>
-    <script src="/nonogram/js/editor/core.js"></script>
- -->
-    <script src="/js/jquery-ctable.js"></script>
+    <!-- <script src="/nonogram/js/nonogram.js"></script> -->
+    <!-- <script src="/nonogram/js/mapper.js"></script> -->
+    <!-- <script src="/nonogram/js/solver.js"></script> -->
+    <!-- <script src="/nonogram/js/ui-manager.js"></script> -->
+    <!-- <script src="/nonogram/js/editor/core.js"></script> -->
 
+    
     <link rel="stylesheet" href="/css/bootstrap-slider.min.css" />
     <script src="/js/bootstrap-slider.min.js"></script>
 
     <script type="text/javascript">
 
+    function loadImage(src, callback){
+        var img = new Image();
+        img.src = src;
+        img.onload = function(){
+            callback(this);
+        }
+    }
+
+    function setCanvasSize(img, canvas){
+        canvas.width = img.width * 0.5;
+        canvas.height = img.height * 0.5;
+    }
+
+    function getSimplifyImageDataArray(img, canvas, ctx, gridX, gridY){
+        var width = canvas.width;
+        var height = canvas.height;
+
+        var scaleRatio = {"x":width/gridX, "y":height/gridY};
+
+        img.style.display = "none";
+        var imageData = ctx.getImageData(0,0,width,height);
+        var data = imageData.data;
+
+        var simplifyArray = [];
+
+        for (var i = 0; i < gridY; i++) {
+            simplifyArray[i] = [];
+        }
+
+        for(var i=0;i<gridX;i++){
+            for (var j = 0; j < gridY; j++) {
+                var gridCellImageData = ctx.getImageData(i*scaleRatio.x,j*scaleRatio.y,scaleRatio.x,scaleRatio.y)
+                var colorAvg = getColorAverage(gridCellImageData.data)
+                // colorAvg = {"red":red, "green":green, "blue":blue, "alpha":alpha}
+                // if(sum != 0){
+                //     console.log("avg = " + avg + "/ sum = " + sum);
+                // }
+
+                if(colorAvg.alpha > 128){
+                    if(colorAvg.red < 128 && colorAvg.blue < 128 && colorAvg.green < 128){
+                        simplifyArray[j].push(1);
+                    } else {
+                        simplifyArray[j].push(0);
+                    }
+                } else {
+                    simplifyArray[j].push(0);
+                }
+                
+            }
+        }
+
+        return simplifyArray;
+    }
+
+    function getColorAverage(data){
+        var redSum = 0;
+        var greenSum = 0;
+        var blueSum = 0;
+        var alphaSum = 0;
+        var colorAverage = {"red":0,"green":0,"blue":0,"alpha":0}
+        for (var k = 0; k < data.length; k++) {
+            switch (k%4) {
+                case 0:
+                    redSum = redSum + data[k];
+                    break;
+                case 1:
+                    greenSum = greenSum + data[k];
+                    break;
+                case 2:
+                    blueSum = blueSum + data[k];
+                    break;
+                case 3:
+                    alphaSum = alphaSum + data[k];
+                    break;
+                default:
+                    // statements_def
+                    break;
+            }
+        }
+        var dataLength = data.length / 4
+
+        colorAverage.red = redSum / dataLength;
+        colorAverage.green = greenSum / dataLength;
+        colorAverage.blue = blueSum / dataLength;
+        colorAverage.alpha = alphaSum / dataLength;
+        return colorAverage;
+
+    }
+
+    function draw(img){
+        var canvas = $("#canvas")[0]
+        var ctx = canvas.getContext('2d');
+
+        setCanvasSize(img, canvas);
+
+        $("#editor-start-button").on("click", simplifyImage);
+
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    }
+
+    function simplifyImage(){
+        var gridX = parseInt($("#editor-sizeX").val());
+        var gridY = parseInt($("#editor-sizeY").val());
+
+        var scaledArray = getSimplifyImageDataArray(img, canvas, ctx, gridX, gridY);
+        var canvas2 = $("#after")[0]
+        var ctx2 = canvas2.getContext('2d');
+
+        canvas2.width = scaledArray.length * 5;
+        canvas2.height = scaledArray[0].length * 5;
+
+        var scaleRatio = {"x":canvas2.width/gridX, "y":canvas2.height/gridY};
+
+        ctx2.scale(scaleRatio.x,scaleRatio.y);
+
+        for (var i = 0; i < scaledArray.length; i++) {
+            for (var j = 0; j < scaledArray[i].length; j++) {
+                if(scaledArray[i][j] == 1){
+                    ctx2.fillRect(i,j,1,1);
+                }
+            }
+        }
+    }
+
+    $(document).ready(function() {
+        $("#image-file-submit").on("click", function(){
+            var fileElement = $("#image-file-input")[0];
+            if(fileElement.files && fileElement.files[0]) {
+                var fileReader = new FileReader();
+                fileReader.onload = function(e){
+                    loadImage(e.target.result, draw);
+                }
+                fileReader.readAsDataURL(fileElement.files[0]);
+            } else {
+                alert("파일을 로드해주세요!");
+            }
+        })    
+    });
     </script>
   </head>
   <body>
+    <canvas id="canvas" width="300" height="300"></canvas>
+    <canvas id="after" width="350" height="350"></canvas>
+    <input type="text" placeholder="X 크기" name="sizeX" id="editor-sizeX">
+    <input type="text" placeholder="Y 크기" name="sizeY" id="editor-sizeY">
     
+    <button id="editor-start-button">resize it</button>
+
+    <input type="file" id="image-file-input" name="nonologic-input" accept="image/*">
+    <input type="button" id="image-file-submit" value="Welcome to the real world">
   </body>
 </html>
