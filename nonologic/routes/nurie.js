@@ -53,27 +53,19 @@ router.get('/tag*', function(req, res, next) {
 router.get('/article/*', function(req, res, next) {
 	var resultData = new Object();
 
-  let id = req.params[0];
-  let content = "";
-  let title = "";
-  mongoArticle.findOne({"id":id}, function(err, doc){
-    title = doc.Title;
-    content = doc.Content;
-  })
-  let iklim = redis.getIklim(id);
-  let inheritIklim = redis.getInheritIklim(id);
-  let relation = redis.getRelation(id);
-  let series = redis.getSeries(id);
-  let author = redis.getAuthor(id);
+	let id = req.params[0];
+
+	redis.getArticle(id, function(doc){
+		mongoArticle.findOne({"id":id}, function(err, doc){
+			doc.Title = doc.Title;
+			doc.Content = doc.Content;
+
+			console.log(util.inspect(doc));
+
+		})
+	});
 
 	var resultComments = getArticleComments(req.params[0]);
-
-	Promise.all([resultArticle, resultTags, resultComments]).then(function(datas){
-		resultData.Article = datas[0];
-		resultData.Article.Tags = datas[1];
-		resultData.Article.Comments = datas[2];
-		res.status(200).set('Content-Type', 'application/json').send(resultData);
-	})
 })
 
 router.post('/article', function(req, res, next){
@@ -85,6 +77,8 @@ router.post('/article', function(req, res, next){
 	var random = Math.floor(Math.random() * 1000000) +1;
 
 	var articleID = "http://www.iklim.com/nurie#Article"+random+""+d.getSeconds();
+
+	redis.addArticle(doc);
 
 	let mongoArticle = new mongoArticle({
 		"ID" : articleID,

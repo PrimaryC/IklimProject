@@ -13,7 +13,7 @@ var app = express();
 const util = require('util');
 
 var session = require('express-session');
-var db = require('./internal_module/db.js');
+var mongodb = require('./internal_module/db.js');
 var passport = require('./internal_module/passport.js');
 var _passport = require('passport');
 
@@ -46,7 +46,7 @@ app.use(session({
 app.use(_passport.initialize());
 app.use(_passport.session());
 
-db.init();
+mongodb.init();
 passport.setup();
 
 app.use('/auth', auth);
@@ -66,6 +66,15 @@ app.get('/', function(req, res, next) {
 app.get('/blankspace', function(req, res, next){
   res.render('blank');
 });
+
+app.get('/what', function(req, res, next){
+  let db1 =          new Redis(6379, 'localhost');
+  db1.lrange("whatthefuckisthisshit", 0, -1).then(values => {console.log(values)}, reason => {
+    console.log(reason);
+    console.log("this was error.");
+  });
+  res.send("what");
+})
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
